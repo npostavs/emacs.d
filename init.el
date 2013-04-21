@@ -1,5 +1,3 @@
-(setq start-of-init.el (current-time))
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; basic utils used for init
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -86,6 +84,16 @@
 (bind-key "<f7>" 'compile)
 (bind-key "<f5>" 'gdb)
 
+;; don't need this
+(unbind-key "C-x C-c")
+(defalias 'quit-emacs 'save-buffers-kill-terminal); use M-x instead
+
+(defun back-to-indentation-or-beginning ()
+  (interactive) 
+  (if (bolp) (back-to-indentation) (beginning-of-line)))
+
+(bind-key "C-a" 'back-to-indentation-or-beginning)
+
 ;; scrolling
 (bind-key* "<right>" 'scroll-left)
 (bind-key* "<left>" 'scroll-right)
@@ -146,7 +154,7 @@
 ;;; modes/packages
 ;;;
 ;; TODO? maybe add
-;; FastNav
+;; FastNav and/or ace-jump? ace-jump seems simpler
 ;; https://github.com/lewang/le_emacs_MRU_yank
 ;; perpective
 ;; CEDET/Semantic
@@ -165,6 +173,12 @@
   :diminish "↺T"
   :idle (global-undo-tree-mode +1))
 
+(use-package ace-jump-mode
+  :bind ("C-c SPC" . ace-jump-mode))
+
+(use-package multiple-cursors
+  ;; TODO: maybe bind more mc/ comands?
+  :bind (("C-z C-SPC" . mc/edit-lines)))
 
 (use-package calc
   :defer t
@@ -218,8 +232,12 @@
 
 (define-and-add-hook emacs-lisp-mode-hook
   (eldoc-mode +1)
-  (eldoc-add-command 'paredit-backward-delete 'paredit-close-round)
   (setq tab-width 8))
+(use-package eldoc
+  :defer t
+  :diminish "ElD"
+  :config (eldoc-add-command 'paredit-backward-delete 'paredit-close-round))
+
 
 (define-and-add-el-get-source
   '(:name elisp-slime-nav
@@ -251,8 +269,10 @@
   :defer t)
 
 ;; newer Emacsen have subword-mode seperate from cc-mode
-(when (fboundp 'global-subword-mode)
-  (global-subword-mode +1))
+(use-package subword
+  :if (fboundp 'global-subword-mode)
+  :init (global-subword-mode +1)
+  :diminish "")
 
 ;; sml-mode
 (define-and-add-el-get-source
@@ -305,5 +325,3 @@ https://github.com/immerrr/lua-mode/pull/19"
 ;;; post init stuff
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (server-start)
-
-(setq end-of-init.el (current-time))
