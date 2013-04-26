@@ -89,10 +89,12 @@
 (defalias 'quit-emacs 'save-buffers-kill-terminal); use M-x instead
 
 (defun back-to-indentation-or-beginning ()
-  (interactive) 
-  (if (bolp) (back-to-indentation) (beginning-of-line)))
+  (interactive)
+  (if (= (point) (progn (back-to-indentation) (point)))
+      (beginning-of-line)))
 
 (bind-key "C-a" 'back-to-indentation-or-beginning)
+(unbind-key "M-m")
 
 ;; scrolling
 (bind-key* "<right>" 'scroll-left)
@@ -112,6 +114,13 @@
 (unbind-key "C-z") ; suspend-frame is also on C-x C-z
 (bind-key "<XF86Sleep>" 'ignore)
 
+(defun yank-primary ()
+  "`mouse-yank-primary' sans mouse"
+  (interactive)
+  (push-mark (point))
+  (insert (or (x-get-selection-value) (x-get-selection 'PRIMARY))))
+
+(bind-key "<S-insert>" 'yank-primary)
 
 (when (eq system-type 'windows-nt)
   (declare-function w32-send-sys-command nil)
