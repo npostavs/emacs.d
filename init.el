@@ -81,6 +81,10 @@
 ;; some compatibility with VisualC++
 (bind-key "<f4>" 'next-error)
 (bind-key "S-<f4>" 'previous-error)
+(bind-key "M-<f4>" 'kill-this-buffer)
+(bind-key "C-<tab>" 'switch-to-next-buffer)
+(bind-key "C-S-<iso-lefttab>" 'switch-to-prev-buffer)
+
 (bind-key "<f7>" 'compile)
 (bind-key "<f5>" 'gdb)
 
@@ -199,6 +203,19 @@
                  (ido-everywhere)
                  (setq ido-enable-flex-matching t)))
 
+(define-and-add-el-get-source
+  '(:name ido-complete-space-or-hyphen
+          :description "Make ido completes like built-in M-x
+          does, useful when use smex or use ido to complete other
+          hyphen separated choices"
+          :type github :username "doitian"))
+(use-package ido-complete-space-or-hyphen
+  :init (ido-complete-space-or-hyphen-enable))
+
+(use-package smex
+  :bind (("M-x" . smex)
+         ("M-X" . smex-major-mode-commands)))
+
 (use-package ibuffer
   :bind ("C-x C-b" . ibuffer)
   :config
@@ -237,7 +254,9 @@
   :config
   (progn
     (add-hook 'lisp-mode-hook #'enable-paredit-mode)
-    (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)))
+    (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
+    (defadvice enable-paredit-mode (around demote-paredit-errors activate)
+      (with-demoted-errors ad-do-it))))
 
 (define-and-add-hook emacs-lisp-mode-hook
   (eldoc-mode +1)
