@@ -88,6 +88,21 @@
 (bind-key "<f7>" 'compile)
 (bind-key "<f5>" 'gdb)
 
+;; don't want to burn single key seq on `forward-page' but moving
+;; multiple pages with double key seq is annoying: use the repeat last
+;; key trick (like C-x z z... or C-x e e...):
+(defvar page-movement-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map "[" 'backward-page)
+    (define-key map "]" 'forward-page)
+    map)
+  "keymap for single key seq movement by page")
+
+(defadvice forward-page (after with-repeat-key activate)
+  (set-temporary-overlay-map page-movement-map))
+(defadvice backward-page (after with-repeat-key activate)
+  (set-temporary-overlay-map page-movement-map))
+
 ;; don't need this
 (unbind-key "C-x C-c")
 (defalias 'quit-emacs 'save-buffers-kill-terminal); use M-x instead
