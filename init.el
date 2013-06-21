@@ -368,3 +368,5 @@ https://github.com/immerrr/lua-mode/pull/19"
 ;;; post init stuff
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (server-start)
+
+(require 'local-init nil t)
