@@ -190,12 +190,6 @@
 
 (use-package diminish); use-package makes use of this, load it first
 
-(use-package sh-script
-  :defer t
-  :config
-  (progn (set-face-foreground 'sh-quoted-exec "maroon4")
-         (set-face-foreground 'sh-heredoc (face-foreground 'font-lock-string-face))))
-
 (use-package undo-tree
   :defer t
   :diminish "↺T"
@@ -261,7 +255,13 @@
   :defer t
   :config (dired-details-install))
 
-;;; lisp related
+;;; loadhist doesn't mention the handy `feature-file' in autoloads
+(use-package loadhist
+  :defer t
+  :init (autoload 'feature-file "loadhist"
+          "Return the file name from which a given FEATURE was loaded."))
+
+;;; lisp related modes
 (show-paren-mode +1) ; this is useful everywhere
 
 (use-package paredit
@@ -291,11 +291,13 @@
   :defer t
   :diminish "")
 
-;;; loadhist doesn't mention the handy `feature-file' in autoloads
-(use-package loadhist
+;;; programming related modes
+
+(use-package sh-script
   :defer t
-  :init (autoload 'feature-file "loadhist"
-          "Return the file name from which a given FEATURE was loaded."))
+  :config
+  (progn (set-face-foreground 'sh-quoted-exec "maroon4")
+         (set-face-foreground 'sh-heredoc (face-foreground 'font-lock-string-face))))
 
 ;; cc-mode
 (use-package cc-mode
