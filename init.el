@@ -222,6 +222,7 @@
   :init (ido-complete-space-or-hyphen-enable))
 
 (use-package smex
+  :init (setq smex-save-file (locate-user-emacs-file "smex-items"))
   :bind (("M-x" . smex)
          ("M-X" . smex-major-mode-commands)))
 
@@ -247,6 +248,9 @@
 
     (define-and-add-hook ibuffer-mode-hook
       (ibuffer-switch-to-saved-filter-groups "default"))))
+
+(use-package uniquify
+  :config (setq uniquify-buffer-name-style 'forward))
 
 (use-package dired-details
   :commands dired-details-install
@@ -338,6 +342,11 @@ https://github.com/immerrr/lua-mode/pull/19"
     (setq ad-return-value t)))
 
 ;; git
+(define-and-add-el-get-source
+  `(:name magit
+          ,@(when (eq system-type 'windows-nt)
+              '(:build nil :autoloads nil))))
+
 (use-package magit
   :bind ("C-c v" . magit-status))
 
