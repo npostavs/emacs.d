@@ -46,7 +46,9 @@
       truncate-partial-width-windows 80
       sentence-end-double-space nil
       x-select-enable-clipboard t
-      set-mark-command-repeat-pop t)
+      set-mark-command-repeat-pop t
+      view-read-only t; all read-only buffers in view-mode
+      )
 
 (setq enable-recursive-minibuffers t)
 (minibuffer-depth-indicate-mode +1)
@@ -74,6 +76,8 @@
 (define-key key-translation-map [?\C-h] [?\C-?])
 (bind-key* "M-h" 'backward-kill-word)
 (bind-key* "C-M-h" 'backward-kill-sexp)
+;; b scrolls back in view-mode (counterpart to SPC scrolling forward, from dillo)
+(bind-key "b" 'View-scroll-page-backward view-mode-map)
 ;; single key non-homerow bindings for some less common operations
 (bind-key* "<delete>" 'delete-region)
 (bind-key "<kp-multiply>" 'calc-dispatch)
