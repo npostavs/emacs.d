@@ -352,6 +352,17 @@ https://github.com/immerrr/lua-mode/pull/19"
 
 ;; use GNU make
 (add-to-list 'auto-mode-alist '("Makefile" . makefile-gmake-mode))
+
+(define-and-add-el-get-source
+  '(:name i3-emacs
+          :description "i3 emacs integration"
+          :website "https://github.com/vava/i3-emacs"
+          :type github :username "npostavs" :url-type ssh :branch "current"))
+
+(use-package i3-integration
+  :load-path (lambda () `(,(concat el-get-dir "i3-emacs")))
+  :if (and (eq window-system 'x)
+           (executable-find "i3")))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
