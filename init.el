@@ -297,6 +297,18 @@
 
 ;;; programming related modes
 
+(use-package mode-compile
+  :init (define-key global-map [remap compile] 'mode-compile))
+
+(define-and-add-el-get-source
+  '(:name pretty-symbols
+          :description "Minor mode for drawing multi-character tokens as Unicode glyphs"
+          :type github :username "drothlis"))
+(use-package pretty-symbols
+  :init (dolist (mode '(emacs-lisp-mode-hook
+                        lisp-mode-hook scheme-mode-hook js-mode-hook))
+          (add-hook mode 'pretty-symbols-mode)))
+
 (use-package sh-script
   :defer t
   :config
