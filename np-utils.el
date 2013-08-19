@@ -39,7 +39,7 @@ variable ADD-TO"
           nil)
         el-get-sources        ; package updated with setcar
       ;; didn't find the package, let's add it
-      (setq el-get-sources (nconc el-get-sources (list package))))))
+      (push package el-get-sources))))
 
 
 (defun rgb-color-values (color)
