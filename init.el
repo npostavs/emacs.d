@@ -360,12 +360,19 @@ https://github.com/immerrr/lua-mode/pull/19"
 
 ;; git
 (define-and-add-el-get-source
+  `(:name git-modes
+          :description "GNU Emacs modes for Git-related files (used by magit)."
+          :type github :username "magit"))
+
+(define-and-add-el-get-source
   `(:name magit
+          :depends (git-modes)
           ,@(when (eq system-type 'windows-nt)
               '(:build nil :autoloads nil))))
 
 (use-package magit
-  :bind ("C-c v" . magit-status))
+  :bind ("C-c v" . magit-status)
+  :init (use-package git-modes :defer t))
 
 ;; use GNU make
 (add-to-list 'auto-mode-alist '("Makefile" . makefile-gmake-mode))
