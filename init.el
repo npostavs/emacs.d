@@ -297,6 +297,7 @@
           :type github
           :username "purcell"))
 (use-package elisp-slime-nav
+  :init (add-hook 'emacs-lisp-mode-hook #'turn-on-elisp-slime-nav-mode)
   :defer t
   :diminish "")
 
