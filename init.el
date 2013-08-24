@@ -387,7 +387,15 @@ https://github.com/immerrr/lua-mode/pull/19"
 (use-package i3-integration
   :load-path (lambda () `(,(concat el-get-dir "i3-emacs")))
   :if (and (eq window-system 'x)
-           (executable-find "i3")))
+           (executable-find "i3"))
+  :config
+  (defadvice magit-key-mode (after show-whole-popup activate)
+    ;; The popup should fit the text exactly, but the last line is
+    ;; clipped by about 1 pixel (because of fontifying?) so the whole
+    ;; buffer ends up scrolling down. We'll just add an extra line.
+    ;; See https://github.com/magit/magit/issues/800 for details.
+    (set-window-text-height (selected-window)
+                            (1+ (count-lines (point-min) (point-max))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
