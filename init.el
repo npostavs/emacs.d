@@ -351,13 +351,7 @@
 
 ;; lua-mode
 (use-package lua-mode
-  :defer t
-  :config
-  (defadvice lua-point-is-after-left-shifter-p
-    (around lua-always-left-shifter-p activate)
-    "pretend everything is left-shifter, see
-https://github.com/immerrr/lua-mode/pull/19"
-    (setq ad-return-value t)))
+  :defer t)
 
 ;; git
 (define-and-add-el-get-source
