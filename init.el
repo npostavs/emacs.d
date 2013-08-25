@@ -370,7 +370,6 @@
 
 (use-package magit
   :bind ("C-c v" . magit-status)
-  :init (use-package git-modes :defer t)
   :config (setq magit-completing-read-function #'magit-ido-completing-read
                 ;; default hook (revert) takes too long
                 magit-refresh-file-buffer-hook nil))
