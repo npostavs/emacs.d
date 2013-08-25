@@ -361,9 +361,12 @@
 
 (define-and-add-el-get-source
   `(:name magit
+          :pkgname "magit"
+          :username "npostavs" :checkout "origin/current"
+          :autoloads t
           :depends (git-modes)
           ,@(when (eq system-type 'windows-nt)
-              '(:build nil :autoloads nil))))
+              '(:build nil))))
 
 (use-package magit
   :bind ("C-c v" . magit-status)
