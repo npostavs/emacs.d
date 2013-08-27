@@ -362,7 +362,7 @@
 (define-and-add-el-get-source
   `(:name magit
           :pkgname "magit"
-          :username "npostavs" :checkout "origin/current"
+          :username "npostavs" :checkout "origin/current" :url-type ssh
           :autoloads t
           :depends (git-modes)
           ,@(when (eq system-type 'windows-nt)
