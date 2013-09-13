@@ -9,7 +9,7 @@
           :website "https://github.com/jwiegley/use-package"
           :description "A use-package declaration for simplifying your .emacs"
           :type github
-          :username "npostavs" :url-type ssh :branch "current"
+          :username "npostavs" :url-type ssh :checkout "current"
           :features (bind-key use-package)))
 (defvar override-global-map (make-sparse-keymap)); else bind-key will make full keymap
 (defvar el-get-dir (concat user-emacs-directory "el-get/"))
