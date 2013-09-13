@@ -358,6 +358,7 @@
   `(:name git-modes
           :description "GNU Emacs modes for Git-related files (used by magit)."
           :type github :username "magit"))
+(use-package git-modes :defer t)
 
 (define-and-add-el-get-source
   `(:name magit
