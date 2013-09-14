@@ -113,11 +113,15 @@
 (defalias 'quit-emacs 'save-buffers-kill-terminal); use M-x instead
 
 (defun back-to-indentation-or-beginning ()
+  "First try `back-to-indentation', if that doesn't move point do
+`beginning-of-line' or whatever the major mode's mapping of
+`C-a' is."
   (interactive)
   (if (= (point) (progn (back-to-indentation) (point)))
-      (beginning-of-line)))
+      (funcall (or (lookup-key (current-local-map) (kbd "C-a"))
+                   #'beginning-of-line))))
 
-(bind-key "C-a" 'back-to-indentation-or-beginning)
+(bind-key* "C-a" 'back-to-indentation-or-beginning)
 (unbind-key "M-m")
 
 ;; scrolling
