@@ -1,0 +1,12 @@
+# -*- mode: org -*-
+* Tasks
+** TODO just-one-space dwim mode
+   something like M-SPC: no space, M-SPC M-SPC one space
+   [2013-09-13 Fri]
+   file:~/.emacs.d/np-utils.el
+
+** DONE C-a in org-mode should be like back-to-indentation-or-beginning
+   [2013-09-13 Fri]
+   file:~/.emacs.d/init.el
+
+** TODO improve mode-compile

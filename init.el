@@ -400,6 +400,11 @@
     ;; See https://github.com/magit/magit/issues/800 for details.
     (set-window-text-height (selected-window)
                             (1+ (count-lines (point-min) (point-max))))))
+
+;; org-mode
+(use-package org-mode
+  :defer t
+  :init (setq orig-default-notes-file "~/.emacs.d/notes"))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
