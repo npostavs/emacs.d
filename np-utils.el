@@ -50,6 +50,13 @@ single integer"
       (setq c (+ c (lsh (logand x #xff00) i))
             i (- i 8)))))
 
+(defun reload-feature (feature)
+  "`unload-feature' followed by `require'"
+  (interactive
+   (list (read-feature "Reload feature: " t)))
+  (unload-feature feature t)
+  (require feature))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; functions grabbed from elsewhere
