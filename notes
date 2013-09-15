@@ -9,4 +9,4 @@
    [2013-09-13 Fri]
    file:~/.emacs.d/init.el
 
-** TODO improve mode-compile
+** MAYBE? mode-compile handle build.xml
