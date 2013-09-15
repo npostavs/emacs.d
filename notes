@@ -1,6 +1,6 @@
 # -*- mode: org -*-
 * Tasks
-** TODO just-one-space dwim mode
+** DONE just-one-space dwim mode
    something like M-SPC: no space, M-SPC M-SPC one space
    [2013-09-13 Fri]
    file:~/.emacs.d/np-utils.el

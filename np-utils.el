@@ -57,6 +57,21 @@ single integer"
   (unload-feature feature t)
   (require feature))
 
+(defun just-dwim-space (&optional n)
+  "like `just-one-space', but flip between 1 and 0 spaces"
+  (interactive "*P")
+  (just-one-space 
+   (if n (prefix-numeric-value n)
+     (let* ((orig-pos (point))
+            (skip-characters " \t")
+            (x (- (save-excursion
+                    (skip-chars-forward skip-characters)
+                    (constrain-to-field nil orig-pos t))
+                  (save-excursion
+                    (skip-chars-backward skip-characters)
+                    (constrain-to-field nil orig-pos)))))
+       (if (zerop x) 1 0)))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; functions grabbed from elsewhere

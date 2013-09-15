@@ -93,6 +93,8 @@
 (bind-key "<f7>" 'compile)
 (bind-key "<f5>" 'gdb)
 
+(define-key global-map [remap just-one-space] 'just-dwim-space)
+
 ;; don't want to burn single key seq on `forward-page' but moving
 ;; multiple pages with double key seq is annoying: use the repeat last
 ;; key trick (like C-x z z... or C-x e e...):
