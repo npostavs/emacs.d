@@ -9,3 +9,8 @@
    - TabCompletion? http://www.emacswiki.org/emacs/TabCompletion
      - TabKey2 seems overly complex, SmartTab probably best
 ** TODO sane binding for mc/* commands
+** TODO Windows pty/console stuff
+   - problem: http://www.gnu.org/software/emacs/manual/html_mono/efaq-w32.html#Subprocess-hang
+   - see http://article.gmane.org/gmane.comp.gnu.mingw.user/24377/match=console+pty
+   - hack? http://sourceforge.net/p/console/code/ci/master/tree/Console/ConsoleHandler.cpp
+** TODO completing-read-function = ido-completing-read fails!?

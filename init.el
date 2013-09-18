@@ -220,7 +220,7 @@
 
 (use-package ido
   :config (progn (ido-mode +1)
-                 (ido-everywhere)
+                 (ido-everywhere +1)
                  (setq ido-enable-flex-matching t)))
 
 (define-and-add-el-get-source
