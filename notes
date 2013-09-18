@@ -1,12 +1,11 @@
 # -*- mode: org -*-
 * Tasks
-** DONE just-one-space dwim mode
-   something like M-SPC: no space, M-SPC M-SPC one space
-   [2013-09-13 Fri]
-   file:~/.emacs.d/np-utils.el
-
-** DONE C-a in org-mode should be like back-to-indentation-or-beginning
-   [2013-09-13 Fri]
-   file:~/.emacs.d/init.el
-
 ** MAYBE? mode-compile handle build.xml
+** TODO yasnippet
+** TODO completion
+   - company-mode? http://company-mode.github.io/
+   - auto-complete? http://cx4a.org/software/auto-complete/
+   - CompletionUI? http://www.dr-qubit.org/emacs.php#completion
+   - TabCompletion? http://www.emacswiki.org/emacs/TabCompletion
+     - TabKey2 seems overly complex, SmartTab probably best
+** TODO sane binding for mc/* commands
