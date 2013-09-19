@@ -72,6 +72,34 @@ single integer"
                     (constrain-to-field nil orig-pos)))))
        (if (zerop x) 1 0)))))
 
+(defun beginning-of-line-dwim (&optional logical)
+  "Go back to line's beginning or indentation, whichever is first.
+
+If at beginning of logical line, go to indentation.
+Prefix arg means just go to logical beginning unconditionally."
+  (interactive "P")
+  (if logical (beginning-of-line)
+    (let* ((old (point))
+           (ind (save-excursion (back-to-indentation) (point)))
+           (beg (save-excursion (if visual-line-mode
+                                    (beginning-of-visual-line)
+                                  (beginning-of-line)) (point)))
+           (hi (max ind beg))
+           (lo (min ind beg)))
+      (goto-char (if (and (< lo old) (<= old hi))
+                     lo hi)))))
+
+(defun end-of-line-dwim (&optional logical)
+  "Go to successive visual line endings.
+
+Prefix arg means just go to logical ending unconditionally."
+  (interactive "*P")
+  (if (or logical (not visual-line-mode))
+      (end-of-line)
+    (when (and (= (point) (progn (end-of-visual-line) (point)))
+               (not (eolp)))
+      (end-of-visual-line 2))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; functions grabbed from elsewhere

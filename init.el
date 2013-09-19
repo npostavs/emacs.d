@@ -54,7 +54,6 @@
 (minibuffer-depth-indicate-mode +1)
 
 (setq-default indicate-empty-lines t
-              word-wrap t
               indent-tabs-mode nil
               tab-width 4
               c-basic-offset 4)
@@ -114,16 +113,8 @@
 (unbind-key "C-x C-c")
 (defalias 'quit-emacs 'save-buffers-kill-terminal); use M-x instead
 
-(defun back-to-indentation-or-beginning ()
-  "First try `back-to-indentation', if that doesn't move point do
-`beginning-of-line' or whatever the major mode's mapping of
-`C-a' is."
-  (interactive)
-  (if (= (point) (progn (back-to-indentation) (point)))
-      (funcall (or (lookup-key (current-local-map) (kbd "C-a"))
-                   #'beginning-of-line))))
-
-(bind-key* "C-a" 'back-to-indentation-or-beginning)
+(bind-key* "C-a" 'beginning-of-line-dwim)
+(bind-key* "C-e" 'end-of-line-dwim)
 (unbind-key "M-m")
 
 ;; scrolling
@@ -206,6 +197,10 @@
               (when (string-match-p "^ [^[:alpha:]]" to-what)
                 (setcar ad-return-value
                         (substring to-what 1))))))
+
+(global-visual-line-mode +1)
+(diminish 'visual-line-mode "V")
+(diminish 'global-visual-line-mode)
 
 (use-package undo-tree
   :defer t
