@@ -14,3 +14,4 @@
    - see http://article.gmane.org/gmane.comp.gnu.mingw.user/24377/match=console+pty
    - hack? http://sourceforge.net/p/console/code/ci/master/tree/Console/ConsoleHandler.cpp
 ** TODO completing-read-function = ido-completing-read fails!?
+** TODO smartparens? https://github.com/Fuco1/smartparens
