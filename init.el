@@ -199,11 +199,17 @@
 ;; CEDET/Semantic
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
-(use-package diminish); use-package makes use of this, load it first
+(use-package diminish ; use-package makes use of this, load it first
+  :config (defadvice diminish (after diminish-no-space activate)
+            "drop space from lighter if first char is not a letter"
+            (let ((to-what (car ad-return-value)))
+              (when (string-match-p "^ [^[:alpha:]]" to-what)
+                (setcar ad-return-value
+                        (substring to-what 1))))))
 
 (use-package undo-tree
   :defer t
-  :diminish "↺T"
+  :diminish "↺"
   :idle (global-undo-tree-mode +1))
 
 (use-package ace-jump-mode
@@ -293,7 +299,7 @@
   (setq tab-width 8))
 (use-package eldoc
   :defer t
-  :diminish "ElD"
+  :diminish ""
   :config (eldoc-add-command 'paredit-backward-delete 'paredit-close-round))
 
 
@@ -323,7 +329,8 @@
 (use-package pretty-symbols
   :init (dolist (mode '(emacs-lisp-mode-hook
                         lisp-mode-hook scheme-mode-hook js-mode-hook))
-          (add-hook mode 'pretty-symbols-mode)))
+          (add-hook mode 'pretty-symbols-mode))
+  :diminish "λ")
 
 (use-package sh-script
   :defer t
