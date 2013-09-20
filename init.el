@@ -198,9 +198,12 @@
                 (setcar ad-return-value
                         (substring to-what 1))))))
 
+;; visual-line-mode is part of simple.el so we can't `use-package' on it
 (global-visual-line-mode +1)
 (diminish 'visual-line-mode "V")
 (diminish 'global-visual-line-mode)
+(setq visual-line-fringe-indicators ; needs to restart mode when changed
+      '(left-curly-arrow right-curly-arrow))
 
 (use-package undo-tree
   :defer t
@@ -271,11 +274,14 @@
   :defer t
   :config (dired-details-install))
 
-;;; loadhist doesn't mention the handy `feature-file' in autoloads
+;;; loadhist misses some autoloads
 (use-package loadhist
   :defer t
-  :init (autoload 'feature-file "loadhist"
-          "Return the file name from which a given FEATURE was loaded."))
+  :init (progn
+          (autoload 'feature-file "loadhist"
+            "Return the file name from which a given FEATURE was loaded.")
+          (autoload 'read-feature "loadhist"
+            "Read feature name from the minibuffer, prompting with string PROMPT.")))
 
 ;;; lisp related modes
 (show-paren-mode +1) ; this is useful everywhere
