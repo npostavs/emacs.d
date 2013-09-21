@@ -42,7 +42,6 @@
 (setq make-backup-files nil
       inhibit-splash-screen t
       require-final-newline 'ask
-      line-move-visual nil
       truncate-partial-width-windows 80
       sentence-end-double-space nil
       x-select-enable-clipboard t
