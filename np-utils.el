@@ -93,7 +93,7 @@ Prefix arg means just go to logical beginning unconditionally."
   "Go to successive visual line endings.
 
 Prefix arg means just go to logical ending unconditionally."
-  (interactive "*P")
+  (interactive "P")
   (if (or logical (not visual-line-mode))
       (end-of-line)
     (when (and (= (point) (progn (end-of-visual-line) (point)))
