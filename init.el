@@ -75,8 +75,14 @@
 (bind-key* "M-h" 'backward-kill-word)
 (bind-key* "C-M-h" 'backward-kill-sexp)
 ;; b scrolls back in view-mode (counterpart to SPC scrolling forward, from dillo)
-(eval-after-load "view"
+(eval-after-load 'view
   '(bind-key "b" 'View-scroll-page-backward view-mode-map))
+(eval-after-load 'info
+  '(bind-key "b" 'Info-scroll-down Info-mode-map))
+(eval-after-load 'help
+  '(progn (bind-key "b" 'scroll-down-command help-mode-map)
+          (bind-key "n" 'help-go-forward help-mode-map)
+          (bind-key "p" 'help-go-back help-mode-map)))
 ;; single key non-homerow bindings for some less common operations
 (bind-key* "<delete>" 'delete-region)
 (bind-key "<kp-multiply>" 'calc-dispatch)
