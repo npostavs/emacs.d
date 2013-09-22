@@ -1,7 +1,7 @@
 # -*- mode: org -*-
 * Tasks
 ** MAYBE? mode-compile handle build.xml
-** TODO default args for dired
+** DONE default args for dired
 ** TODO yasnippet
 ** TODO completion
    - company-mode? http://company-mode.github.io/

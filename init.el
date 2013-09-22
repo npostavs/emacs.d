@@ -277,7 +277,9 @@
   :config (setq-default dired-details-hidden-string "+ "))
 (use-package dired
   :defer t
-  :config (dired-details-install))
+  :config (progn
+            (setq dired-listing-switches "-alX")
+            (dired-details-install)))
 
 ;;; loadhist misses some autoloads
 (use-package loadhist
