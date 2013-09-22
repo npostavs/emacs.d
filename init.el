@@ -279,6 +279,7 @@
   :defer t
   :config (progn
             (setq dired-listing-switches "-alX")
+            (require 'dired-x)
             (dired-details-install)))
 
 ;;; loadhist misses some autoloads
