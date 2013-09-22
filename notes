@@ -1,6 +1,7 @@
 # -*- mode: org -*-
 * Tasks
 ** MAYBE? mode-compile handle build.xml
+** TODO default args for dired
 ** TODO yasnippet
 ** TODO completion
    - company-mode? http://company-mode.github.io/
@@ -9,9 +10,20 @@
    - TabCompletion? http://www.emacswiki.org/emacs/TabCompletion
      - TabKey2 seems overly complex, SmartTab probably best
 ** TODO sane binding for mc/* commands
+   - region-bindings-mode https://github.com/fgallina/region-bindings-mode
+** TextMate "ScopeSelectors", are they good?
+   http://manual.macromates.com/en/scope_selectors
 ** TODO Windows pty/console stuff
    - problem: http://www.gnu.org/software/emacs/manual/html_mono/efaq-w32.html#Subprocess-hang
    - see http://article.gmane.org/gmane.comp.gnu.mingw.user/24377/match=console+pty
    - hack? http://sourceforge.net/p/console/code/ci/master/tree/Console/ConsoleHandler.cpp
 ** TODO completing-read-function = ido-completing-read fails!?
 ** TODO smartparens? https://github.com/Fuco1/smartparens
+** use-package
+*** TODO :config block should be idempotent
+    see eval-after-load, and after-load-alist
+*** TODO test the simplify branch
+** el-get
+*** can .info be built without make?
+    like .elc files
+*** install all info to one dir?
