@@ -22,7 +22,8 @@
 ** use-package
 *** TODO :config block should be idempotent
     see eval-after-load, and after-load-alist
-*** TODO test the simplify branch
+*** DONE test the simplify branch
+*** bind-key should allow remap?
 ** el-get
 *** can .info be built without make?
     like .elc files

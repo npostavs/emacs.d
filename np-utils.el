@@ -81,9 +81,7 @@ Prefix arg means just go to logical beginning unconditionally."
   (if logical (beginning-of-line)
     (let* ((old (point))
            (ind (save-excursion (back-to-indentation) (point)))
-           (beg (save-excursion (if visual-line-mode
-                                    (beginning-of-visual-line)
-                                  (beginning-of-line)) (point)))
+           (beg (save-excursion (beginning-of-visual-line) (point)))
            (hi (max ind beg))
            (lo (min ind beg)))
       (goto-char (if (and (< lo old) (<= old hi))
@@ -94,9 +92,12 @@ Prefix arg means just go to logical beginning unconditionally."
 
 Prefix arg means just go to logical ending unconditionally."
   (interactive "P")
-  (if (or logical (not visual-line-mode))
+  (if logical
       (end-of-line)
-    (when (and (= (point) (progn (end-of-visual-line) (point)))
+    (when (and (= (point) (progn (end-of-visual-line)
+                                 (when (not (or word-wrap (eolp)))
+                                   (backward-char))
+                                 (point)))
                (not (eolp)))
       (end-of-visual-line 2))))
 

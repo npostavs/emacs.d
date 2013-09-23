@@ -204,9 +204,8 @@
                         (substring to-what 1))))))
 
 ;; visual-line-mode is part of simple.el so we can't `use-package' on it
-(global-visual-line-mode +1)
 (diminish 'visual-line-mode "V")
-(diminish 'global-visual-line-mode)
+(add-hook 'text-mode-hook #'visual-line-mode)
 (setq visual-line-fringe-indicators ; needs to restart mode when changed
       '(left-curly-arrow right-curly-arrow))
 
