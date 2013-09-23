@@ -114,6 +114,8 @@
 (defadvice backward-page (after with-repeat-key activate)
   (set-temporary-overlay-map page-movement-map))
 
+(define-key global-map [remap set-selective-display] 'toggle-fold)
+
 ;; don't need this
 (unbind-key "C-x C-c")
 (defalias 'quit-emacs 'save-buffers-kill-terminal); use M-x instead

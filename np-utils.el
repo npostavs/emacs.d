@@ -101,6 +101,33 @@ Prefix arg means just go to logical ending unconditionally."
                (not (eolp)))
       (end-of-visual-line 2))))
 
+;; based on `kmacro-call-macro' code. There is a library form for this
+;; sort of thing, but it looks a lot more complicated possibly because
+;; it's working with older emacsen.
+;; http://furius.ca/pubcode/pub/conf/lib/elisp/blais/repeatable.el
+(defun make-repeatable (cmd no-repeat &rest args)
+  "call this to allow repeating function with last key of
+sequence, just like C-x e e e..."
+  (when (or (eq no-repeat 'repeating)
+            (> (length (this-single-command-keys)) 1))
+   (set-temporary-overlay-map
+    (let ((map (make-sparse-keymap)))
+      (define-key map (vector last-input-event)
+        `(lambda () (interactive) (,cmd ,@args 'repeating)))
+      map))))
+
+;;; from https://github.com/thomasf/dotfiles-thomasf-emacs
+(defun toggle-fold (&optional no-repeat)
+  "Toggle fold all lines larger than indentation on current line"
+  (interactive)
+  (let ((col 1))
+    (save-excursion
+      (back-to-indentation)
+      (setq col (+ 1 (current-column)))
+      (set-selective-display
+       (if selective-display nil (or col 1)))))
+  (make-repeatable 'toggle-fold no-repeat))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; functions grabbed from elsewhere

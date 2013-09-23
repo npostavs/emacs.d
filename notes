@@ -28,3 +28,6 @@
 *** can .info be built without make?
     like .elc files
 *** install all info to one dir?
+** (elisp) 22.17.3 Menus and the Keyboard
+   would be better for calc-dispatch
+
