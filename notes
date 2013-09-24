@@ -2,6 +2,12 @@
 * Tasks
 ** MAYBE? mode-compile handle build.xml
 ** DONE default args for dired
+** TODO visual line end
+   when point is at visual line end it *looks* like the cursor is on
+   the next line. How to resolve this? Sacrifice space at end of line?
+** TODO beginning-of-line-dwim doesn't dwim
+   goes to beginning of line instead of indentation when before
+   indentation
 ** TODO yasnippet
 ** TODO completion
    - company-mode? http://company-mode.github.io/
