@@ -84,8 +84,7 @@ Prefix arg means just go to logical beginning unconditionally."
            (beg (save-excursion (beginning-of-visual-line) (point)))
            (hi (max ind beg))
            (lo (min ind beg)))
-      (goto-char (if (and (< lo old) (<= old hi))
-                     lo hi)))))
+      (goto-char (if (eq old hi) lo hi)))))
 
 (defun end-of-line-dwim (&optional logical)
   "Go to successive visual line endings.
