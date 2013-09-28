@@ -77,6 +77,7 @@
 ;; b scrolls back in view-mode (counterpart to SPC scrolling forward, from dillo)
 (eval-after-load 'view
   '(bind-key "b" 'View-scroll-page-backward view-mode-map))
+(bind-key "b" 'scroll-down-command apropos-mode-map)
 (eval-after-load 'info
   '(bind-key "b" 'Info-scroll-down Info-mode-map))
 (eval-after-load 'help
