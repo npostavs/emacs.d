@@ -35,6 +35,18 @@
              el-get-update
              el-get-list-packages))
 
+;;; cut down el-get's post-init stuff
+(define-and-add-el-get-source
+  '(:name package
+          :post-init
+          (setq package-user-dir
+                (expand-file-name
+                 (convert-standard-filename
+                  (concat (file-name-as-directory
+                           default-directory)
+                          "elpa"))))
+          (make-directory package-user-dir t)))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; misc emacs settings
@@ -374,11 +386,10 @@
 
 ;; sml-mode
 (define-and-add-el-get-source
- `(:name sml-mode
-         ,@(when (eq system-type 'windows-nt) '(:build nil))
-         :compile ("sml-compat.el" "sml-util.el" "sml-defs.el"
-                   "sml-move.el" "sml-mode.el" "sml-proc.el")
-         :info "sml-mode.info"))
+  '(:name sml-mode
+          :description
+          "SML-mode is a major Emacs mode for editing Standard ML source code."
+          :type elpa))
 
 ;; lua-mode
 (use-package lua-mode
