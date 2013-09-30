@@ -77,7 +77,8 @@
 ;; b scrolls back in view-mode (counterpart to SPC scrolling forward, from dillo)
 (eval-after-load 'view
   '(bind-key "b" 'View-scroll-page-backward view-mode-map))
-(bind-key "b" 'scroll-down-command apropos-mode-map)
+(eval-after-load 'apropos
+  '(bind-key "b" 'scroll-down-command apropos-mode-map))
 (eval-after-load 'info
   '(bind-key "b" 'Info-scroll-down Info-mode-map))
 (eval-after-load 'help
@@ -88,7 +89,7 @@
 (bind-key* "<delete>" 'delete-region)
 (bind-key "<kp-multiply>" 'calc-dispatch)
 (bind-key "C-<kp-multiply>" 'quick-calc)
-;; some compatibility with VisualC++
+;; some compatibility with Windows/VisualC++ stuff
 (bind-key "<f4>" 'next-error)
 (bind-key "S-<f4>" 'previous-error)
 (bind-key "M-<f4>" 'kill-this-buffer)
@@ -97,6 +98,11 @@
 
 (bind-key "<f7>" 'compile)
 (bind-key "<f5>" 'gdb)
+
+(unbind-key "C-x C-c")                             ; don't need this
+(defalias 'quit-emacs 'save-buffers-kill-terminal) ; use M-x instead
+(bind-key "M-<f4>" 'quit-emacs)
+(bind-key "C-<f4>" 'kill-buffer-and-window)
 
 (define-key global-map [remap just-one-space] 'just-dwim-space)
 
@@ -117,9 +123,6 @@
 
 (define-key global-map [remap set-selective-display] 'toggle-fold)
 
-;; don't need this
-(unbind-key "C-x C-c")
-(defalias 'quit-emacs 'save-buffers-kill-terminal); use M-x instead
 
 (bind-key* "C-a" 'beginning-of-line-dwim)
 (bind-key* "C-e" 'end-of-line-dwim)
