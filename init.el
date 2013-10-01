@@ -448,7 +448,8 @@
 ;; org-mode
 (use-package org-mode
   :defer t
-  :init (setq orig-default-notes-file "~/.emacs.d/notes"))
+  :init (setq orig-default-notes-file "~/.emacs.d/notes"
+              org-startup-folded nil))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
