@@ -245,9 +245,12 @@
   :config (setq calc-display-trail nil))
 
 (use-package ido
-  :config (progn (ido-mode +1)
-                 (ido-everywhere +1)
-                 (setq ido-enable-flex-matching t)))
+  :config
+  (progn (ido-mode +1)
+         (ido-everywhere +1)
+         (setq ido-enable-flex-matching t
+               ;; don't jump to some other directory when I mistype a filename
+               ido-auto-merge-work-directories-length -1)))
 
 (define-and-add-el-get-source
   '(:name ido-complete-space-or-hyphen
