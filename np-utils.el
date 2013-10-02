@@ -104,19 +104,24 @@ Prefix arg means just go to logical ending unconditionally."
 ;; sort of thing, but it looks a lot more complicated possibly because
 ;; it's working with older emacsen.
 ;; http://furius.ca/pubcode/pub/conf/lib/elisp/blais/repeatable.el
-(defun make-repeatable (cmd no-repeat &rest args)
+
+(defvar make-repeatable--command nil
+  "The command that's currently repeating")
+
+(defun make-repeatable (cmd &rest args)
   "call this to allow repeating function with last key of
 sequence, just like C-x e e e..."
-  (when (or (eq no-repeat 'repeating)
+  (when (or (eq cmd make-repeatable--command)
             (> (length (this-single-command-keys)) 1))
    (set-temporary-overlay-map
     (let ((map (make-sparse-keymap)))
       (define-key map (vector last-input-event)
-        `(lambda () (interactive) (,cmd ,@args 'repeating)))
+        `(lambda () (interactive) (let ((make-repeatable--command ',cmd))
+                               (,cmd ,@args))))
       map))))
 
 ;;; from https://github.com/thomasf/dotfiles-thomasf-emacs
-(defun toggle-fold (&optional no-repeat)
+(defun toggle-fold ()
   "Toggle fold all lines larger than indentation on current line"
   (interactive)
   (let ((col 1))
@@ -125,7 +130,7 @@ sequence, just like C-x e e e..."
       (setq col (+ 1 (current-column)))
       (set-selective-display
        (if selective-display nil (or col 1)))))
-  (make-repeatable 'toggle-fold no-repeat))
+  (make-repeatable 'toggle-fold))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -148,7 +153,8 @@ sequence, just like C-x e e e..."
        (let ((window (car window-to-buffer))
              (buffer (cadr window-to-buffer)))
          (select-window window)
-         (switch-to-buffer buffer))) map)))
+         (switch-to-buffer buffer))) map))
+  (make-repeatable 'rotate-frame-window-buffers))
 
 (defun toggle-window-split ()
   (interactive)
@@ -173,7 +179,8 @@ sequence, just like C-x e e e..."
           (set-window-buffer (selected-window) this-win-buffer)
           (set-window-buffer (next-window) next-win-buffer)
           (select-window first-win)
-          (if this-win-2nd (other-window 1))))))
+          (if this-win-2nd (other-window 1)))))
+  (make-repeatable 'toggle-window-split))
 
 
 
