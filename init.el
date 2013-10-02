@@ -155,6 +155,9 @@
 (bind-key* "M-<right>" 'windmove-right)
 (bind-key* "M-<left>" 'windmove-left)
 
+(bind-key "t" 'toggle-window-split ctl-x-4-map)
+(bind-key "C-t" 'rotate-frame-window-buffers ctl-x-4-map)
+
 (unbind-key "C-z") ; suspend-frame is also on C-x C-z
 (bind-key "<XF86Sleep>" 'ignore)
 
