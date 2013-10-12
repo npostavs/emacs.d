@@ -9,7 +9,7 @@
           :website "https://github.com/jwiegley/use-package"
           :description "A use-package declaration for simplifying your .emacs"
           :type github
-          :username "npostavs" :url-type ssh :checkout "current"
+          :username "npostavs" :url-type ssh :checkout "origin/current"
           :features (bind-key use-package)))
 (defvar override-global-map (make-sparse-keymap)); else bind-key will make full keymap
 (defvar el-get-dir (concat user-emacs-directory "el-get/"))
@@ -432,7 +432,7 @@
   '(:name i3-emacs
           :description "i3 emacs integration"
           :website "https://github.com/vava/i3-emacs"
-          :type github :username "npostavs" :url-type ssh :branch "current"))
+          :type github :username "npostavs" :url-type ssh :branch "origin/current"))
 
 (use-package i3-integration
   :load-path (lambda () `(,(concat el-get-dir "i3-emacs")))
