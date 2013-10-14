@@ -345,6 +345,14 @@
   :defer t
   :diminish "")
 
+(define-and-add-el-get-source
+  '(:name pcre2el
+          :description "Parse, convert, and font-lock PCRE, Emacs and rx regexps"
+          :type github
+          :username "joddie"))
+(use-package pcre2el
+  :idle (rxt-global-mode +1))
+
 ;;; programming related modes
 
 (use-package mode-compile
