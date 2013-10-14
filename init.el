@@ -433,7 +433,8 @@
 (define-and-add-el-get-source
   `(:name git-modes
           :description "GNU Emacs modes for Git-related files (used by magit)."
-          :type github :username "magit"))
+          :type github
+          :username "npostavs" :url-type ssh :checkout "origin/current"))
 (use-package git-modes
   :defer t
   :config (remove-hook 'git-commit-mode-hook 'flyspell-mode))
