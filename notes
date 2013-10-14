@@ -10,7 +10,6 @@
 ** DONE beginning-of-line-dwim doesn't dwim
    goes to beginning of line instead of indentation when before
    indentation
-** TODO yasnippet
 ** TODO completion
    - company-mode? http://company-mode.github.io/
    - auto-complete? http://cx4a.org/software/auto-complete/
@@ -30,12 +29,12 @@
 ** use-package
 *** TODO :config block should be idempotent
     see eval-after-load, and after-load-alist
-*** DONE test the simplify branch
 *** bind-key should allow remap?
 ** el-get
 *** can .info be built without make?
     - like .elc files
     - lisp/textmodes/makeinfo.el
+    - lisp/textmodes/texinfmt.el.gz
 *** install all info to one dir?
 ** (elisp) 22.17.3 Menus and the Keyboard
    would be better for calc-dispatch

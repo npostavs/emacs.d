@@ -1,1 +1,4 @@
 *
+# want all the snippets, need to first whitelist directory
+!snippets/
+!snippets/**
