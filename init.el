@@ -363,6 +363,8 @@
                 ,(expand-file-name "yasnippet-snippets" el-get-dir)
                 ,(expand-file-name "yasnippet/snippets" el-get-dir)))
   :idle (yas-global-mode +1)
+  :config (setq yas-prompt-functions ; default x-prompt is just annoying
+                '(yas-ido-prompt yas-completing-prompt yas-no-prompt))
   :diminish (yas-minor-mode . "Y"))
 
 (define-and-add-el-get-source
