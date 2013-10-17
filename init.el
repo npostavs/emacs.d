@@ -243,6 +243,14 @@
   ;; TODO: maybe bind more mc/ comands?
   :bind (("C-z C-SPC" . mc/edit-lines)))
 
+(use-package grep
+  :defer t
+  :config (when (eq system-type 'windows-nt)
+            ;; findstr can handle the basic find|grep use case
+            (grep-apply-setting 'grep-find-template
+                                "findstr /S /N /D:. /C:<R> <F>")
+            (setq find-name-arg nil)))
+
 (use-package calc
   :defer t
   :bind (("<kp-multiply>" . calc-dispatch)
