@@ -250,6 +250,16 @@
   ;; the trail is distracting
   :config (setq calc-display-trail nil))
 
+(use-package proced
+  :bind ("C-c p" . proced)
+  :config (progn
+            (set-assq 'proced-format-alist
+                      'min '(pid tree (args comm)))
+            (set-assq 'proced-format-alist
+                      'tiny '(pid tree user pcpu pmem (args comm)))
+            (setq-default proced-format 'tiny
+                          proced-tree-flag nil)))
+
 (use-package ido
   :config
   (progn (ido-mode +1)

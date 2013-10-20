@@ -41,6 +41,10 @@ variable ADD-TO"
       ;; didn't find the package, let's add it
       (push package el-get-sources))))
 
+(defun set-assq (alist-var key value)
+  "Set the value of KEY in ALIST-VAR to VALUE."
+  (set alist-var (cons (cons key value)
+                       (assq-delete-all key (symbol-value alist-var)))))
 
 (defun rgb-color-values (color)
   "like `color-values' but returns the classic 3-byte rgb in a
