@@ -101,12 +101,10 @@
           (bind-key "p" 'help-go-back help-mode-map)))
 ;; single key non-homerow bindings for some less common operations
 (bind-key* "<delete>" 'delete-region)
-(bind-key "<kp-multiply>" 'calc-dispatch)
-(bind-key "C-<kp-multiply>" 'quick-calc)
 ;; some compatibility with Windows/VisualC++ stuff
 (bind-key "<f4>" 'next-error)
 (bind-key "S-<f4>" 'previous-error)
-(bind-key "M-<f4>" 'kill-this-buffer)
+
 (bind-key "C-<tab>" 'switch-to-next-buffer)
 (bind-key "C-S-<iso-lefttab>" 'switch-to-prev-buffer)
 
@@ -116,7 +114,8 @@
 (unbind-key "C-x C-c")                             ; don't need this
 (defalias 'quit-emacs 'save-buffers-kill-terminal) ; use M-x instead
 (bind-key "M-<f4>" 'quit-emacs)
-(bind-key "C-<f4>" 'kill-buffer-and-window)
+(bind-key "C-<f4>" 'kill-this-buffer)
+(bind-key "C-S-<f4>" 'kill-buffer-and-window)
 
 (define-key global-map [remap just-one-space] 'just-dwim-space)
 
@@ -246,6 +245,8 @@
 
 (use-package calc
   :defer t
+  :bind (("<kp-multiply>" . calc-dispatch)
+         ("C-<kp-multiply>" . quick-calc))
   ;; the trail is distracting
   :config (setq calc-display-trail nil))
 
