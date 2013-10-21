@@ -24,7 +24,9 @@
    - problem: http://www.gnu.org/software/emacs/manual/html_mono/efaq-w32.html#Subprocess-hang
    - see http://article.gmane.org/gmane.comp.gnu.mingw.user/24377/match=console+pty
    - hack? http://sourceforge.net/p/console/code/ci/master/tree/Console/ConsoleHandler.cpp
-** TODO completing-read-function = ido-completing-read fails!?
+** completing-read-function = ido-completing-read fails!?
+   - see http://debbugs.gnu.org/cgi/bugreport.cgi?bug=15430
+   - see [[https://github.com/technomancy/ido-ubiquitous][ido-ubiquitious]]
 ** TODO smartparens? https://github.com/Fuco1/smartparens
 ** use-package
 *** TODO :config block should be idempotent
@@ -38,4 +40,7 @@
 *** install all info to one dir?
 ** (elisp) 22.17.3 Menus and the Keyboard
    would be better for calc-dispatch
-** DONE sml-mode get from ELPA
+** magit
+*** undoable branch delete
+    - save the reflogs?
+    - see [[http://stackoverflow.com/questions/19486477/is-it-possible-to-prevent-git-from-removing-deleted-branches-from-the-reflog][stackoverflow Q]]
