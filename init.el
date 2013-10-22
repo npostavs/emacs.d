@@ -367,13 +367,7 @@
   :diminish "")
 
 (define-and-add-el-get-source
-  '(:name yasnippet-snippets
-          :description "a collection of yasnippet snippets for many languages"
-          :type github
-          :username "AndreaCrotti"))
-
-(define-and-add-el-get-source
-  '(:name yasnippet :depends (yasnippet-snippets)
+  '(:name yasnippet
           :pkgname nil
           :username "npostavs" :url-type ssh :checkout "origin/current"
           :pre-init nil :post-init nil))
@@ -381,7 +375,6 @@
 (use-package yasnippet
   :init (setq yas-snippet-dirs
               `("~/.emacs.d/snippets"
-                ,(expand-file-name "yasnippet-snippets" el-get-dir)
                 ,(expand-file-name "yasnippet/snippets" el-get-dir)))
   :idle (yas-global-mode +1)
   :config (progn
