@@ -367,6 +367,23 @@
   :diminish "")
 
 (define-and-add-el-get-source
+  '(:name anaphora
+          :description "Anaphoric expressions for Emacs Lisp, providing implicit temporary variables."
+          :type github
+          :username "rolandwalker"))
+
+(define-and-add-el-get-source
+  '(:name simple-call-tree-ext
+          :description "emacs lisp code for displaying a simple call tree."
+          :type github
+          :username "npostavs" :url-type ssh :checkout "origin/current"
+          :depends anapohra))
+
+(use-package simple-call-tree-ext
+  :defer t
+  :requires simple-call-tree+)
+
+(define-and-add-el-get-source
   '(:name yasnippet
           :pkgname nil
           :username "npostavs" :url-type ssh :checkout "origin/current"
