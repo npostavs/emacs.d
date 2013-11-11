@@ -487,9 +487,16 @@
 
 (use-package magit
   :bind ("C-c v" . magit-status)
-  :config (setq magit-completing-read-function #'magit-ido-completing-read
-                ;; default hook (revert) takes too long
-                magit-refresh-file-buffer-hook nil))
+  :config
+  (progn
+    (setq magit-completing-read-function #'magit-ido-completing-read
+          magit-default-tracking-name-function      ; remote usually
+          #'magit-default-tracking-name-branch-only ; redundant
+          magit-status-verbose-untracked nil        ; less noise
+          ;; default hook (revert) takes too long
+          magit-refresh-file-buffer-hook nil)
+    (font-lock-add-keywords 'emacs-lisp-mode
+                            magit-font-lock-keywords)))
 
 ;; use GNU make
 (add-to-list 'auto-mode-alist '("Makefile" . makefile-gmake-mode))
