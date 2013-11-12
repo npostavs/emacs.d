@@ -100,6 +100,9 @@
   '(bind-key "b" 'View-scroll-page-backward view-mode-map))
 (eval-after-load 'apropos
   '(bind-key "b" 'scroll-down-command apropos-mode-map))
+(setenv "MANWIDTH" "72")
+(eval-after-load 'man
+  '(bind-key "b" 'scroll-down-command Man-mode-map))
 (eval-after-load 'info
   '(bind-key "b" 'Info-scroll-down Info-mode-map))
 (eval-after-load 'help
