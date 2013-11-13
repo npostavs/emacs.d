@@ -71,6 +71,11 @@
               tab-width 4
               c-basic-offset 4)
 
+(when (fboundp 'tool-bar-mode)
+  (tool-bar-mode -1))
+(when (fboundp 'menu-bar-mode)
+  (menu-bar-mode -1))
+
 (fringe-mode '(4 . 4))
 
 ;; only show trailing whitespace in files
