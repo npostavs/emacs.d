@@ -377,7 +377,7 @@
           :description "emacs lisp code for displaying a simple call tree."
           :type github
           :username "npostavs" :url-type ssh :checkout "origin/current"
-          :depends anapohra))
+          :depends anaphora))
 
 (use-package simple-call-tree-ext
   :defer t
