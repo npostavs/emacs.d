@@ -44,3 +44,4 @@
 *** undoable branch delete
     - save the reflogs?
     - see [[http://stackoverflow.com/questions/19486477/is-it-possible-to-prevent-git-from-removing-deleted-branches-from-the-reflog][stackoverflow Q]]
+** ediff side-by-side not aligned
