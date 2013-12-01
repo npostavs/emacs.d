@@ -152,13 +152,10 @@
 (unbind-key "M-m")
 
 ;; scrolling
-(bind-key* "<right>" 'scroll-left)
-(bind-key* "<left>" 'scroll-right)
-(bind-key* "<up>"
-  (lambda () (interactive) (scroll-up -1)))
-(bind-key* "<down>"
-  (lambda () (interactive) (scroll-down -1)))
-(bind-key* "<right>" 'scroll-left)
+(bind-key* "<right>" (lambda () (interactive) (scroll-left 1 t)))
+(bind-key* "<left>" (lambda () (interactive) (scroll-right 1 t)))
+(bind-key* "<up>" (lambda () (interactive) (scroll-up -1)))
+(bind-key* "<down>" (lambda () (interactive) (scroll-down -1)))
 (put 'scroll-left 'disabled nil)
 
 (bind-key* "M-<down>" 'windmove-down)
