@@ -534,7 +534,9 @@
 (use-package org-mode
   :defer t
   :init (setq orig-default-notes-file "~/.emacs.d/notes"
-              org-startup-folded nil))
+              org-startup-folded nil
+              org-confirm-babel-evaluate nil
+              org-export-copy-to-kill-ring nil))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
