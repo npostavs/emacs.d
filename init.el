@@ -396,7 +396,7 @@
 (define-and-add-el-get-source
   '(:name yasnippet
           :pkgname nil
-          :username "npostavs" :url-type ssh :checkout "origin/current"
+          :username "capitaomorte" :url-type ssh
           :pre-init nil :post-init nil))
 
 (use-package yasnippet
