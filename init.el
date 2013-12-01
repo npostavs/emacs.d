@@ -502,7 +502,6 @@
     (setq magit-completing-read-function #'magit-ido-completing-read
           magit-default-tracking-name-function      ; remote usually
           #'magit-default-tracking-name-branch-only ; redundant
-          magit-status-verbose-untracked nil        ; less noise
           ;; default hook (revert) takes too long
           magit-refresh-file-buffer-hook nil)
     (font-lock-add-keywords 'emacs-lisp-mode
