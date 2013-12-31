@@ -63,6 +63,8 @@
       view-inhibit-help-message t ; don't tell me about it
 
       delete-active-region nil ; just use <delete>
+
+      gdb-many-windows t
       )
 
 (setq enable-recursive-minibuffers t)
@@ -119,7 +121,14 @@
 (bind-key "C-S-<iso-lefttab>" 'switch-to-prev-buffer)
 
 (bind-key "<f7>" 'compile)
-(bind-key "<f5>" 'gdb)
+(bind-key "C-<f7>" 'recompile)
+(bind-key "C-<f5>" 'gdb)
+(bind-key "<f5>" 'gud-cont)
+(bind-key "<f9>" 'gud-break)
+(bind-key "<f10>" 'gud-next)
+(bind-key "C-<f10>" 'gud-until)
+(bind-key "<f11>" 'gud-step)
+(bind-key "S-<f11>" 'gud-finish)
 
 (unbind-key "C-x C-c")                             ; don't need this
 (defalias 'quit-emacs 'save-buffers-kill-terminal) ; use M-x instead
