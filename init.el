@@ -564,6 +564,7 @@
 (put 'require-final-newline 'safe-local-variable #'symbolp)
 (put 'whitespace-style 'safe-local-variable #'listp)
 (put 'whitespace-line-column 'safe-local-variable #'integerp)
+(put 'emacs-lisp-docstring-fill-column 'safe-local-variable #'integerp)
 (put 'lexical-binding 'safe-local-variable #'booleanp)
 (setq enable-local-eval nil)
 
