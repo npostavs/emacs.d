@@ -133,7 +133,9 @@
 (unbind-key "C-x C-c")                             ; don't need this
 (defalias 'quit-emacs 'save-buffers-kill-terminal) ; use M-x instead
 (bind-key "M-<f4>" 'quit-emacs)
-(bind-key "C-<f4>" 'kill-this-buffer)
+(bind-key "C-<f4>"
+          ;; `kill-this-buffer' only works properly from menu
+          (lambda () (interactive) (kill-buffer)))
 (bind-key "C-S-<f4>" 'kill-buffer-and-window)
 
 (define-key global-map [remap just-one-space] 'just-dwim-space)
