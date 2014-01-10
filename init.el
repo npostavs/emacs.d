@@ -93,6 +93,10 @@
 ;;; keybindings
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
+;; it's too annoying to accidentally hit C-[ three times when C-p was
+;; meant.
+(bind-key "ESC ESC ESC" 'keyboard-quit)
+
 ;; <backspace> is too far away
 (define-key key-translation-map [?\C-h] [?\C-?])
 (bind-key* "M-h" 'backward-kill-word)
