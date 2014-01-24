@@ -257,6 +257,7 @@
 
 (use-package undo-tree
   :defer t
+  :config (setq undo-tree-visualizer-timestamps t)
   :diminish "↺"
   :idle (global-undo-tree-mode +1))
 
