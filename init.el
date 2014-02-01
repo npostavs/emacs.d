@@ -73,7 +73,8 @@
 (setq-default indicate-empty-lines t
               indent-tabs-mode nil
               tab-width 4
-              c-basic-offset 4)
+              c-basic-offset 4
+              truncate-lines t)
 
 (when (fboundp 'tool-bar-mode)
   (tool-bar-mode -1))
