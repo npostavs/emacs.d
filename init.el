@@ -554,6 +554,20 @@
               org-startup-folded nil
               org-confirm-babel-evaluate nil
               org-export-copy-to-kill-ring nil))
+
+;;; probably this should be replaced with projectile or something
+(when (eq system-type 'windows-nt)
+ (defvar project-list '()
+   "list of (name dir) for `open-project'.")
+
+ (defun open-project (name dir)
+   (interactive (assoc (ido-completing-read "Project: " (mapcar #'car project-list) nil 'require-match)
+                       project-list))
+   (start-process-shell-command
+    (format "%s-cmd" name) nil
+    (format "start \"%s\" /D %s cmd.exe"
+            name (shell-quote-argument dir)))
+   (dired dir)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
