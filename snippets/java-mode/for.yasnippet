@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: for
+# key: for
+# --
+for (${1:`(yas-choose-value "int" "short")`} ${2:i} = 0; $2 < ${3:N}; $2+=${4:1}) {
+    $0
+}

@@ -423,6 +423,7 @@
   :config (progn
             (setq yas-prompt-functions ; default x-prompt is just annoying
                   '(yas-ido-prompt yas-completing-prompt yas-no-prompt))
+            (setq yas-wrap-around-region t)
             (unbind-key "<tab>" yas-minor-mode-map)
             (unbind-key "TAB" yas-minor-mode-map)
             (bind-key "M-i" 'yas-expand yas-minor-mode-map))
