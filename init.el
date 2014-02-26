@@ -334,7 +334,8 @@
                               (mode . gnus-article-mode)
                               (mode . gnus-group-mode)
                               (mode . gnus-summary-mode)))
-             ("Procs" (predicate . (get-buffer-process (current-buffer)))))))
+             ("Procs" (predicate . (get-buffer-process (current-buffer))))
+             ("Magit" (name . "^[*]magit")))))
 
     (define-and-add-hook ibuffer-mode-hook
       (ibuffer-switch-to-saved-filter-groups "default"))))
