@@ -524,6 +524,14 @@
           ;; don't revert automatically
           magit-refresh-file-buffer-hook nil ; obsolete
           magit-turn-on-auto-revert-mode nil)
+    (when (eq system-type 'windows-nt)
+      ;; msys git uses a wrapper in .../Git/cmd/git.exe, going
+      ;; directly to the executable in .../Git/bin/git.exe makes a
+      ;; noticable difference in time: magit-refresh goes from 2.0s to
+      ;; 1.3s
+      (setq magit-git-executable
+            (expand-file-name "../bin/git.exe"
+                              (file-name-directory (executable-find "git")))))
     (font-lock-add-keywords 'emacs-lisp-mode
                             magit-font-lock-keywords)))
 
