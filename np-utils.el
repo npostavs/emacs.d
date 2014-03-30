@@ -1,3 +1,5 @@
+(require 'pkg-list)
+
 (defconst +quote-switching-char-table+
   (let* ((last (max ?' ?\"))
          (table (make-string (1+ last) 0)))
@@ -44,28 +46,6 @@ variable ADD-TO"
      (defun ,hook-name ()
        ,@body)
      (add-hook ',add-to #',hook-name))))
-
-(defvar el-get-sources nil)
-
-(defun define-and-add-el-get-source (package)
-  "Update PACKAGE in `el-get-source' (or add if absent)."
-  (let ((srcs el-get-sources)
-        (name (plist-get package :name)))
-    (if (catch 'return
-          (while srcs
-            (when (eq name (plist-get (car srcs) :name))
-              (setcar srcs package)
-              (throw 'return t))
-            (pop srcs))
-          nil)
-        el-get-sources        ; package updated with setcar
-      ;; didn't find the package, let's add it
-      (push package el-get-sources))))
-
-(defun set-assq (alist-var key value)
-  "Set the value of KEY in ALIST-VAR to VALUE."
-  (set alist-var (cons (cons key value)
-                       (assq-delete-all key (symbol-value alist-var)))))
 
 (defun rgb-color-values (color)
   "like `color-values' but returns the classic 3-byte rgb in a

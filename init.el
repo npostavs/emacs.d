@@ -3,49 +3,28 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (add-to-list 'load-path user-emacs-directory)
 (require 'np-utils)
+(require 'np-recipes)
 
-(define-and-add-el-get-source
-  '(:name use-package
-          :website "https://github.com/jwiegley/use-package"
-          :description "A use-package declaration for simplifying your .emacs"
-          :type github
-          :username "npostavs" :url-type ssh :checkout "origin/current"
-          :features (bind-key use-package)))
 (defvar override-global-map (make-sparse-keymap)); else bind-key will make full keymap
-(defvar el-get-dir (concat user-emacs-directory "el-get/"))
+(defvar el-get-dir (expand-file-name "el-get/" user-emacs-directory))
 
-(add-to-list 'load-path (concat el-get-dir "el-get"))
-(dolist (p (eval-when-compile
-             (require 'el-get)
-             (el-get 'sync 'el-get 'use-package)
-             (el-get-load-path 'use-package)))
-  (add-to-list 'load-path p))
+(add-to-list 'load-path (expand-file-name "el-get/" el-get-dir))
+(add-to-list 'load-path (expand-file-name "use-package/" el-get-dir))
+
+(unless (require 'el-get nil 'noerror)
+  (with-current-buffer
+      (url-retrieve-synchronously
+       "https://raw.github.com/npostavs/el-get/current/el-get-install.el")
+    (goto-char (point-max))
+    (eval-print-last-sexp))
+  (el-get 'sync (mapcar #'el-get-source-name el-get-sources)))
+
+;; el-get autoloads are relative to `el-get-dir'
+(add-to-list 'load-path el-get-dir)
+(require '.loaddefs)
 
 (require 'bind-key)
 (require 'use-package)
-
-
-(use-package el-get
-  :if (not (featurep 'el-get)); this is just for experimenting with a compiled init
-  :init (progn
-          (add-to-list 'load-path el-get-dir); .loaddefs has paths relative to el-get-dir
-          (require '.loaddefs))
-  :commands (el-get
-             el-get-install
-             el-get-update
-             el-get-list-packages))
-
-;;; cut down el-get's post-init stuff
-(define-and-add-el-get-source
-  '(:name package
-          :post-init
-          (setq package-user-dir
-                (expand-file-name
-                 (convert-standard-filename
-                  (concat (file-name-as-directory
-                           default-directory)
-                          "elpa"))))
-          (make-directory package-user-dir t)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -302,14 +281,8 @@
                ;; don't jump to some other directory when I mistype a filename
                ido-auto-merge-work-directories-length -1)))
 
-(define-and-add-el-get-source
-  '(:name ido-complete-space-or-hyphen
-          :description "Make ido completes like built-in M-x
-          does, useful when use smex or use ido to complete other
-          hyphen separated choices"
-          :type github :username "doitian"))
 (use-package ido-complete-space-or-hyphen
-  :init (ido-complete-space-or-hyphen-enable))
+  :config (ido-complete-space-or-hyphen-enable))
 
 (use-package smex
   :init (setq smex-save-file (locate-user-emacs-file "smex-items"))
@@ -382,39 +355,10 @@
   :diminish ""
   :config (eldoc-add-command 'paredit-backward-delete 'paredit-close-round))
 
-
-(define-and-add-el-get-source
-  '(:name elisp-slime-nav
-          :description "Slime-style navigation of Emacs Lisp source with M-. & M-,"
-          :type github
-          :username "purcell"))
 (use-package elisp-slime-nav
   :init (add-hook 'emacs-lisp-mode-hook #'turn-on-elisp-slime-nav-mode)
   :defer t
   :diminish "")
-
-(define-and-add-el-get-source
-  '(:name anaphora
-          :description "Anaphoric expressions for Emacs Lisp, providing implicit temporary variables."
-          :type github
-          :username "rolandwalker"))
-
-(define-and-add-el-get-source
-  '(:name simple-call-tree-ext
-          :description "emacs lisp code for displaying a simple call tree."
-          :type github
-          :username "npostavs" :url-type ssh :checkout "origin/current"
-          :depends anaphora))
-
-(use-package simple-call-tree-ext
-  :defer t
-  :requires simple-call-tree+)
-
-(define-and-add-el-get-source
-  '(:name yasnippet
-          :pkgname nil
-          :username "capitaomorte" :url-type ssh
-          :pre-init nil :post-init nil))
 
 (use-package yasnippet
   :init (setq yas-snippet-dirs
@@ -430,11 +374,6 @@
             (bind-key "M-i" 'yas-expand yas-minor-mode-map))
   :diminish (yas-minor-mode . "Y"))
 
-(define-and-add-el-get-source
-  '(:name pcre2el
-          :description "Parse, convert, and font-lock PCRE, Emacs and rx regexps"
-          :type github
-          :username "joddie"))
 (use-package pcre2el
   :idle (rxt-global-mode +1))
 
@@ -447,10 +386,6 @@
                ;; *Messages* buffer
                (setq mode-compile-reading-time 0)))
 
-(define-and-add-el-get-source
-  '(:name pretty-symbols
-          :description "Minor mode for drawing multi-character tokens as Unicode glyphs"
-          :type github :username "drothlis"))
 (use-package pretty-symbols
   :init (dolist (mode '(emacs-lisp-mode-hook
                         lisp-mode-hook scheme-mode-hook js-mode-hook))
@@ -484,34 +419,17 @@
   :diminish "")
 
 ;; sml-mode
-(define-and-add-el-get-source
-  '(:name sml-mode
-          :description
-          "SML-mode is a major Emacs mode for editing Standard ML source code."
-          :type elpa))
+(use-package sml-mode
+  :defer t)
 
 ;; lua-mode
 (use-package lua-mode
   :defer t)
 
 ;; git
-(define-and-add-el-get-source
-  `(:name git-modes
-          :description "GNU Emacs modes for Git-related files (used by magit)."
-          :type github
-          :username "npostavs" :url-type ssh :checkout "origin/current"))
 (use-package git-modes
   :defer t
   :config (remove-hook 'git-commit-mode-hook 'flyspell-mode))
-
-(define-and-add-el-get-source
-  `(:name magit
-          :pkgname "magit"
-          :username "npostavs" :checkout "origin/current" :url-type ssh
-          :autoloads t
-          :depends (git-modes)
-          ,@(when (eq system-type 'windows-nt)
-              '(:build nil))))
 
 (use-package magit
   :bind ("C-c v" . magit-status)
@@ -537,12 +455,6 @@
 
 ;; use GNU make
 (add-to-list 'auto-mode-alist '("Makefile" . makefile-gmake-mode))
-
-(define-and-add-el-get-source
-  '(:name i3-emacs
-          :description "i3 emacs integration"
-          :website "https://github.com/vava/i3-emacs"
-          :type github :username "npostavs" :url-type ssh :branch "origin/current"))
 
 (use-package i3-integration
   :load-path (lambda () `(,(concat el-get-dir "i3-emacs")))
