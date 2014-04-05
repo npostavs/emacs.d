@@ -16,7 +16,8 @@
                 (package-desc-vers (cdr (assq (intern package) package-alist)))))
               ((eq type 'builtin) "BUILTIN")
               (t "???")))
-            (face (if (string= current-rev checkout)
+            (face (if (or (eq type 'builtin)
+                          (string= current-rev checkout))
                       'default 'font-lock-warning-face)))
 
        (unless remote
@@ -61,7 +62,9 @@
         (delete-region (point) (save-excursion (forward-sexp 1) (point)))
         (prin1 remote-rev (current-buffer))
         (save-buffer)
-        (eval-defun nil))
+        (let ((eval-expression-print-level 1)
+              (eval-expression-print-length 1))
+         (eval-defun nil)))
       (revert-buffer))
      (t (message "remote = '%s', oops..." remote-rev)))))
 
