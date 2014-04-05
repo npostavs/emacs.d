@@ -6,7 +6,7 @@
            :pkgname "rolandwalker/anaphora")
     (:name diminish                        :checkout "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
     (:name dired-details                   :checkout "3de7e19ae874dac03edf9951648a1f11f52dead6")
-    (:name el-get                          :checkout "1bf9d0fad0da62fbf6a4bcbb64afe82febbe9274"
+    (:name el-get                          :checkout "bb6f095ce842e4f6a5f23c08585e37e9c315cfbb"
            :pkgname "npostavs/el-get" :branch "origin/current")
     (:name elisp-slime-nav                 :checkout "1a2cb6a832635bde694fd25cc6dce2962aad3807"
            :description "Slime-style navigation of Emacs Lisp source with M-. & M-,"
@@ -23,7 +23,7 @@
            :description "Make ido completes like built-in M-x does"
            :type github :pkgname "doitian/ido-complete-space-or-hyphen")
     (:name lua-mode                        :checkout "67a90221b4b82c559d62275e73dd966ff5503ed3")
-    (:name magit                           :checkout "ce5b7f10c22ee4ac6717a4c3aa8816afb977b0d2"
+    (:name magit                           :checkout "b5e5e96b5dcfe53b23f19be5125d649d58f5ef27"
            :branch "origin/current"
            :pkgname "npostavs/magit" :autoloads t :build nil)
     (:name mode-compile                    :checkout "718e297d8d8aaf9c67cacb4e29d85348b5150280")
