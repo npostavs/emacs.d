@@ -441,7 +441,8 @@
 
           ;; don't revert automatically
           magit-refresh-file-buffer-hook nil ; obsolete
-          magit-turn-on-auto-revert-mode nil)
+          magit-turn-on-auto-revert-mode nil ; obsolete
+          magit-auto-revert-mode nil)
     (when (eq system-type 'windows-nt)
       ;; msys git uses a wrapper in .../Git/cmd/git.exe, going
       ;; directly to the executable in .../Git/bin/git.exe makes a
