@@ -6,7 +6,7 @@
            :pkgname "rolandwalker/anaphora")
     (:name diminish                        :checkout "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
     (:name dired-details                   :checkout "3de7e19ae874dac03edf9951648a1f11f52dead6")
-    (:name el-get                          :checkout "bb6f095ce842e4f6a5f23c08585e37e9c315cfbb"
+    (:name el-get                          :checkout "e9356d2cc7b49ac4b7ec3ebe3bd5c84fedd534bd"
            :pkgname "npostavs/el-get" :branch "origin/current")
     (:name elisp-slime-nav                 :checkout "1a2cb6a832635bde694fd25cc6dce2962aad3807"
            :description "Slime-style navigation of Emacs Lisp source with M-. & M-,"
