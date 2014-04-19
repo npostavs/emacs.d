@@ -4,6 +4,8 @@
            :description "Anaphoric expressions for Emacs Lisp, providing implicit temporary variables."
            :type github
            :pkgname "rolandwalker/anaphora")
+    (:name dash                            :checkout "8dfa9b6e6df6162ee6f0271a23276cf1995667ab"
+           :branch "2.6.0")
     (:name diminish                        :checkout "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
     (:name dired-details                   :checkout "3de7e19ae874dac03edf9951648a1f11f52dead6")
     (:name el-get                          :checkout "e9356d2cc7b49ac4b7ec3ebe3bd5c84fedd534bd"
@@ -12,8 +14,8 @@
            :description "Slime-style navigation of Emacs Lisp source with M-. & M-,"
            :type github
            :pkgname "purcell/elisp-slime-nav")
-    (:name git-modes                       :checkout "3751aa8216c463f25edc60743466b0228c99b19a"
-           :type github :pkgname "magit/git-modes")
+    (:name git-modes                       :checkout "4039bf1d8bf6af6994a86f16a45002a50c5ec214"
+           :type github :pkgname "magit/git-modes" :branch "origin/next")
     (:name htmlize                         :checkout "1e48ccdfc3aec0f80323036578c232300673a64a")
     (:name i3-emacs                        :checkout "055510298fe2d5b52a346aebcec859af9b55ac3c"
            :description "i3 emacs integration"
@@ -23,8 +25,8 @@
            :description "Make ido completes like built-in M-x does"
            :type github :pkgname "doitian/ido-complete-space-or-hyphen")
     (:name lua-mode                        :checkout "67a90221b4b82c559d62275e73dd966ff5503ed3")
-    (:name magit                           :checkout "b5e5e96b5dcfe53b23f19be5125d649d58f5ef27"
-           :branch "origin/current"
+    (:name magit                           :checkout "16bd6945c9f19e06ea2ebdd02c54baf6a8d4e3ae"
+           :branch "origin/current" :depends (dash)
            :pkgname "npostavs/magit" :autoloads t :build nil)
     (:name multiple-cursors                :checkout "54e408fc682d968ad46846d8bff079cd704ff6fe")
     (:name package                         :checkout BUILTIN

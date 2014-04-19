@@ -425,7 +425,12 @@
 ;; git
 (use-package git-modes
   :defer t
-  :config (remove-hook 'git-commit-mode-hook 'flyspell-mode))
+  :config (progn
+            (cond
+             ((boundp 'git-commit-mode-hook) ; obsolete
+              (remove-hook 'git-commit-mode-hook 'flyspell-mode))
+             ((boundp 'git-commit-setup-hook)
+              (remove-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)))))
 
 (use-package magit
   :bind ("C-c v" . magit-status)
@@ -439,6 +444,12 @@
           magit-refresh-file-buffer-hook nil ; obsolete
           magit-turn-on-auto-revert-mode nil ; obsolete
           magit-auto-revert-mode nil)
+    (bind-key "SPC <t>"     'magit-invoke-popup-switch magit-popup-mode-map)
+    (bind-key "SPC SPC <t>" 'magit-invoke-popup-option magit-popup-mode-map)
+    (bind-keys :map magit-mode-map
+               ("C-c C-d" . magit-describe-section)
+               ("M-p"     . magit-goto-previous-sibling-section)
+               ("M-n"     . magit-goto-next-sibling-section))
     (when (eq system-type 'windows-nt)
       ;; msys git uses a wrapper in .../Git/cmd/git.exe, going
       ;; directly to the executable in .../Git/bin/git.exe makes a
