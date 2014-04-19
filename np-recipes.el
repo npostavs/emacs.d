@@ -26,7 +26,6 @@
     (:name magit                           :checkout "b5e5e96b5dcfe53b23f19be5125d649d58f5ef27"
            :branch "origin/current"
            :pkgname "npostavs/magit" :autoloads t :build nil)
-    (:name mode-compile                    :checkout "718e297d8d8aaf9c67cacb4e29d85348b5150280")
     (:name multiple-cursors                :checkout "54e408fc682d968ad46846d8bff079cd704ff6fe")
     (:name package                         :checkout BUILTIN
            ;; cut out el-get's post-init stuff
@@ -45,11 +44,7 @@
            "SML-mode is a major Emacs mode for editing Standard ML source code."
            :type elpa)
     (:name undo-tree                       :checkout "bc9d09555f5aeac6ac4684d748be763f64a7d80a")
-    (:name use-package                     :checkout "e782a4a5e70e4ad40f05c118edbf134d57a46928"
-           :website "https://github.com/jwiegley/use-package"
-           :description "A use-package declaration for simplifying your .emacs"
-           :type github
-           :pkgname "npostavs/use-package" :url-type ssh :branch "origin/current")
+    (:name use-package                     :checkout "1df5bbcf5f5d23e2a43750fd3fa765109dae3255")
     (:name yasnippet                       :checkout "a0c221725c2e3ae21d84f86655bf207e80811d49"))
  )
 

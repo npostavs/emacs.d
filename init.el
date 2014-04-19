@@ -16,12 +16,8 @@
       (url-retrieve-synchronously
        "https://raw.github.com/npostavs/el-get/current/el-get-install.el")
     (goto-char (point-max))
-    (eval-print-last-sexp))
-  (el-get 'sync (mapcar #'el-get-source-name el-get-sources)))
-
-;; el-get autoloads are relative to `el-get-dir'
-(add-to-list 'load-path el-get-dir)
-(require '.loaddefs)
+    (eval-print-last-sexp)))
+(el-get 'sync (mapcar #'el-get-source-name el-get-sources))
 
 (require 'bind-key)
 (require 'use-package)
