@@ -375,13 +375,6 @@
 
 ;;; programming related modes
 
-(use-package mode-compile
-  :defer t
-  :init (progn (define-key global-map [remap compile] 'mode-compile)
-               ;; if you really want to read the messages, check
-               ;; *Messages* buffer
-               (setq mode-compile-reading-time 0)))
-
 (use-package pretty-symbols
   :init (dolist (mode '(emacs-lisp-mode-hook
                         lisp-mode-hook scheme-mode-hook js-mode-hook))
