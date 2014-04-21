@@ -416,7 +416,7 @@
   :defer t)
 
 ;; git
-(use-package git-modes
+(use-package git-commit-mode ; from git-modes
   :defer t
   :config (progn
             (cond
