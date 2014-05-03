@@ -8,7 +8,7 @@
            :branch "2.6.0")
     (:name diminish                        :checkout "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
     (:name dired-details                   :checkout "3de7e19ae874dac03edf9951648a1f11f52dead6")
-    (:name el-get                          :checkout "e9356d2cc7b49ac4b7ec3ebe3bd5c84fedd534bd"
+    (:name el-get                          :checkout "0d4715fa6d4cbd5e90e8c5dc3791c02b995260f7"
            :pkgname "npostavs/el-get" :branch "origin/current")
     (:name elisp-slime-nav                 :checkout "1a2cb6a832635bde694fd25cc6dce2962aad3807"
            :description "Slime-style navigation of Emacs Lisp source with M-. & M-,"
@@ -25,7 +25,7 @@
            :description "Make ido completes like built-in M-x does"
            :type github :pkgname "doitian/ido-complete-space-or-hyphen")
     (:name lua-mode                        :checkout "67a90221b4b82c559d62275e73dd966ff5503ed3")
-    (:name magit                           :checkout "16bd6945c9f19e06ea2ebdd02c54baf6a8d4e3ae"
+    (:name magit                           :checkout "2482fc250f27339ad51ec00260304b3cb8d9898b"
            :branch "origin/current" :depends (dash)
            :pkgname "npostavs/magit" :autoloads t :build nil)
     (:name multiple-cursors                :checkout "54e408fc682d968ad46846d8bff079cd704ff6fe")
