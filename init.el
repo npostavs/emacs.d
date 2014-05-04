@@ -443,6 +443,9 @@
                ("C-c C-d" . magit-describe-section)
                ("M-p"     . magit-goto-previous-sibling-section)
                ("M-n"     . magit-goto-next-sibling-section))
+    ;; The `pop-to-ongoing' advice is too expensive: it takes close to
+    ;; half a second.
+    (ad-deactivate 'magit-commit-popup)
     (when (eq system-type 'windows-nt)
       ;; msys git uses a wrapper in .../Git/cmd/git.exe, going
       ;; directly to the executable in .../Git/bin/git.exe makes a
