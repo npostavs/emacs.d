@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: new
+# key: new
+# --
+${1:Type} ${2:${1:$(replace-regexp-in-string "<.*$" "" (downcase yas-text))}} = new $1($0);

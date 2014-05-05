@@ -357,9 +357,10 @@
   :diminish "")
 
 (use-package yasnippet
-  :init (setq yas-snippet-dirs
-              `("~/.emacs.d/snippets"
-                ,(expand-file-name "yasnippet/snippets" el-get-dir)))
+  ;; use `:pre-load' we need to run synchronously, not on idle timer
+  :pre-load (setq yas-snippet-dirs
+                  `("~/.emacs.d/snippets"
+                    ,(expand-file-name "yasnippet/snippets" el-get-dir)))
   :idle (yas-global-mode +1)
   :config (progn
             (setq yas-prompt-functions ; default x-prompt is just annoying
