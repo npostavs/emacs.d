@@ -8,7 +8,7 @@
            :branch "2.6.0")
     (:name diminish                        :checkout "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
     (:name dired-details                   :checkout "3de7e19ae874dac03edf9951648a1f11f52dead6")
-    (:name el-get                          :checkout "0d4715fa6d4cbd5e90e8c5dc3791c02b995260f7"
+    (:name el-get                          :checkout "50ec866d28ef4656706408bdecf20fca13299c7b"
            :pkgname "npostavs/el-get" :branch "origin/current")
     (:name elisp-slime-nav                 :checkout "1a2cb6a832635bde694fd25cc6dce2962aad3807"
            :description "Slime-style navigation of Emacs Lisp source with M-. & M-,"
@@ -25,7 +25,7 @@
            :description "Make ido completes like built-in M-x does"
            :type github :pkgname "doitian/ido-complete-space-or-hyphen")
     (:name lua-mode                        :checkout "67a90221b4b82c559d62275e73dd966ff5503ed3")
-    (:name magit                           :checkout "2482fc250f27339ad51ec00260304b3cb8d9898b"
+    (:name magit                           :checkout "94c9caccc5afccfa7a3b9d3b40722ae1ce7eed81"
            :branch "origin/current" :depends (dash)
            :pkgname "npostavs/magit" :autoloads t :build nil)
     (:name multiple-cursors                :checkout "54e408fc682d968ad46846d8bff079cd704ff6fe")
@@ -46,7 +46,7 @@
            "SML-mode is a major Emacs mode for editing Standard ML source code."
            :type elpa)
     (:name undo-tree                       :checkout "bc9d09555f5aeac6ac4684d748be763f64a7d80a")
-    (:name use-package                     :checkout "1df5bbcf5f5d23e2a43750fd3fa765109dae3255")
+    (:name use-package                     :checkout "02833c292899d406c76233da255e3304c4ab24f3")
     (:name yasnippet                       :checkout "a0c221725c2e3ae21d84f86655bf207e80811d49"))
  )
 
