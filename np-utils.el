@@ -105,6 +105,17 @@ Prefix arg means just go to logical ending unconditionally."
                (not (eolp)))
       (end-of-visual-line 2))))
 
+(defun delete-this-file ()
+  "Delete the file of the current buffer."
+  (interactive)
+  (delete-file (buffer-file-name)))
+
+(defun set-assq (alist-var key value)
+  "Set the value of KEY in ALIST-VAR to VALUE."
+  (set alist-var (cons (cons key value)
+                       (assq-delete-all key (symbol-value alist-var)))))
+
+
 ;; based on `kmacro-call-macro' code. There is a library form for this
 ;; sort of thing, but it looks a lot more complicated possibly because
 ;; it's working with older emacsen.
