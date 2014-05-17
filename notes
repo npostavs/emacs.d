@@ -1,6 +1,6 @@
 # -*- mode: org -*-
 * Tasks
-** MAYBE? mode-compile handle build.xml
+** TODO uniquify - apply to non file buffers?
 ** DONE default args for dired
 ** TODO visual line end
    - when point is at visual line end it *looks* like the cursor is on
@@ -29,9 +29,8 @@
    - see [[https://github.com/technomancy/ido-ubiquitous][ido-ubiquitious]]
 ** TODO smartparens? https://github.com/Fuco1/smartparens
 ** use-package
-*** TODO :config block should be idempotent
+*** TODO? :config block should be idempotent
     see eval-after-load, and after-load-alist
-*** bind-key should allow remap?
 ** el-get
 *** can .info be built without make?
     - like .elc files
