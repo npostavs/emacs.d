@@ -14,7 +14,7 @@
            :description "Slime-style navigation of Emacs Lisp source with M-. & M-,"
            :type github
            :pkgname "purcell/elisp-slime-nav")
-    (:name git-modes                       :checkout "4039bf1d8bf6af6994a86f16a45002a50c5ec214"
+    (:name git-modes                       :checkout "d19ee56e17d2f1bac87ff81e864b880e8f9e5fca"
            :type github :pkgname "magit/git-modes" :branch "origin/next")
     (:name htmlize                         :checkout "1e48ccdfc3aec0f80323036578c232300673a64a")
     (:name i3-emacs                        :checkout "055510298fe2d5b52a346aebcec859af9b55ac3c"
@@ -25,7 +25,7 @@
            :description "Make ido completes like built-in M-x does"
            :type github :pkgname "doitian/ido-complete-space-or-hyphen")
     (:name lua-mode                        :checkout "67a90221b4b82c559d62275e73dd966ff5503ed3")
-    (:name magit                           :checkout "94c9caccc5afccfa7a3b9d3b40722ae1ce7eed81"
+    (:name magit                           :checkout "548262dc3659d197efc6fd064e91b7a8d890546b"
            :branch "origin/current" :depends (dash)
            :pkgname "npostavs/magit" :autoloads t :build nil)
     (:name multiple-cursors                :checkout "54e408fc682d968ad46846d8bff079cd704ff6fe")
@@ -47,7 +47,7 @@
            :type elpa)
     (:name undo-tree                       :checkout "bc9d09555f5aeac6ac4684d748be763f64a7d80a")
     (:name use-package                     :checkout "02833c292899d406c76233da255e3304c4ab24f3")
-    (:name yasnippet                       :checkout "a0c221725c2e3ae21d84f86655bf207e80811d49"))
+    (:name yasnippet                       :checkout "763f5faa14614b207d65e03594b80ba662f47efc"))
  )
 
 
