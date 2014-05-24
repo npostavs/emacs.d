@@ -252,6 +252,11 @@
                                 "findstr /S /N /D:. /C:<R> <F>")
             (setq find-name-arg nil)))
 
+(use-package edebug
+  :defer t
+  ;; 24.3 is missing this edebug spec
+  :config (def-edebug-spec cl-type-spec sexp))
+
 (use-package calc
   :defer t
   :bind (("<kp-multiply>" . calc-dispatch)
