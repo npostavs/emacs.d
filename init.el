@@ -309,7 +309,7 @@
                               (mode . gnus-group-mode)
                               (mode . gnus-summary-mode)))
              ("Procs" (predicate . (get-buffer-process (current-buffer))))
-             ("Magit" (name . "^[*]magit")))))
+             ("Magit" (name . "[.]magit>$")))))
 
     (define-and-add-hook ibuffer-mode-hook
       (ibuffer-switch-to-saved-filter-groups "default"))))
@@ -443,6 +443,12 @@
           magit-refresh-file-buffer-hook nil ; obsolete
           magit-turn-on-auto-revert-mode nil ; obsolete
           magit-auto-revert-mode nil)
+    ;; change buffer name formats so the "magit" goes at the end, that
+    ;; way the important parts won't be cut off in the ibuffer list.
+    (dolist (type '("branches" "cherry" "commit" "diff" "log"
+                    "process" "reflog" "status" "wazzup"))
+      (set (intern (format "magit-%s-buffer-name-format" type))
+           (format "*%%a<%s.magit>" type)))
     (bind-key "SPC <t>"     'magit-invoke-popup-switch magit-popup-mode-map)
     (bind-key "SPC SPC <t>" 'magit-invoke-popup-option magit-popup-mode-map)
     (bind-keys :map magit-mode-map
