@@ -34,6 +34,8 @@
       x-select-enable-clipboard t
       set-mark-command-repeat-pop t
 
+      history-delete-duplicates t
+
       view-read-only t; all read-only buffers in view-mode
       view-inhibit-help-message t ; don't tell me about it
 
