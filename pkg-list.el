@@ -17,7 +17,7 @@
                    ((eq type 'elpa)
                     (package-version-join
                      (package-desc-vers (cdr (assq (intern package) package-alist)))))
-                   ((eq type 'builtin) "BUILTIN")
+                   ((eq type 'builtin) "-")
                    (t "???")))
                  (face (if (or (eq type 'builtin)
                                (string= current-rev checkout))
@@ -25,14 +25,17 @@
 
             (unless remote
               (setq remote (if (member type '(git github))
-                               "origin/master" "")))
+                               "origin/master"
+                             (propertize (upcase (symbol-name type))
+                                         'face 'shadow))))
 
             (list pkg-sym
                   (apply #'vector
-                         (mapcar (lambda (s) (propertize s 'face face))
-                                 (list package current-rev
-                                       (el-get-as-string checkout)
-                                       remote))))))))
+                         (append
+                          (mapcar (lambda (s) (propertize s 'face face))
+                                  (list package current-rev
+                                        (el-get-as-string checkout)))
+                          (list remote))))))))
     (el-get-list-package-names-with-status "installed"))))
 
 (defun pkg-list-check-remote ()

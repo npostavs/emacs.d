@@ -27,7 +27,7 @@
            :branch "origin/current" :depends (dash)
            :pkgname "npostavs/magit" :autoloads t :build nil)
     (:name multiple-cursors                :checkout "54e408fc682d968ad46846d8bff079cd704ff6fe")
-    (:name package                         :checkout BUILTIN
+    (:name package                         :checkout -
            ;; cut out el-get's post-init stuff
            :post-init nil)
     (:name paredit                         :checkout "b1bb6fdb0517a0df1cc7b6fe0730e7ac2d06e9fc")
