@@ -1,36 +1,39 @@
 (defun pkg-list-entries ()
-  (mapcar
-   (lambda (package)
-     (let* ((type             (el-get-package-type package))
-            (recipe           (el-get-package-def package))
-            (checkout         (plist-get recipe :checkout))
-            (remote           (plist-get recipe :branch))
-            (compute-checksum (el-get-method type :compute-checksum))
-            (pkg-sym          (el-get-package-symbol package))
-            (current-rev
-             (cond
-              (compute-checksum
-               (funcall compute-checksum package))
-              ((eq type 'elpa)
-               (package-version-join
-                (package-desc-vers (cdr (assq (intern package) package-alist)))))
-              ((eq type 'builtin) "BUILTIN")
-              (t "???")))
-            (face (if (or (eq type 'builtin)
-                          (string= current-rev checkout))
-                      'default 'font-lock-warning-face)))
+  (delq
+   nil
+   (mapcar
+    (lambda (package)
+      (let ((recipe (ignore-errors (el-get-package-def package))))
+        (when recipe
+          (let* ((type             (el-get-package-type recipe))
+                 (checkout         (plist-get recipe :checkout))
+                 (remote           (plist-get recipe :branch))
+                 (compute-checksum (el-get-method type :compute-checksum))
+                 (pkg-sym          (el-get-package-symbol package))
+                 (current-rev
+                  (cond
+                   (compute-checksum
+                    (funcall compute-checksum package))
+                   ((eq type 'elpa)
+                    (package-version-join
+                     (package-desc-vers (cdr (assq (intern package) package-alist)))))
+                   ((eq type 'builtin) "BUILTIN")
+                   (t "???")))
+                 (face (if (or (eq type 'builtin)
+                               (string= current-rev checkout))
+                           'default 'font-lock-warning-face)))
 
-       (unless remote
-         (setq remote (if (member type '(git github))
-                          "origin/master" "")))
+            (unless remote
+              (setq remote (if (member type '(git github))
+                               "origin/master" "")))
 
-       (list pkg-sym
-             (apply #'vector
-                    (mapcar (lambda (s) (propertize s 'face face))
-                            (list package current-rev
-                                  (el-get-as-string checkout)
-                                  remote))))))
-   (el-get-list-package-names-with-status "installed")))
+            (list pkg-sym
+                  (apply #'vector
+                         (mapcar (lambda (s) (propertize s 'face face))
+                                 (list package current-rev
+                                       (el-get-as-string checkout)
+                                       remote))))))))
+    (el-get-list-package-names-with-status "installed"))))
 
 (defun pkg-list-check-remote ()
   (interactive)
