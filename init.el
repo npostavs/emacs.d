@@ -447,10 +447,13 @@
           magit-auto-revert-mode nil)
     ;; change buffer name formats so the "magit" goes at the end, that
     ;; way the important parts won't be cut off in the ibuffer list.
-    (dolist (type '("branches" "cherry" "commit" "diff" "log"
-                    "process" "reflog" "status" "wazzup"))
+    (dolist (type '("branches" "cherry" "log" "reflog" "status" "wazzup"))
       (set (intern (format "magit-%s-buffer-name-format" type))
            (format "*%%a<%s.magit>" type)))
+    ;; only have one buffer for each of these, not per repo
+    (dolist (type '("commit" "diff" "process"))
+      (set (intern (format "magit-%s-buffer-name-format" type))
+           (format "*<%s.magit>" type)))
     (bind-key "SPC <t>"     'magit-invoke-popup-switch magit-popup-mode-map)
     (bind-key "SPC SPC <t>" 'magit-invoke-popup-option magit-popup-mode-map)
     (bind-keys :map magit-mode-map
