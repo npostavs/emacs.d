@@ -445,6 +445,8 @@
           magit-refresh-file-buffer-hook nil ; obsolete
           magit-turn-on-auto-revert-mode nil ; obsolete
           magit-auto-revert-mode nil)
+    (set-face-foreground 'magit-hash
+                         (face-foreground 'font-lock-type-face))
     ;; change buffer name formats so the "magit" goes at the end, that
     ;; way the important parts won't be cut off in the ibuffer list.
     (dolist (type '("branches" "cherry" "log" "reflog" "status" "wazzup"))
