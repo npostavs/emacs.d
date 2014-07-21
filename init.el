@@ -461,7 +461,8 @@
     (bind-keys :map magit-mode-map
                ("C-c C-d" . magit-describe-section)
                ("M-p"     . magit-goto-previous-sibling-section)
-               ("M-n"     . magit-goto-next-sibling-section))
+               ("M-n"     . magit-goto-next-sibling-section)
+               ("`"       . magit-log-toggle-margin))
     ;; The `pop-to-ongoing' advice is too expensive: it takes close to
     ;; half a second.
     (ad-deactivate 'magit-commit-popup)
