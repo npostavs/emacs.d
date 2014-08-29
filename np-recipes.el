@@ -9,13 +9,13 @@
            :branch "2.6.0")
     (:name diminish                        :checkout "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
     (:name dired-details                   :checkout "3de7e19ae874dac03edf9951648a1f11f52dead6")
-    (:name el-get                          :checkout "4f0e1e266704ef039ad5f147f4c6ffc00c1fc628"
+    (:name el-get                          :checkout "d993eb339327fb9ab903e372f370b25da53b48ec"
            :pkgname "npostavs/el-get" :branch "origin/current")
     (:name elisp-slime-nav                 :checkout "1a2cb6a832635bde694fd25cc6dce2962aad3807"
            :description "Slime-style navigation of Emacs Lisp source with M-. & M-,"
            :type github
            :pkgname "purcell/elisp-slime-nav")
-    (:name git-modes                       :checkout "07bfeb2cc5f7c0a656655c764816b2378767f88b"
+    (:name git-modes                       :checkout "e2be7fd255144296a8381bbf3b9b3c80844c0c02"
            :type github :pkgname "magit/git-modes" :branch "origin/next")
     (:name htmlize                         :checkout "1e48ccdfc3aec0f80323036578c232300673a64a")
     (:name i3-emacs                        :checkout "055510298fe2d5b52a346aebcec859af9b55ac3c"
@@ -26,7 +26,7 @@
            :description "Make ido completes like built-in M-x does"
            :type github :pkgname "doitian/ido-complete-space-or-hyphen")
     (:name lua-mode                        :checkout "2453e370ca39f38fced67a6d2db462aaea110f22")
-    (:name magit                           :checkout "66b7f0086510544d37fde55f49e18ed950d5c5dc"
+    (:name magit                           :checkout "ad5e9accba1faa692c7ad04ec1653f167e9048b6"
            :branch "origin/current" :depends (dash)
            :pkgname "npostavs/magit" :autoloads t :build nil)
     (:name multiple-cursors                :checkout "54e408fc682d968ad46846d8bff079cd704ff6fe")
@@ -47,8 +47,8 @@
            "SML-mode is a major Emacs mode for editing Standard ML source code."
            :type elpa)
     (:name undo-tree                       :checkout "bc9d09555f5aeac6ac4684d748be763f64a7d80a")
-    (:name use-package                     :checkout "02833c292899d406c76233da255e3304c4ab24f3")
-    (:name yasnippet                       :checkout "e53ec1e0c3611c3a0f4ac6228aab041a82b9d3bb"))
+    (:name use-package                     :checkout "019d11383d10d39aafc7fe4faae101b01c147146")
+    (:name yasnippet                       :checkout "be2f815c43deb74e0f809ed47debc4aa2e67ea1e"))
  )
 
 
