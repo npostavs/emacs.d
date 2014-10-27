@@ -444,7 +444,15 @@
           ;; don't revert automatically
           magit-refresh-file-buffer-hook nil ; obsolete
           magit-turn-on-auto-revert-mode nil ; obsolete
-          magit-auto-revert-mode nil)
+          magit-auto-revert-mode nil
+
+          ;; this is too expensive to have on by default
+          magit-backup-mode nil)
+
+    ;; defaults for popups
+    (add-to-list 'magit-log-arguments "--all")
+    (setq magit-branch-arguments (remove "--track" magit-branch-arguments))
+
     (set-face-foreground 'magit-hash
                          (face-foreground 'font-lock-type-face))
     ;; change buffer name formats so the "magit" goes at the end, that
