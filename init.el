@@ -452,6 +452,13 @@
     ;; defaults for popups
     (add-to-list 'magit-log-arguments "--all")
     (setq magit-branch-arguments (remove "--track" magit-branch-arguments))
+    (defadvice magit-push-popup (around magit-push-arguments-maybe-upstream
+                                        activate)
+      "Enable --set-upstream switch if there isn't a current upstream."
+      (let ((magit-push-arguments
+             (if (magit-get-remote) magit-push-arguments
+               (cons "--set-upstream" magit-push-arguments))))
+        ad-do-it))
 
     (set-face-foreground 'magit-hash
                          (face-foreground 'font-lock-type-face))
