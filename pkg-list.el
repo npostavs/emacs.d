@@ -46,9 +46,13 @@
              (let ((default-directory (el-get-package-directory pkg))
                    (remote (or remote "origin/master")))
                (call-process "git" nil nil nil "fetch")
-               (replace-regexp-in-string "\n$" ""
-                (shell-command-to-string (format "git rev-parse %s" remote))
-                t t))))))
+               (with-temp-buffer
+                 (call-process "git" nil '(t t) nil "rev-parse"
+                               (concat remote "^{commit}"))
+                 (goto-char (point-max))
+                 (skip-syntax-backward "\\s-")
+                 (delete-region (point) (point-max))
+                 (buffer-string)))))))
     (cond
      ((equal remote-rev checkout)
       (message "%s = %s, %s is up to date." remote-rev checkout pkg))

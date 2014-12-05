@@ -5,7 +5,7 @@
            :type github
            :pkgname "rolandwalker/anaphora")
     (:name ample-regexps                   :checkout "f24c5991927c8eb180d9f1d1614da238daba6423")
-    (:name dash                            :checkout "d68aa5eaf3e0288b63a8bcc33bdef6683fcfe2c9"
+    (:name dash                            :checkout "31f321a9dcfe3a2ad0436a3d636331c942ff7acc"
            :branch "2.9.0")
     (:name diminish                        :checkout "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
     (:name dired-details                   :checkout "3de7e19ae874dac03edf9951648a1f11f52dead6")
