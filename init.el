@@ -312,6 +312,7 @@
                               (mode . gnus-group-mode)
                               (mode . gnus-summary-mode)))
              ("Procs" (predicate . (get-buffer-process (current-buffer))))
+             ("Grep"  (mode . grep-mode))
              ("Magit" (name . "[.]magit>$")))))
 
     (define-and-add-hook ibuffer-mode-hook
