@@ -13,7 +13,8 @@
                  (current-rev
                   (cond
                    (compute-checksum
-                    (funcall compute-checksum package))
+                    (or (ignore-errors (funcall compute-checksum package))
+                        "???"))
                    ((eq type 'elpa)
                     (package-version-join
                      (package-desc-vers (cdr (assq (intern package) package-alist)))))

@@ -9,7 +9,7 @@
            :branch "2.9.0")
     (:name diminish                        :checkout "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
     (:name dired-details                   :checkout "3de7e19ae874dac03edf9951648a1f11f52dead6")
-    (:name el-get                          :checkout "74bb3abea13d081c35d990f4a23315da60611a2a"
+    (:name el-get                          :checkout "ee26036b1b24b0070204702c7dd4a9bf33d8858c"
            :pkgname "npostavs/el-get" :branch "origin/current")
     (:name elisp-slime-nav                 :checkout "1a2cb6a832635bde694fd25cc6dce2962aad3807"
            :description "Slime-style navigation of Emacs Lisp source with M-. & M-,"
@@ -44,7 +44,7 @@
            "SML-mode is a major Emacs mode for editing Standard ML source code."
            :type elpa)
     (:name undo-tree                       :checkout "bc9d09555f5aeac6ac4684d748be763f64a7d80a")
-    (:name use-package                     :checkout "d43af5e0769a92f77e01dea229e376d9006722ef")
+    (:name use-package                     :checkout "1df5bbcf5f5d23e2a43750fd3fa765109dae3255")
     (:name yasnippet                       :checkout "be2f815c43deb74e0f809ed47debc4aa2e67ea1e"))
  )
 
