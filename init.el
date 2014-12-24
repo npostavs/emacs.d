@@ -67,6 +67,9 @@
 
 ;; typing the whole word is tiresome
 (fset 'yes-or-no-p 'y-or-n-p)
+
+;; improved rectangle selection without semi-shadowing C-{z,x,c}
+(cua-selection-mode +1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; keybindings
