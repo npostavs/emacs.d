@@ -334,6 +334,11 @@
             (require 'dired-x)
             (dired-details-install)))
 
+(use-package ediff
+  :defer t
+  :config (setq ediff-window-setup-function #'ediff-setup-windows-plain))
+
+
 ;;; loadhist misses some autoloads
 (use-package loadhist
   :defer t
