@@ -1,3 +1,5 @@
+(require 'el-get-elpa) ; for package compat functions
+
 (defun pkg-list-entries ()
   (delq
    nil
@@ -17,7 +19,9 @@
                         "???"))
                    ((eq type 'elpa)
                     (package-version-join
-                     (package-desc-vers (cdr (assq (intern package) package-alist)))))
+                     (package-desc-version (car
+                                            (el-get-elpa-descs
+                                             (assq (intern package) package-alist))))))
                    ((eq type 'builtin) "-")
                    (t "???")))
                  (face (if (or (eq type 'builtin)
@@ -63,7 +67,7 @@
     (cond
      ((equal remote-rev checkout)
       (message "%s = %s, %s is up to date." remote-rev checkout pkg))
-     ((string-match-p "[0-9a-f]\\{40\\}" remote-rev)
+     ((and remote-rev (string-match-p "[0-9a-f]\\{40\\}" remote-rev))
       (message "%s != %s" remote-rev checkout)
       (with-current-buffer (find-file-noselect "~/.emacs.d/np-recipes.el")
         (goto-char (point-min))

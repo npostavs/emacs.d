@@ -4,6 +4,7 @@
 (add-to-list 'load-path user-emacs-directory)
 (require 'np-utils)
 (require 'np-recipes)
+(autoload 'pkg-list "pkg-list" nil t)
 
 (defvar override-global-map (make-sparse-keymap)); else bind-key will make full keymap
 (defvar el-get-dir (expand-file-name "el-get/" user-emacs-directory))

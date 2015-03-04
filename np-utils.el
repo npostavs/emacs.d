@@ -1,5 +1,3 @@
-(require 'pkg-list)
-
 (defconst +quote-switching-char-table+
   (let* ((last (max ?' ?\"))
          (table (make-string (1+ last) 0)))
