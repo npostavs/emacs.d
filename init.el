@@ -484,9 +484,10 @@
            (format "*<%s.magit>" type)))
     (bind-key "SPC <t>"     'magit-invoke-popup-switch magit-popup-mode-map)
     (bind-key "SPC SPC <t>" 'magit-invoke-popup-option magit-popup-mode-map)
-    (bind-keys :map magit-mode-map
-               ("C-c C-d" . magit-describe-section)
-               ("`"       . magit-log-toggle-margin))
+    (bind-key "C-c C-d" 'magit-describe-section magit-mode-map)
+    (bind-key "`" (if (fboundp 'magit-toggle-margin)
+                      'magit-toggle-margin
+                    'magit-log-toggle-margin) magit-mode-map)
     ;; The `pop-to-ongoing' advice is too expensive: it takes close to
     ;; half a second.
     (ad-deactivate 'magit-commit-popup)
