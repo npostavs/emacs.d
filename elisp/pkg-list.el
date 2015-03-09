@@ -96,7 +96,7 @@
                ("Current Revision" 16 nil)
                ("Target Revision" 16 nil)
                ("Remote branch" -1 nil)])
-  (cd "~/.emacs.d/")
+  (cd "~/.emacs.d/elisp/")
   (tabulated-list-init-header)
   (setq tabulated-list-entries #'pkg-list-entries))
 

@@ -1,7 +1,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; basic utils used for init
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-(add-to-list 'load-path user-emacs-directory)
+(add-to-list 'load-path (expand-file-name "elisp" user-emacs-directory))
 (require 'np-utils)
 (require 'np-recipes)
 (autoload 'pkg-list "pkg-list" nil t)
