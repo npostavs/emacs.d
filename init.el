@@ -291,6 +291,8 @@
 
 (use-package ido-complete-space-or-hyphen
   :config (ido-complete-space-or-hyphen-enable))
+(use-package ido-ubiquitous
+  :config (ido-ubiquitous-mode +1))
 
 (use-package smex
   :init (setq smex-save-file (locate-user-emacs-file "smex-items"))
@@ -448,20 +450,21 @@
   :bind ("C-c v" . magit-status)
   :config
   (progn
-    (setq magit-completing-read-function #'magit-ido-completing-read
-          magit-default-tracking-name-function      ; remote usually
-          #'magit-default-tracking-name-branch-only ; redundant
+     ;; NOTE: require ido-ubiquitous
+    (setq magit-completing-read-function #'magit-ido-completing-read)
+    ;; remote usually redundant
+    (setq magit-default-tracking-name-function
+          #'magit-default-tracking-name-branch-only)
 
-          ;; don't revert automatically
-          magit-refresh-file-buffer-hook nil ; obsolete
+    ;; don't revert automatically
+    (setq magit-refresh-file-buffer-hook nil ; obsolete
           magit-turn-on-auto-revert-mode nil ; obsolete
-          magit-auto-revert-mode nil
+          magit-auto-revert-mode nil)
 
-          ;; this is too expensive to have on by default
-          magit-backup-mode nil)
+    ;; this is too expensive to have on by default
+    (setq magit-backup-mode nil)
 
     ;; defaults for popups
-    (add-to-list 'magit-log-arguments "--all")
     (setq magit-branch-arguments (remove "--track" magit-branch-arguments))
     (defadvice magit-push-popup (around magit-push-arguments-maybe-upstream
                                         activate)

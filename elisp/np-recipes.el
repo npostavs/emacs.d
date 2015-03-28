@@ -19,11 +19,12 @@
            :description "i3 emacs integration"
            :type github
            :pkgname "vava/i3-emacs")
+    (:name ido-ubiquitous                  :checkout "c430dd331dcadc1efc5dee7aa5226c175f2f7a56")
     (:name ido-complete-space-or-hyphen    :checkout "3fe1fe1e1a743f8deb8f4025977647afecd58f14"
            :description "Make ido completes like built-in M-x does"
            :type github :pkgname "doitian/ido-complete-space-or-hyphen")
     (:name lua-mode                        :checkout "2453e370ca39f38fced67a6d2db462aaea110f22")
-    (:name magit                           :checkout "b2b549c546688c79f2f69f89385cc477722f0456"
+    (:name magit                           :checkout "2df74ef6cd61ed3543b0166b20508ae48fa4d537"
            :branch "origin/current" :depends (dash)
            :pkgname "npostavs/magit" :autoloads t :build nil)
     (:name multiple-cursors                :checkout "54e408fc682d968ad46846d8bff079cd704ff6fe")
