@@ -77,9 +77,7 @@
         (delete-region (point) (save-excursion (forward-sexp 1) (point)))
         (prin1 remote-rev (current-buffer))
         (save-buffer)
-        (let ((eval-expression-print-level 1)
-              (eval-expression-print-length 1))
-         (eval-defun nil)))
+        (eval-buffer))
       (revert-buffer))
      (t (message "remote = '%s', oops..." remote-rev)))))
 

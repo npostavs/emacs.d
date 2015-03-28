@@ -1,4 +1,4 @@
-(defvar el-get-sources
+(defconst el-get-sources
   '((:name ace-jump-mode                   :checkout "c60f7d2e84c9eb283627e30d1949462f403d877b")
     (:name anaphora                        :checkout "20bf7dcfa502538d23525f0905b4f845d97993d3"
            :description "Anaphoric expressions for Emacs Lisp, providing implicit temporary variables."
