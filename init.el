@@ -305,7 +305,7 @@
   (progn
     (setq ibuffer-saved-filter-groups
           '(("default"
-             ("Files" (filename . "") (name . "^[^*]"))
+             ("Files" (filename . "[^/]\\'") (name . "\\`[^*].*[^*]\\'"))
              ("Dirs" (mode . dired-mode))
              ("Docs" (or (mode . help-mode)
                          (mode . Info-mode)
