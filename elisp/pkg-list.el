@@ -69,7 +69,7 @@
       (message "%s = %s, %s is up to date." remote-rev checkout pkg))
      ((and remote-rev (string-match-p "[0-9a-f]\\{40\\}" remote-rev))
       (message "%s != %s" remote-rev checkout)
-      (with-current-buffer (find-file-noselect "~/.emacs.d/np-recipes.el")
+      (with-current-buffer (find-file-noselect "~/.emacs.d/elisp/np-recipes.el") 
         (goto-char (point-min))
         (re-search-forward (format "(:name %s +:checkout"
                                    (regexp-quote (symbol-name pkg))))
