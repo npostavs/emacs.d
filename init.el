@@ -292,7 +292,8 @@
 (use-package ido-complete-space-or-hyphen
   :config (ido-complete-space-or-hyphen-enable))
 (use-package ido-ubiquitous
-  :config (ido-ubiquitous-mode +1))
+  :config (progn (setq ido-ubiquitous-enable-old-style-default nil)
+                 (ido-ubiquitous-mode +1)))
 
 (use-package smex
   :init (setq smex-save-file (locate-user-emacs-file "smex-items"))
