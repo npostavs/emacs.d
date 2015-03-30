@@ -9,7 +9,7 @@
            :branch "2.9.0")
     (:name diminish                        :checkout "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
     (:name dired-details                   :checkout "3de7e19ae874dac03edf9951648a1f11f52dead6")
-    (:name el-get                          :checkout "d80c48b97a1986623be7cc31f8ff317081883ccd"
+    (:name el-get                          :checkout "25a5e3f16d70ac6854621aca7587c64bf876ba8d"
            :pkgname "npostavs/el-get" :branch "origin/current")
     (:name elisp-slime-nav                 :checkout "1a2cb6a832635bde694fd25cc6dce2962aad3807"
            :description "Slime-style navigation of Emacs Lisp source with M-. & M-,"
@@ -40,7 +40,7 @@
            :description "Minor mode for drawing multi-character tokens as Unicode glyphs"
            :type github :pkgname "drothlis/pretty-symbols")
     (:name smex                            :checkout "c2b14f46439246a23f2178555ba69085db226b19")
-    (:name sml-mode                        :checkout "6.5"
+    (:name sml-mode                        :checkout "6.7"
            :description
            "SML-mode is a major Emacs mode for editing Standard ML source code."
            :type elpa)
