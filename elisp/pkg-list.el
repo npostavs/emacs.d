@@ -44,7 +44,10 @@
                                   (list package current-rev
                                         (el-get-as-string checkout)))
                           (list remote))))))))
-    (el-get-list-package-names-with-status "installed"))))
+    (delete-consecutive-dups
+     (sort (append (el-get-list-package-names-with-status "installed")
+                   (mapcar #'el-get-source-name el-get-sources))
+           #'string<)))))
 
 (defun pkg-list-check-remote ()
   (interactive)
@@ -88,7 +91,9 @@
   (interactive)
   (let* ((pkg-entry (tabulated-list-get-entry))
          (pkg (el-get-package-symbol (elt pkg-entry 0))))
-    (el-get-update pkg)))
+    (if (el-get-package-installed-p pkg)
+        (el-get-update pkg)
+      (el-get-install pkg))))
 
 (define-derived-mode pkg-list-mode tabulated-list-mode "PkgList"
   "List and manage el-get installed packages..."
