@@ -1,6 +1,9 @@
 (require 'el-get-elpa) ; for package compat functions
 
+(defconst pkg-recipes-file "~/.emacs.d/elisp/np-recipes.el")
+
 (defun pkg-list-entries ()
+  (load pkg-recipes-file nil 'nomessage 'nosuffix)
   (delq
    nil
    (mapcar
@@ -69,7 +72,7 @@
       (message "%s = %s, %s is up to date." remote-rev checkout pkg))
      ((and remote-rev (string-match-p "[0-9a-f]\\{40\\}" remote-rev))
       (message "%s != %s" remote-rev checkout)
-      (with-current-buffer (find-file-noselect "~/.emacs.d/elisp/np-recipes.el") 
+      (with-current-buffer (find-file-noselect pkg-recipes-file) 
         (goto-char (point-min))
         (re-search-forward (format "(:name %s +:checkout"
                                    (regexp-quote (symbol-name pkg))))
