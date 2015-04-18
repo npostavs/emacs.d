@@ -239,10 +239,10 @@
       '(left-curly-arrow right-curly-arrow))
 
 (use-package undo-tree
-  :defer t
-  :config (setq undo-tree-visualizer-timestamps t)
-  :diminish "↺"
-  :idle (global-undo-tree-mode +1))
+  :defer 5
+  :config (progn (setq undo-tree-visualizer-timestamps t)
+                 (global-undo-tree-mode +1))
+  :diminish "↺")
 
 (use-package ace-jump-mode
   :bind ("C-c SPC" . ace-jump-mode))
@@ -378,22 +378,20 @@
   :diminish "")
 
 (use-package yasnippet
-  ;; use `:pre-load' we need to run synchronously, not on idle timer
-  :pre-load (setq yas-snippet-dirs
-                  `("~/.emacs.d/snippets"
-                    ,(expand-file-name "yasnippet/snippets" el-get-dir)))
-  :idle (yas-global-mode +1)
+  :defer 5
   :config (progn
             (setq yas-prompt-functions ; default x-prompt is just annoying
                   '(yas-ido-prompt yas-completing-prompt yas-no-prompt))
             (setq yas-wrap-around-region t)
             (unbind-key "<tab>" yas-minor-mode-map)
             (unbind-key "TAB" yas-minor-mode-map)
-            (bind-key "M-i" 'yas-expand yas-minor-mode-map))
+            (bind-key "M-i" 'yas-expand yas-minor-mode-map)
+            (yas-global-mode +1))
   :diminish (yas-minor-mode . "Y"))
 
 (use-package pcre2el
-  :idle (rxt-global-mode +1))
+  :defer 10
+  :config (rxt-global-mode +1))
 
 ;;; programming related modes
 

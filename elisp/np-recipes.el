@@ -45,7 +45,7 @@
            "SML-mode is a major Emacs mode for editing Standard ML source code."
            :type elpa)
     (:name undo-tree                       :checkout "bc9d09555f5aeac6ac4684d748be763f64a7d80a")
-    (:name use-package                     :checkout "1df5bbcf5f5d23e2a43750fd3fa765109dae3255")
+    (:name use-package                     :checkout "af3ee10a9b0ba4c55d3fb12638ae541638b23e2c")
     (:name yasnippet                       :checkout "be2f815c43deb74e0f809ed47debc4aa2e67ea1e"))
  )
 
