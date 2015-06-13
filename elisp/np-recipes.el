@@ -5,8 +5,8 @@
            :type github
            :pkgname "rolandwalker/anaphora")
     (:name ample-regexps                   :checkout "f24c5991927c8eb180d9f1d1614da238daba6423")
-    (:name dash                            :checkout "31f321a9dcfe3a2ad0436a3d636331c942ff7acc"
-           :branch "2.9.0")
+    (:name dash                            :checkout "446c5226337ca132da6148893c43ebb3335d91ea"
+           :branch "2.10.0")
     (:name diminish                        :checkout "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
     (:name dired-details                   :checkout "3de7e19ae874dac03edf9951648a1f11f52dead6")
     (:name el-get                          :checkout "25a5e3f16d70ac6854621aca7587c64bf876ba8d"
@@ -24,7 +24,7 @@
            :description "Make ido completes like built-in M-x does"
            :type github :pkgname "doitian/ido-complete-space-or-hyphen")
     (:name lua-mode                        :checkout "2453e370ca39f38fced67a6d2db462aaea110f22")
-    (:name magit                           :checkout "acecf9dfbc7c80e6970560a7a3219a1de9acc16e"
+    (:name magit                           :checkout "02f8dd7175b5fc883dc3ce6d353eeed5841a5621"
            :branch "origin/current" :depends (dash)
            :pkgname "npostavs/magit" :autoloads t :build nil)
     (:name multiple-cursors                :checkout "54e408fc682d968ad46846d8bff079cd704ff6fe")
