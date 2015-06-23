@@ -449,7 +449,7 @@
   :bind ("C-c v" . magit-status)
   :config
   (progn
-     ;; NOTE: require ido-ubiquitous
+    ;; NOTE: require ido-ubiquitous
     (setq magit-completing-read-function #'magit-ido-completing-read)
     ;; remote usually redundant
     (setq magit-default-tracking-name-function
@@ -458,7 +458,8 @@
     ;; don't revert automatically
     (setq magit-refresh-file-buffer-hook nil ; obsolete
           magit-turn-on-auto-revert-mode nil ; obsolete
-          magit-auto-revert-mode nil)
+          magit-auto-revert-mode nil         ; obsolete
+          magit-revert-buffers nil)
 
     ;; this is too expensive to have on by default
     (setq magit-backup-mode nil)

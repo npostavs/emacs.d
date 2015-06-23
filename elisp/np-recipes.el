@@ -19,7 +19,7 @@
            :description "i3 emacs integration"
            :type github
            :pkgname "vava/i3-emacs")
-    (:name ido-ubiquitous                  :checkout "c430dd331dcadc1efc5dee7aa5226c175f2f7a56")
+    (:name ido-ubiquitous                  :checkout "2c8c0810e1dc5457641bba63ca4c56aca3c9049c")
     (:name ido-complete-space-or-hyphen    :checkout "3fe1fe1e1a743f8deb8f4025977647afecd58f14"
            :description "Make ido completes like built-in M-x does"
            :type github :pkgname "doitian/ido-complete-space-or-hyphen")
