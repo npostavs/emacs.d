@@ -268,8 +268,9 @@
   :defer t
   :bind (("<kp-multiply>" . calc-dispatch)
          ("C-<kp-multiply>" . quick-calc))
-  ;; the trail is distracting
-  :config (setq calc-display-trail nil))
+  ;; remove distracting display stuff
+  :config (setq calc-display-trail nil
+                calc-line-numbering nil))
 
 (use-package proced
   :bind ("C-c p" . proced)
