@@ -496,6 +496,7 @@
     ;; half a second.
     (ad-deactivate 'magit-commit-popup)
     (when (eq system-type 'windows-nt)
+      (require 'ssh-agency)
       ;; msys git uses a wrapper in .../Git/cmd/git.exe, going
       ;; directly to the executable in .../Git/bin/git.exe makes a
       ;; noticable difference in time: magit-refresh goes from 2.0s to

@@ -24,9 +24,9 @@
            :description "Make ido completes like built-in M-x does"
            :type github :pkgname "doitian/ido-complete-space-or-hyphen")
     (:name lua-mode                        :checkout "2453e370ca39f38fced67a6d2db462aaea110f22")
-    (:name magit                           :checkout "02f8dd7175b5fc883dc3ce6d353eeed5841a5621"
+    (:name magit                           :checkout "cf3ee1926b5075eed23491bec169a6cde7dc747d"
            :branch "origin/current" :depends (dash)
-           :pkgname "npostavs/magit" :autoloads t :build nil)
+           :pkgname "npostavs/magit" :autoloads t :build nil :load-path "lisp")
     (:name multiple-cursors                :checkout "54e408fc682d968ad46846d8bff079cd704ff6fe")
     (:name package                         :checkout -
            ;; cut out el-get's post-init stuff
@@ -44,6 +44,9 @@
            :description
            "SML-mode is a major Emacs mode for editing Standard ML source code."
            :type elpa)
+    (:name ssh-agency                      :checkout "280603797c6dfbca17cb7ecfcdf062ae332063e1"
+           :description "Use ssh-agent on win32 from Emacs"
+           :type github :pkgname "magit/ssh-agency")
     (:name undo-tree                       :checkout "bc9d09555f5aeac6ac4684d748be763f64a7d80a")
     (:name use-package                     :checkout "af3ee10a9b0ba4c55d3fb12638ae541638b23e2c")
     (:name yasnippet                       :checkout "be2f815c43deb74e0f809ed47debc4aa2e67ea1e"))
