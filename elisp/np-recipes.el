@@ -39,6 +39,7 @@
     (:name pretty-symbols                  :checkout "fc49af3da086431c498adf92a86a9b5f70c6aad3"
            :description "Minor mode for drawing multi-character tokens as Unicode glyphs"
            :type github :pkgname "drothlis/pretty-symbols")
+    (:name s                               :checkout "e59915ec6fc35983fa4a164ff2a3f73df135ca88")
     (:name smex                            :checkout "c2b14f46439246a23f2178555ba69085db226b19")
     (:name sml-mode                        :checkout "6.7"
            :description
