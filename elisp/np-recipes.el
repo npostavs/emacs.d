@@ -44,7 +44,7 @@
            :description
            "SML-mode is a major Emacs mode for editing Standard ML source code."
            :type elpa)
-    (:name ssh-agency                      :checkout "280603797c6dfbca17cb7ecfcdf062ae332063e1"
+    (:name ssh-agency                      :checkout "9f07001c00265101f4af56ad3a0cac216832a27a"
            :description "Use ssh-agent on win32 from Emacs"
            :type github :pkgname "magit/ssh-agency")
     (:name undo-tree                       :checkout "bc9d09555f5aeac6ac4684d748be763f64a7d80a")
