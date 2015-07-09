@@ -475,6 +475,15 @@
         (apply magit-push-popup-fun args)))
     (advice-add 'magit-push-popup :around #'magit-push-arguments-maybe-upstream)
 
+    (defun magit-branch-HEAD-and-checkout (branch &optional args)
+      "Create and checkout BRANCH at branch or revision START-POINT.
+\n(git checkout [ARGS] -b BRANCH HEAD)."
+      (interactive (list (magit-read-string "Branch name") (magit-branch-arguments)))
+      (setq args (delete "--track" args))
+      (magit-branch-and-checkout branch "HEAD" args))
+    (magit-define-popup-action 'magit-branch-popup
+      ?c "Create @HEAD & checkout" 'magit-branch-HEAD-and-checkout)
+
     (set-face-foreground 'magit-hash
                          (face-foreground 'font-lock-type-face))
     ;; change buffer name formats so the "magit" goes at the end, that
