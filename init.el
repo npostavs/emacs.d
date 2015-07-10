@@ -488,7 +488,7 @@
       ?b)
     (magit-define-popup-action 'magit-branch-popup ; bumped to shifted binding
       ?C "Create" 'magit-branch)
-    (magit-remove-popup-key 'magit-branch-popup :actions ?B) ; pointless
+    (magit-remove-popup-key 'magit-branch-popup :action ?B) ; drop this command
 
     (defconst magit-pull-request-remote "upstream"
       "Where to find pull requests.")
