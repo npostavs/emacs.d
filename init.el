@@ -490,6 +490,16 @@
       ?C "Create" 'magit-branch)
     (magit-remove-popup-key 'magit-branch-popup :action ?B) ; drop this command
 
+    (defun magit-branch-move (branch to &optional args)
+      (interactive
+       (let ((branch (magit-read-branch "Move branch" (magit-get-current-branch))))
+         (list branch
+               (magit-read-other-branch-or-commit "to" branch)
+               (magit-branch-arguments))))
+      (magit-branch branch to (cl-adjoin "--force" args :test #'equal)))
+    (magit-define-popup-action 'magit-branch-popup
+      ?m "Move" 'magit-branch-move)
+
     (defconst magit-pull-request-remote "upstream"
       "Where to find pull requests.")
     ;; From https://github.com/tarsius/magit-rockstar/
