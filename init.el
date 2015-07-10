@@ -483,8 +483,12 @@
       (interactive (list (magit-read-string "Branch name") (magit-branch-arguments)))
       (setq args (delete "--track" args))
       (magit-branch-and-checkout branch "HEAD" args))
-    (magit-define-popup-action 'magit-branch-popup
-      ?c "Create @HEAD & checkout" 'magit-branch-HEAD-and-checkout)
+    (magit-define-popup-action 'magit-branch-popup ; more common than plain "Create"
+      ?c "Create@HEAD & Checkout" 'magit-branch-HEAD-and-checkout
+      ?b)
+    (magit-define-popup-action 'magit-branch-popup ; bumped to shifted binding
+      ?C "Create" 'magit-branch)
+    (magit-remove-popup-key 'magit-branch-popup :actions ?B) ; pointless
 
     (defconst magit-pull-request-remote "upstream"
       "Where to find pull requests.")
