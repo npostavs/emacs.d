@@ -31,7 +31,7 @@
       inhibit-splash-screen t
       require-final-newline 'ask
       truncate-partial-width-windows 80
-      sentence-end-double-space nil
+      sentence-end-double-space t ; explicitly choose default
       x-select-enable-clipboard t
       set-mark-command-repeat-pop t
 
