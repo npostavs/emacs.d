@@ -154,8 +154,8 @@
 (bind-key* "<left>" (lambda () (interactive) (scroll-right 1 t)))
 (bind-key "<kp-right>" 'scroll-left)
 (bind-key "<kp-left>" 'scroll-right)
-(bind-key* "<up>" (lambda () (interactive) (scroll-up -1)))
-(bind-key* "<down>" (lambda () (interactive) (scroll-down -1)))
+(bind-key* "<up>" #'scroll-down-line)
+(bind-key* "<down>" #'scroll-up-line)
 (put 'scroll-left 'disabled nil)
 
 (bind-key* "M-<down>" 'windmove-down)
