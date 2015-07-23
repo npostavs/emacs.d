@@ -98,6 +98,8 @@
   '(progn (bind-key "b" 'scroll-down-command help-mode-map)
           (bind-key "n" 'help-go-forward help-mode-map)
           (bind-key "p" 'help-go-back help-mode-map)))
+;; Almost always want to see major mode keymap
+(bind-key "b" 'describe-major-mode-bindings help-map)
 ;; single key non-homerow bindings for some less common operations
 (bind-key* "<delete>" 'delete-region)
 ;; some compatibility with Windows/VisualC++ stuff

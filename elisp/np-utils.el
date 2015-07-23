@@ -134,6 +134,16 @@ sequence, just like C-x e e e..."
                                (,cmd ,@args))))
       map))))
 
+;; `describe-bindings' orders the keymaps by precedence so the
+;; major-mode goes next to last, which makes it a bit inconvenient
+;; for quick lookup.
+(defun describe-major-mode-bindings ()
+  (interactive)
+  (call-interactively 'describe-bindings)
+  (with-current-buffer (help-buffer)
+    (search-forward "Major Mode Bindings")
+    (narrow-to-page)))
+
 ;;; from https://github.com/thomasf/dotfiles-thomasf-emacs
 (defun toggle-fold ()
   "Toggle fold all lines larger than indentation on current line"
