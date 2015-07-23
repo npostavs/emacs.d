@@ -465,6 +465,12 @@
           magit-auto-revert-mode nil         ; obsolete
           magit-revert-buffers nil)
 
+    ;; see https://github.com/magit/magit/pull/2091
+    (setq magit-keep-region-overlay t)
+
+    ;; I always keep my repos under ~/src
+    (setq magit-repository-directories '("~/src/"))
+
     (setq magit-popup-use-prefix-argument 'default)
 
     ;; this is too expensive to have on by default
@@ -491,17 +497,10 @@
       ?b)
     (magit-define-popup-action 'magit-branch-popup ; bumped to shifted binding
       ?C "Create" 'magit-branch)
-    (magit-remove-popup-key 'magit-branch-popup :action ?B) ; drop this command
-
-    (defun magit-branch-move (branch to &optional args)
-      (interactive
-       (let ((branch (magit-read-branch "Move branch" (magit-get-current-branch))))
-         (list branch
-               (magit-read-other-branch-or-commit "to" branch)
-               (magit-branch-arguments))))
-      (magit-branch branch to (cl-adjoin "--force" args :test #'equal)))
-    (magit-define-popup-action 'magit-branch-popup
-      ?m "Move" 'magit-branch-move)
+    (setq magit-branch-read-upstream-first t)
+    ;; drop these commands
+    (magit-remove-popup-key 'magit-branch-popup :action ?B)
+    (magit-remove-popup-key 'magit-branch-popup :action ?v)
 
     (defconst magit-pull-request-remote "upstream"
       "Where to find pull requests.")
