@@ -287,6 +287,8 @@
   (progn (ido-mode +1)
          (ido-everywhere +1)
          (setq ido-enable-flex-matching t
+               ;; so I can complete candidates without entering them
+               ido-confirm-unique-completion t
                ;; don't jump to some other directory when I mistype a filename
                ido-auto-merge-work-directories-length -1)))
 
@@ -327,7 +329,8 @@
       (ibuffer-switch-to-saved-filter-groups "default"))))
 
 (use-package uniquify
-  :config (setq uniquify-buffer-name-style 'forward))
+  :config (setq uniquify-buffer-name-style 'forward
+                uniquify-after-kill-buffer-p nil))
 
 (use-package dired-details
   :commands dired-details-install
