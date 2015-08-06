@@ -98,6 +98,9 @@
   '(progn (bind-key "b" 'scroll-down-command help-mode-map)
           (bind-key "n" 'help-go-forward help-mode-map)
           (bind-key "p" 'help-go-back help-mode-map)))
+;; For some reason, these are only on `M-n' and `M-p' by default.
+(bind-key "n" 'occur-next occur-mode-map)
+(bind-key "p" 'occur-prev occur-mode-map)
 ;; Almost always want to see major mode keymap
 (bind-key "b" 'describe-major-mode-bindings help-map)
 ;; single key non-homerow bindings for some less common operations
@@ -367,6 +370,8 @@
   (progn
     (add-hook 'lisp-mode-hook #'enable-paredit-mode)
     (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
+    ;; Don't shadow `M-s' prefix key; paredit-splice still on `M-S'.
+    (unbind-key "M-s" paredit-mode-map)
     (defadvice enable-paredit-mode (around demote-paredit-errors activate)
       (with-demoted-errors ad-do-it))))
 
