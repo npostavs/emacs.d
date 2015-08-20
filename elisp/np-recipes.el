@@ -9,7 +9,7 @@
            :branch "2.10.0")
     (:name diminish                        :checkout "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
     (:name dired-details                   :checkout "3de7e19ae874dac03edf9951648a1f11f52dead6")
-    (:name el-get                          :checkout "20ae7822742cb6cc41b00b0d30ac99c4f8888c64"
+    (:name el-get                          :checkout "aacdcd000fa63914658913439b18dfed4002f768"
            :pkgname "npostavs/el-get" :branch "origin/current")
     (:name elisp-slime-nav                 :checkout "1a2cb6a832635bde694fd25cc6dce2962aad3807"
            :description "Slime-style navigation of Emacs Lisp source with M-. & M-,"
