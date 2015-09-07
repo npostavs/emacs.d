@@ -20,7 +20,7 @@
                    (compute-checksum
                     (or (ignore-errors (funcall compute-checksum package))
                         "???"))
-                   ((eq type 'elpa)
+                   ((and (eq type 'elpa) package-alist)
                     (package-version-join
                      (package-desc-version (car
                                             (el-get-elpa-descs
