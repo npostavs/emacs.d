@@ -374,8 +374,9 @@
   (progn
     (add-hook 'lisp-mode-hook #'enable-paredit-mode)
     (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
-    ;; Don't shadow `M-s' prefix key; paredit-splice still on `M-S'.
+    ;; Don't shadow `M-s' prefix key
     (unbind-key "M-s" paredit-mode-map)
+    (bind-key "M-s M-s" 'paredit-splice-sexp paredit-mode-map)
     (defadvice enable-paredit-mode (around demote-paredit-errors activate)
       (with-demoted-errors ad-do-it))))
 
