@@ -44,6 +44,10 @@
       delete-active-region nil ; just use <delete>
 
       gdb-many-windows t
+
+      ;; No more damn prompts!
+      dired-recursive-deletes 'always
+      dired-recursive-copies 'always
       )
 
 (setq enable-recursive-minibuffers t)
