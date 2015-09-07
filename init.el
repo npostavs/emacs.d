@@ -484,6 +484,7 @@
     (setq magit-repository-directories '("~/src/"))
 
     (setq magit-popup-use-prefix-argument 'default)
+    (setq magit-push-always-verify nil)
 
     ;; this is too expensive to have on by default
     (setq magit-backup-mode nil)
@@ -511,8 +512,8 @@
       ?C "Create" 'magit-branch)
     (setq magit-branch-read-upstream-first t)
     ;; drop these commands
-    (magit-remove-popup-key 'magit-branch-popup :action ?B)
-    (magit-remove-popup-key 'magit-branch-popup :action ?v)
+    (magit-remove-popup-key 'magit-branch-popup :action ?B) ; "Create & checkout"
+    (magit-remove-popup-key 'magit-branch-popup :action ?v) ; "Branch manager"
 
     (defconst magit-pull-request-remote "upstream"
       "Where to find pull requests.")
@@ -561,9 +562,6 @@ branch."
     (bind-key "`" (if (fboundp 'magit-toggle-margin)
                       'magit-toggle-margin
                     'magit-log-toggle-margin) magit-mode-map)
-    ;; The `pop-to-ongoing' advice is too expensive: it takes close to
-    ;; half a second.
-    (ad-deactivate 'magit-commit-popup)
     (when (eq system-type 'windows-nt)
       ;; msys git uses a wrapper in .../Git/cmd/git.exe, going
       ;; directly to the executable in .../Git/bin/git.exe makes a

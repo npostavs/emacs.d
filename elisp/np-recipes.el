@@ -1,5 +1,5 @@
 (defconst el-get-sources
-  '((:name ace-jump-mode                   :checkout "c60f7d2e84c9eb283627e30d1949462f403d877b")
+  '((:name ace-jump-mode                   :checkout "8351e2df4fbbeb2a4003f2fb39f46d33803f3dac")
     (:name anaphora                        :checkout "20bf7dcfa502538d23525f0905b4f845d97993d3"
            :description "Anaphoric expressions for Emacs Lisp, providing implicit temporary variables."
            :type github
@@ -9,7 +9,7 @@
            :branch "2.10.0")
     (:name diminish                        :checkout "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
     (:name dired-details                   :checkout "3de7e19ae874dac03edf9951648a1f11f52dead6")
-    (:name el-get                          :checkout "aacdcd000fa63914658913439b18dfed4002f768"
+    (:name el-get                          :checkout "8a0e577d297346d322fe38fc818976fa1fcb9ed7"
            :pkgname "npostavs/el-get" :branch "origin/current")
     (:name elisp-slime-nav                 :checkout "1a2cb6a832635bde694fd25cc6dce2962aad3807"
            :description "Slime-style navigation of Emacs Lisp source with M-. & M-,"
@@ -24,9 +24,9 @@
            :description "Make ido completes like built-in M-x does"
            :type github :pkgname "doitian/ido-complete-space-or-hyphen")
     (:name lua-mode                        :checkout "2453e370ca39f38fced67a6d2db462aaea110f22")
-    (:name magit                           :checkout "d0ebdd1b113d935b6715cd73a78749fe272b789e"
+    (:name magit                           :checkout "e60c7a1d7fded372c8abbfe7ec523cbff55fa4b3"
            :branch "origin/current" :pkgname "npostavs/magit"
-           :build (with-temp-file "lisp/magit-autoloads.el" nil) :build/windows-nt nil)
+           :build/windows-nt (with-temp-file "lisp/magit-autoloads.el" nil))
     (:name multiple-cursors                :checkout "54e408fc682d968ad46846d8bff079cd704ff6fe")
     (:name package                         :checkout -
            ;; cut out el-get's post-init stuff
