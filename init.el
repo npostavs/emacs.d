@@ -562,14 +562,6 @@ branch."
     (bind-key "`" (if (fboundp 'magit-toggle-margin)
                       'magit-toggle-margin
                     'magit-log-toggle-margin) magit-mode-map)
-    (when (eq system-type 'windows-nt)
-      ;; msys git uses a wrapper in .../Git/cmd/git.exe, going
-      ;; directly to the executable in .../Git/bin/git.exe makes a
-      ;; noticable difference in time: magit-refresh goes from 2.0s to
-      ;; 1.3s
-      (setq magit-git-executable
-            (expand-file-name "../bin/git.exe"
-                              (file-name-directory (executable-find "git")))))
     (font-lock-add-keywords 'emacs-lisp-mode
                             magit-font-lock-keywords)))
 

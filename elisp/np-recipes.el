@@ -24,7 +24,7 @@
            :description "Make ido completes like built-in M-x does"
            :type github :pkgname "doitian/ido-complete-space-or-hyphen")
     (:name lua-mode                        :checkout "2453e370ca39f38fced67a6d2db462aaea110f22")
-    (:name magit                           :checkout "e60c7a1d7fded372c8abbfe7ec523cbff55fa4b3"
+    (:name magit                           :checkout "884c81ad5cf5435ccf4fe4354d1d3d34d3ecfa1e"
            :branch "origin/current" :pkgname "npostavs/magit"
            :build/windows-nt (with-temp-file "lisp/magit-autoloads.el" nil))
     (:name multiple-cursors                :checkout "54e408fc682d968ad46846d8bff079cd704ff6fe")
