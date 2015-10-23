@@ -332,7 +332,7 @@
                               (mode . gnus-summary-mode)))
              ("Procs" (predicate . (get-buffer-process (current-buffer))))
              ("Grep"  (mode . grep-mode))
-             ("Magit" (name . "[.]magit>$")))))
+             ("Magit" (name . "\\`[*]magit.*:")))))
 
     (define-and-add-hook ibuffer-mode-hook
       (ibuffer-switch-to-saved-filter-groups "default"))))
@@ -545,17 +545,6 @@ branch."
 
     (set-face-foreground 'magit-hash
                          (face-foreground 'font-lock-type-face))
-    ;; change buffer name formats so the "magit" goes at the end, that
-    ;; way the important parts won't be cut off in the ibuffer list.
-    (dolist (type '("cherry" "log" "reflog" "refs" "stash" "status"))
-      (-if-let (sym (intern-soft (format "magit-%s-buffer-name-format" type)))
-          (set sym (format "*%%a<%s.magit>" type))
-        (display-warning 'magit-config (format "No such type: `%s'." type) :error)))
-    ;; only have one buffer for each of these, not per repo
-    (dolist (type '("revision" "diff" "process"))
-      (-if-let (sym (intern-soft (format "magit-%s-buffer-name-format" type)))
-          (set sym (format "*<%s.magit>" type))
-        (display-warning 'magit-config (format "No such type: `%s'." type) :error)))
     (bind-key "SPC <t>"     'magit-invoke-popup-switch magit-popup-mode-map)
     (bind-key "SPC SPC <t>" 'magit-invoke-popup-option magit-popup-mode-map)
     (bind-key "C-c C-d" 'magit-describe-section magit-mode-map)
