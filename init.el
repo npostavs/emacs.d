@@ -113,8 +113,11 @@
 (bind-key "<f4>" 'next-error)
 (bind-key "S-<f4>" 'previous-error)
 
+(bind-key "TAB" 'forward-button special-mode-map)
+(bind-key "<backtab>" 'backward-button special-mode-map)
+
 (bind-key "C-<tab>" 'switch-to-next-buffer)
-(bind-key "C-S-<iso-lefttab>" 'switch-to-prev-buffer)
+(bind-key "<backtab>" 'switch-to-prev-buffer)
 
 (bind-key "<f7>" 'compile)
 (bind-key "C-<f7>" 'recompile)
