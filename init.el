@@ -466,6 +466,9 @@
 
 (use-package magit
   :bind ("C-c v" . magit-status)
+  ;; Avoid Emacs bug#20015
+  :init (setq tramp-ssh-controlmaster-options
+              "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
   :config
   (progn
     ;; NOTE: require ido-ubiquitous
