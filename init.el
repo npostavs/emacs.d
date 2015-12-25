@@ -117,7 +117,7 @@
 (bind-key "<backtab>" 'backward-button special-mode-map)
 
 (bind-key "C-<tab>" 'switch-to-next-buffer)
-(bind-key "<backtab>" 'switch-to-prev-buffer)
+(bind-key "C-<iso-lefttab>" 'switch-to-prev-buffer)
 
 (bind-key "<f7>" 'compile)
 (bind-key "C-<f7>" 'recompile)
