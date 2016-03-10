@@ -459,20 +459,17 @@
   :defer t)
 
 ;; git
-(use-package git-commit-mode ; from git-modes
-  :defer t
-  :config (progn
-            (cond
-             ((boundp 'git-commit-mode-hook) ; obsolete
-              (remove-hook 'git-commit-mode-hook 'flyspell-mode))
-             ((boundp 'git-commit-setup-hook)
-              (remove-hook 'git-commit-setup-hook 'git-commit-turn-on-flyspell)))))
-
 (use-package magit
   :bind ("C-c v" . magit-status)
-  ;; Avoid Emacs bug#20015
-  :init (setq tramp-ssh-controlmaster-options
-              "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no")
+  :init (setq
+         ;; Avoid Emacs bug#20015
+         tramp-ssh-controlmaster-options
+         "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no"
+         ;; don't revert automatically
+         magit-refresh-file-buffer-hook nil ; obsolete
+         magit-turn-on-auto-revert-mode nil ; obsolete
+         magit-auto-revert-mode nil
+         magit-revert-buffers nil)      ; obsolete
   :config
   (progn
     ;; NOTE: require ido-ubiquitous
@@ -480,12 +477,6 @@
     ;; remote usually redundant
     (setq magit-default-tracking-name-function
           #'magit-default-tracking-name-branch-only)
-
-    ;; don't revert automatically
-    (setq magit-refresh-file-buffer-hook nil ; obsolete
-          magit-turn-on-auto-revert-mode nil ; obsolete
-          magit-auto-revert-mode nil         ; obsolete
-          magit-revert-buffers nil)
 
     ;; see https://github.com/magit/magit/pull/2091
     (setq magit-keep-region-overlay t)
@@ -500,15 +491,6 @@
     (setq magit-backup-mode nil)
 
     ;; defaults for popups
-    (setq magit-branch-arguments (remove "--track" magit-branch-arguments))
-    (defun magit-push-arguments-maybe-upstream (magit-push-popup-fun &rest args)
-      "Enable --set-upstream switch if there isn't a current upstream."
-      (let ((magit-push-arguments
-             (if (magit-get-remote) magit-push-arguments
-               (cons "--set-upstream" magit-push-arguments))))
-        (apply magit-push-popup-fun args)))
-    (advice-add 'magit-push-popup :around #'magit-push-arguments-maybe-upstream)
-
     (defun magit-branch-HEAD-and-checkout (branch &optional args)
       "Create and checkout BRANCH at branch or revision START-POINT.
 \n(git checkout [ARGS] -b BRANCH HEAD)."
@@ -518,12 +500,6 @@
     (magit-define-popup-action 'magit-branch-popup ; more common than plain "Create"
       ?c "Create@HEAD & Checkout" 'magit-branch-HEAD-and-checkout
       ?b)
-    (magit-define-popup-action 'magit-branch-popup ; bumped to shifted binding
-      ?C "Create" 'magit-branch)
-    (setq magit-branch-read-upstream-first t)
-    ;; drop these commands
-    (magit-remove-popup-key 'magit-branch-popup :action ?B) ; "Create & checkout"
-    (magit-remove-popup-key 'magit-branch-popup :action ?v) ; "Branch manager"
 
     (defconst magit-pull-request-remote "upstream"
       "Where to find pull requests.")
@@ -561,6 +537,7 @@ branch."
     (bind-key "`" (if (fboundp 'magit-toggle-margin)
                       'magit-toggle-margin
                     'magit-log-toggle-margin) magit-mode-map)
+    (bind-key "C-c C-l" 'magit-toggle-buffer-lock magit-mode-map)
     (font-lock-add-keywords 'emacs-lisp-mode
                             magit-font-lock-keywords)))
 

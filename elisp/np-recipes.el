@@ -9,7 +9,7 @@
            :branch "2.12.1")
     (:name diminish                        :checkout "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
     (:name dired-details                   :checkout "3de7e19ae874dac03edf9951648a1f11f52dead6")
-    (:name el-get                          :checkout "c337455c72d5aa2ea47d9da39c89ed121339d2ab"
+    (:name el-get                          :checkout "8614b9cb264fee60c9f4562e5559a7d06c180109"
            :pkgname "npostavs/el-get" :branch "origin/current")
     (:name elisp-slime-nav                 :checkout "1a2cb6a832635bde694fd25cc6dce2962aad3807"
            :description "Slime-style navigation of Emacs Lisp source with M-. & M-,"
@@ -24,14 +24,14 @@
            :description "Make ido completes like built-in M-x does"
            :type github :pkgname "doitian/ido-complete-space-or-hyphen")
     (:name lua-mode                        :checkout "2453e370ca39f38fced67a6d2db462aaea110f22")
-    (:name magit                           :checkout "9d541fb06a172a1f8f226b16794be3213bfd66bb"
+    (:name magit                           :checkout "cae79c43038e4325a5ede0c50dc6bbbd9b374f5c"
            :branch "origin/current" :pkgname "npostavs/magit"
            :build/windows-nt (with-temp-file "lisp/magit-autoloads.el" nil))
     (:name multiple-cursors                :checkout "54e408fc682d968ad46846d8bff079cd704ff6fe")
     (:name package                         :checkout -
            ;; cut out el-get's post-init stuff
            :post-init nil)
-    (:name paredit                         :checkout "808b4305877355fd11dc9c4c7bf00990e636b01d")
+    (:name paredit                         :checkout "9a696fdcce87c9d9eec4569a9929d0300ac6ae5c")
     (:name pcre2el                         :checkout "5046f3323724300e42de14cb54e7f65b392ca383"
            :description "Parse, convert, and font-lock PCRE, Emacs and rx regexps"
            :type github
@@ -45,11 +45,12 @@
            :description
            "SML-mode is a major Emacs mode for editing Standard ML source code."
            :type elpa)
-    (:name ssh-agency                      :checkout "742b64a2657fe3876f489755667fb1b5f380d0b8"
+    (:name ssh-agency                      :checkout "f8042250174fb72dd935b3e65820580e3232a6fd"
            :description "Use ssh-agent on win32 from Emacs"
            :type github :pkgname "magit/ssh-agency")
     (:name undo-tree                       :checkout "bc9d09555f5aeac6ac4684d748be763f64a7d80a")
     (:name use-package                     :checkout "77a77c8b03044f0279e00cadd6a6d1a7ae97b016")
+    (:name with-editor                     :checkout "b3631b8ef473a314a504321d0442b6a5ea481a99")
     (:name yasnippet                       :checkout "1cf723a408800b489a5f74bd14219a74b665a7f3"))
  )
 
