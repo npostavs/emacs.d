@@ -131,7 +131,11 @@
 
 (unbind-key "C-x C-c")                             ; don't need this
 (defalias 'quit-emacs 'save-buffers-kill-terminal) ; use M-x instead
-(bind-key "M-<f4>" 'quit-emacs)
+(defun maybe-quit-emacs ()
+  (interactive)
+  (when (y-or-n-p "Quit Emacs?")
+    (quit-emacs)))
+(bind-key "M-<f4>" 'maybe-quit-emacs)
 (bind-key "C-<f4>"
           ;; `kill-this-buffer' only works properly from menu
           (lambda () (interactive) (kill-buffer)))
