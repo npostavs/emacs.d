@@ -168,19 +168,16 @@ sequence, just like C-x e e e..."
 
 (defun rotate-frame-window-buffers ()
   (interactive)
-  (let ((map
+  (let ((window-and-buffers
          (mapcar
           (lambda (window)
-            `(,window
-              ,(window-buffer
-                (next-window window))))
+            (cons window (window-buffer (next-window window))))
           (window-list))))
-    (mapcar
-     (lambda (window-to-buffer)
-       (let ((window (car window-to-buffer))
-             (buffer (cadr window-to-buffer)))
-         (select-window window)
-         (switch-to-buffer buffer))) map))
+    (dolist (window-and-buffer window-and-buffers)
+      (let ((window (car window-and-buffer))
+            (buffer (cdr window-and-buffer)))
+        (select-window window)
+        (switch-to-buffer buffer))))
   (make-repeatable 'rotate-frame-window-buffers))
 
 (defun toggle-window-split ()
