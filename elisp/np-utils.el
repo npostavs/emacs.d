@@ -1,3 +1,4 @@
+;;; -*- lexical-binding: t -*-
 (defconst +quote-switching-char-table+
   (let* ((last (max ?' ?\"))
          (table (make-string (1+ last) 0)))
@@ -118,8 +119,8 @@ sequence, just like C-x e e e..."
    (set-temporary-overlay-map
     (let ((map (make-sparse-keymap)))
       (define-key map (vector last-input-event)
-        `(lambda () (interactive) (let ((make-repeatable--command ',cmd))
-                               (,cmd ,@args))))
+        (lambda () (interactive) (let ((make-repeatable--command cmd))
+                              (apply cmd args))))
       map))))
 
 ;; `describe-bindings' orders the keymaps by precedence so the
