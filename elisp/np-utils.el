@@ -44,10 +44,10 @@ Sets up remotes:
   "defun a hook function (named my-ADD-TO) and add it to hook
 variable ADD-TO"
   (let ((hook-name (intern (concat "my-" (symbol-name add-to)) obarray)))
-  `(progn
-     (defun ,hook-name ()
-       ,@body)
-     (add-hook ',add-to #',hook-name))))
+    `(progn
+       (defun ,hook-name ()
+         ,@body)
+       (add-hook ',add-to #',hook-name))))
 
 (defun rgb-color-values (color)
   "like `color-values' but returns the classic 3-byte rgb in a
@@ -103,9 +103,9 @@ Prefix arg means just go to logical ending unconditionally."
                        (assq-delete-all key (symbol-value alist-var)))))
 
 
-;; based on `kmacro-call-macro' code. There is a library form for this
-;; sort of thing, but it looks a lot more complicated possibly because
-;; it's working with older emacsen.
+;; Based on `kmacro-call-macro' code.  There is a library form for
+;; this sort of thing, but it looks a lot more complicated possibly
+;; because it's working with older emacsen.
 ;; http://furius.ca/pubcode/pub/conf/lib/elisp/blais/repeatable.el
 
 (defvar make-repeatable--command nil
