@@ -141,7 +141,7 @@
           (lambda () (interactive) (kill-buffer)))
 (bind-key "C-S-<f4>" 'kill-buffer-and-window)
 
-(define-key global-map [remap just-one-space] 'just-dwim-space)
+(define-key global-map [remap just-one-space] 'cycle-spacing)
 
 ;; don't want to burn single key seq on `forward-page' but moving
 ;; multiple pages with double key seq is annoying: use the repeat last
