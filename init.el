@@ -462,14 +462,16 @@
 (use-package magit
   :bind ("C-c v" . magit-status)
   :init (setq
-         ;; Avoid Emacs bug#20015
+         ;; Avoid Emacs bug#20015,
          tramp-ssh-controlmaster-options
          "-o ControlMaster=auto -o ControlPath='tramp.%%C' -o ControlPersist=no"
-         ;; don't revert automatically
+         ;; don't revert automatically,
          magit-refresh-file-buffer-hook nil ; obsolete
          magit-turn-on-auto-revert-mode nil ; obsolete
          magit-auto-revert-mode nil
-         magit-revert-buffers nil)      ; obsolete
+         magit-revert-buffers nil       ; obsolete
+         ;; and just delete for real.
+         magit-delete-by-moving-to-trash nil)
   :config
   (progn
     ;; NOTE: require ido-ubiquitous
