@@ -16,30 +16,6 @@ region"
   (interactive "r")
   (translate-region beg end +quote-switching-char-table+))
 
-(defun np-github-clone (user pkg)
-  "Clone a github repository from npostavs/PKG into ~/src/PKG.
-
-Sets up remotes:
-  origin = git@github.com:npostavs/PKG.git
-  upstream = https://github.com/USER/PKG.git"
-  (interactive (let* ((p (read-string "Package: "))
-                      (u (read-string "User: " nil nil p)))
-                 (list u p)))
-  (let ((clone-dir (file-name-as-directory (expand-file-name pkg "~/src")))
-        (ssh-url (format "git@github.com:npostavs/%s.git" pkg))
-        (https-url (format "https://github.com/%s/%s.git" user pkg)))
-   (make-directory clone-dir)
-   (if (with-current-buffer (get-buffer-create "*git-clone-output*")
-         (erase-buffer)
-         (and (= (call-process "git" nil t t
-                               "clone" "-o" "upstream" https-url clone-dir) 0)
-              (= (let ((default-directory clone-dir))
-                   (call-process "git" nil t t
-                                 "remote" "add" "origin" ssh-url)) 0)))
-       (when (featurep 'magit)
-         (magit-status clone-dir))
-     (pop-to-buffer "*git-clone-output*"))))
-
 (defmacro define-and-add-hook (add-to &rest body)
   "defun a hook function (named my-ADD-TO) and add it to hook
 variable ADD-TO"
