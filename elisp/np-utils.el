@@ -109,6 +109,11 @@ sequence, just like C-x e e e..."
     (search-forward "Major Mode Bindings")
     (narrow-to-page)))
 
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; functions grabbed from elsewhere
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 ;;; from https://github.com/thomasf/dotfiles-thomasf-emacs
 (defun toggle-fold ()
   "Toggle fold all lines larger than indentation on current line"
@@ -120,11 +125,6 @@ sequence, just like C-x e e e..."
       (set-selective-display
        (if selective-display nil (or col 1)))))
   (make-repeatable 'toggle-fold))
-
-
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;; functions grabbed from elsewhere
-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 ;;; from https://github.com/re5et/.emacs.d/blob/master/my/my-functions.el
 
