@@ -497,16 +497,7 @@
     (setq magit-backup-mode nil)
 
     ;; defaults for popups
-    (defun magit-branch-HEAD-and-checkout (branch &optional args)
-      "Create and checkout BRANCH at branch or revision START-POINT.
-\n(git checkout [ARGS] -b BRANCH HEAD)."
-      (interactive (list (magit-read-string "Branch name") (magit-branch-arguments)))
-      (setq args (delete "--track" args))
-      (magit-branch-and-checkout branch "HEAD" args))
-    (magit-define-popup-action 'magit-branch-popup ; more common than plain "Create"
-      ?c "Create@HEAD & Checkout" 'magit-branch-HEAD-and-checkout
-      ?b)
-
+    (setq magit-branch-popup-show-variables nil)
     (defconst magit-pull-request-remote "upstream"
       "Where to find pull requests.")
     ;; From https://github.com/tarsius/magit-rockstar/
@@ -541,8 +532,8 @@ branch."
     (bind-key "SPC SPC <t>" 'magit-invoke-popup-option magit-popup-mode-map)
     (bind-key "C-c C-d" 'magit-describe-section magit-mode-map)
     (bind-key "`" (if (fboundp 'magit-toggle-margin)
-                      'magit-toggle-margin
-                    'magit-log-toggle-margin) magit-mode-map)
+                      'magit-toggle-margin 'magit-log-toggle-margin)
+              magit-mode-map)
     (bind-key "C-c C-l" 'magit-toggle-buffer-lock magit-mode-map)
     (font-lock-add-keywords 'emacs-lisp-mode
                             magit-font-lock-keywords)))
