@@ -413,6 +413,7 @@
             (unbind-key "<tab>" yas-minor-mode-map)
             (unbind-key "TAB" yas-minor-mode-map)
             (bind-key "M-i" 'yas-expand yas-minor-mode-map)
+            (setq yas-fallback-behavior '(apply yas-insert-snippet))
             (yas-global-mode +1))
   :diminish (yas-minor-mode . "Y"))
 
