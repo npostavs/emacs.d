@@ -492,7 +492,7 @@
     (setq magit-repository-directories '("~/src/"))
 
     (setq magit-popup-use-prefix-argument 'default)
-    (setq magit-push-always-verify nil)
+    (setq magit-push-always-verify nil) ; obsolete
 
     ;; this is too expensive to have on by default
     (setq magit-backup-mode nil)
@@ -536,6 +536,32 @@ branch."
                       'magit-toggle-margin 'magit-log-toggle-margin)
               magit-mode-map)
     (bind-key "C-c C-l" 'magit-toggle-buffer-lock magit-mode-map)
+
+    ;; Show worktree section if there are worktrees, avoid overhead if
+    ;; there aren't.
+    (defun np/magit-maybe-add-worktrees ()
+      (when (eq major-mode 'magit-status-mode)
+        (when (and (not (memq #'magit-insert-worktrees magit-status-sections-hook))
+                   (> (length (magit-list-worktrees)) 1))
+          (magit-add-section-hook
+           'magit-status-sections-hook #'magit-insert-worktrees
+           'magit-insert-status-headers 'append 'local))))
+    (add-hook 'magit-status-mode-hook #'np/magit-maybe-add-worktrees)
+    (bind-key "j w" #'magit-jump-to-worktrees magit-status-mode-map)
+
+    ;; Show submodule section if there are submodules, avoid overhead if
+    ;; there aren't.
+    (defun np/magit-maybe-add-submodules ()
+      (when (eq major-mode 'magit-status-mode)
+        (when (and (not (memq #'magit-insert-submodules magit-status-sections-hook))
+                   (magit-get-submodules))
+          (debug)
+          (magit-add-section-hook
+           'magit-status-sections-hook #'magit-insert-submodules
+           'magit-insert-status-headers 'append 'local))))
+    (add-hook 'magit-status-mode-hook #'np/magit-maybe-add-submodules)
+    (bind-key "j m" #'magit-jump-to-submodules magit-status-mode-map)
+
     (font-lock-add-keywords 'emacs-lisp-mode
                             magit-font-lock-keywords)))
 
