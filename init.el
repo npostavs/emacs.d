@@ -169,6 +169,8 @@
 (bind-key* "C-e" 'end-of-line-dwim)
 (unbind-key "M-m")
 
+(bind-key [remap fill-paragraph] #'endless/fill-or-unfill)
+
 ;; scrolling
 (bind-key* "<right>" (lambda () (interactive) (scroll-left 1 t)))
 (bind-key* "<left>" (lambda () (interactive) (scroll-right 1 t)))
