@@ -50,8 +50,8 @@
            :type github :pkgname "magit/ssh-agency")
     (:name undo-tree                       :checkout "bc9d09555f5aeac6ac4684d748be763f64a7d80a")
     (:name use-package                     :checkout "77a77c8b03044f0279e00cadd6a6d1a7ae97b016")
-    (:name yasnippet                       :checkout "727f7d35cecc059f0b323242a3035b5ec3b01a08"
     (:name with-editor                     :checkout "d28d07497f67fea4c62fe7a2d3201fd86fb64fe2")
+    (:name yasnippet                       :checkout "1aa20aee3fe402b0f693a77acc6712cd99d06a71"
            :branch "origin/current" :pkgname "npostavs/yasnippet"))
  )
 
