@@ -4,9 +4,10 @@
            :description "Anaphoric expressions for Emacs Lisp, providing implicit temporary variables."
            :type github
            :pkgname "rolandwalker/anaphora")
-    (:name ample-regexps                   :checkout "f24c5991927c8eb180d9f1d1614da238daba6423")
     (:name dash                            :checkout "fec6f5480d0ce03ead0e6117ac77dc7e757e76f8"
            :branch "2.12.1")
+    (:name debbugs                         :checkout "0.9.5"
+           :type elpa :description "SOAP library to access debbugs servers")
     (:name diminish                        :checkout "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
     (:name dired-details                   :checkout "3de7e19ae874dac03edf9951648a1f11f52dead6")
     (:name el-get                          :checkout "25d7e5a5925391dfb6ca247c6c94b66515ec1573"
