@@ -439,6 +439,7 @@
 
 ;; cc-mode
 (use-package cc-mode
+  :init (setq-default c-basic-offset 4)
   :config
   (define-and-add-hook c-mode-common-hook
     (unless (fboundp 'global-subword-mode)
@@ -447,7 +448,6 @@
     (c-set-offset 'access-label '/)
     (c-set-offset 'arglist-cont-nonempty '+)
     (c-set-offset 'statement-case-intro '+)
-    (setq-default c-basic-offset 4)
     (setq fill-column 80))
   :defer t)
 
