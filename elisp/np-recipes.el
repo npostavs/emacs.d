@@ -4,9 +4,10 @@
            :description "Anaphoric expressions for Emacs Lisp, providing implicit temporary variables."
            :type github
            :pkgname "rolandwalker/anaphora")
-    (:name ample-regexps                   :checkout "f24c5991927c8eb180d9f1d1614da238daba6423")
     (:name dash                            :checkout "fec6f5480d0ce03ead0e6117ac77dc7e757e76f8"
            :branch "2.12.1")
+    (:name debbugs                         :checkout "0.9.5"
+           :type elpa :description "SOAP library to access debbugs servers")
     (:name diminish                        :checkout "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
     (:name dired-details                   :checkout "3de7e19ae874dac03edf9951648a1f11f52dead6")
     (:name el-get                          :checkout "25d7e5a5925391dfb6ca247c6c94b66515ec1573"
@@ -24,9 +25,9 @@
            :description "Make ido completes like built-in M-x does"
            :type github :pkgname "doitian/ido-complete-space-or-hyphen")
     (:name lua-mode                        :checkout "2453e370ca39f38fced67a6d2db462aaea110f22")
-    (:name magit                           :checkout "728dbc025cc1f58ed209e7322c36647dbdee0308"
+    (:name magit                           :checkout "6f69789b580af539e26fbb28fff0b2905a4ff2c7"
            :branch "origin/current" :pkgname "npostavs/magit"
-           :build/windows-nt (with-temp-file "lisp/magit-autoloads.el" nil))
+           :build (with-temp-file "lisp/magit-autoloads.el" nil))
     (:name multiple-cursors                :checkout "54e408fc682d968ad46846d8bff079cd704ff6fe")
     (:name package                         :checkout -
            ;; cut out el-get's post-init stuff
@@ -50,8 +51,8 @@
            :type github :pkgname "magit/ssh-agency")
     (:name undo-tree                       :checkout "bc9d09555f5aeac6ac4684d748be763f64a7d80a")
     (:name use-package                     :checkout "77a77c8b03044f0279e00cadd6a6d1a7ae97b016")
-    (:name with-editor                     :checkout "b3631b8ef473a314a504321d0442b6a5ea481a99")
-    (:name yasnippet                       :checkout "727f7d35cecc059f0b323242a3035b5ec3b01a08"
+    (:name with-editor                     :checkout "d28d07497f67fea4c62fe7a2d3201fd86fb64fe2")
+    (:name yasnippet                       :checkout "1aa20aee3fe402b0f693a77acc6712cd99d06a71"
            :branch "origin/current" :pkgname "npostavs/yasnippet"))
  )
 
