@@ -24,9 +24,9 @@
            :description "Make ido completes like built-in M-x does"
            :type github :pkgname "doitian/ido-complete-space-or-hyphen")
     (:name lua-mode                        :checkout "2453e370ca39f38fced67a6d2db462aaea110f22")
-    (:name magit                           :checkout "728dbc025cc1f58ed209e7322c36647dbdee0308"
+    (:name magit                           :checkout "6f69789b580af539e26fbb28fff0b2905a4ff2c7"
            :branch "origin/current" :pkgname "npostavs/magit"
-           :build/windows-nt (with-temp-file "lisp/magit-autoloads.el" nil))
+           :build (with-temp-file "lisp/magit-autoloads.el" nil))
     (:name multiple-cursors                :checkout "54e408fc682d968ad46846d8bff079cd704ff6fe")
     (:name package                         :checkout -
            ;; cut out el-get's post-init stuff
@@ -50,8 +50,8 @@
            :type github :pkgname "magit/ssh-agency")
     (:name undo-tree                       :checkout "bc9d09555f5aeac6ac4684d748be763f64a7d80a")
     (:name use-package                     :checkout "77a77c8b03044f0279e00cadd6a6d1a7ae97b016")
-    (:name with-editor                     :checkout "b3631b8ef473a314a504321d0442b6a5ea481a99")
     (:name yasnippet                       :checkout "727f7d35cecc059f0b323242a3035b5ec3b01a08"
+    (:name with-editor                     :checkout "d28d07497f67fea4c62fe7a2d3201fd86fb64fe2")
            :branch "origin/current" :pkgname "npostavs/yasnippet"))
  )
 

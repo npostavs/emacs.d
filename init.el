@@ -541,26 +541,36 @@ branch."
 
     ;; Show worktree section if there are worktrees, avoid overhead if
     ;; there aren't.
+    (defvar-local np/magit-want-worktrees t)
+    (put 'np/magit-want-worktrees 'permanent-local t)
     (defun np/magit-maybe-add-worktrees ()
-      (when (eq major-mode 'magit-status-mode)
-        (when (and (not (memq #'magit-insert-worktrees magit-status-sections-hook))
-                   (> (length (magit-list-worktrees)) 1))
+      (if (and np/magit-want-worktrees
+               (not (memq #'magit-insert-worktrees magit-status-sections-hook))
+               (> (length (magit-list-worktrees)) 1))
           (magit-add-section-hook
            'magit-status-sections-hook #'magit-insert-worktrees
-           'magit-insert-status-headers 'append 'local))))
+           'magit-insert-status-headers 'append 'local)
+        (setq-local np/magit-want-worktrees nil)))
     (add-hook 'magit-status-mode-hook #'np/magit-maybe-add-worktrees)
     (bind-key "j w" #'magit-jump-to-worktrees magit-status-mode-map)
 
     ;; Show submodule section if there are submodules, avoid overhead if
     ;; there aren't.
+    (defvar-local np/magit-want-submodules t)
+    (put 'np/magit-want-submodules 'permanent-local t)
     (defun np/magit-maybe-add-submodules ()
-      (when (eq major-mode 'magit-status-mode)
-        (when (and (not (memq #'magit-insert-submodules magit-status-sections-hook))
-                   (magit-get-submodules))
-          (debug)
-          (magit-add-section-hook
-           'magit-status-sections-hook #'magit-insert-submodules
-           'magit-insert-status-headers 'append 'local))))
+      (if (and np/magit-want-submodules
+               (not (memq #'magit-insert-submodules magit-status-sections-hook))
+               (magit-get-submodules))
+          (dolist (inserter '(magit-insert-modules-unpulled-from-upstream
+                              magit-insert-modules-unpulled-from-pushremote
+                              magit-insert-modules-unpushed-to-upstream
+                              magit-insert-modules-unpushed-to-pushremote
+                              magit-insert-submodules))
+            (magit-add-section-hook
+             'magit-status-sections-hook inserter
+             'magit-insert-unpulled-from-upstream nil 'local))
+        (setq-local np/magit-want-submodules nil)))
     (add-hook 'magit-status-mode-hook #'np/magit-maybe-add-submodules)
     (bind-key "j m" #'magit-jump-to-submodules magit-status-mode-map)
 
