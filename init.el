@@ -54,6 +54,14 @@
       dired-recursive-copies 'always
       )
 
+;; Mail settings.
+(setq send-mail-function #'smtpmail-send-it
+      mail-host-address "users.sourceforge.net" ;"gmail.com"
+      smtpmail-smtp-server "smtp.googlemail.com"
+      smtpmail-smtp-service 587 ;25
+      smtpmail-smtp-service 25 ;587
+      )
+
 (setq enable-recursive-minibuffers t)
 (minibuffer-depth-indicate-mode +1)
 
@@ -78,6 +86,7 @@
 (fset 'yes-or-no-p 'y-or-n-p)
 
 ;; improved rectangle selection without semi-shadowing C-{z,x,c}
+(setq cua-delete-selection nil) ; but don't enable `delete-selection-mode'!
 (cua-selection-mode +1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -87,6 +96,9 @@
 ;; it's too annoying to accidentally hit C-[ three times when C-p was
 ;; meant.
 (bind-key "ESC ESC ESC" 'keyboard-quit)
+;; I sometimes lean on this by accident, resulting in deeply nested
+;; M-x prompts which is super annoying.
+(unbind-key "<menu>")
 
 ;; <backspace> is too far away
 (define-key key-translation-map [?\C-h] [?\C-?])
@@ -260,6 +272,10 @@
 (setq visual-line-fringe-indicators ; needs to restart mode when changed
       '(left-curly-arrow right-curly-arrow))
 
+;; debbugs.el uses this, but it's convenient to call independently.
+(autoload 'gnus-read-ephemeral-bug-group "gnus-group"
+  "Browse bug NUMBER as ephemeral group" 'interactive)
+
 (use-package undo-tree
   :defer 5
   :config (progn (setq undo-tree-visualizer-timestamps t)
@@ -366,8 +382,8 @@
 
 (use-package ediff
   :defer t
-  :config (setq ediff-window-setup-function #'ediff-setup-windows-plain))
-
+  :config (progn (setq ediff-window-setup-function #'ediff-setup-windows-plain)
+                 (set-face-background 'ediff-current-diff-Ancestor "light blue")))
 
 ;;; loadhist misses some autoloads
 (use-package loadhist
@@ -496,6 +512,20 @@
     (setq magit-popup-use-prefix-argument 'default)
     (setq magit-push-always-verify nil) ; obsolete
 
+    ;; TODO: bind `magit-pop-revision-stack'?
+    (setq magit-pop-revision-stack-format
+          (pcase-let ((`(,pt ,_eob ,index-regexp)
+                       (default-value 'magit-pop-revision-stack-format)))
+            `(,pt "%N: %ci %H\n  %s\n" ,index-regexp)))
+
+    ;; Modify margin format: abbreviate time, shorten author name.
+    (pcase-let ((`(,init ,_style ,width ,author ,_author-width)
+                 magit-log-margin))
+      (setq magit-log-margin
+            `(,init age-abbreviated ,width ,author 10))
+      (setq magit-status-margin
+            `(nil age-abbreviated ,width ,author 10)))
+
     ;; this is too expensive to have on by default
     (setq magit-backup-mode nil)
 
@@ -522,12 +552,15 @@ branch."
       (unless branch
         (setq branch number))
       (magit-call-git "fetch" magit-pull-request-remote
-                      (format "pull/%s/head:refs/remotes/%s/pull/%s"
+                      (format "+pull/%s/head:refs/remotes/%s/pull/%s"
                               number magit-pull-request-remote branch))
       (when checkout
         (magit-run-git "checkout" branch)))
     (magit-define-popup-action 'magit-fetch-popup
       ?p "Fetch pull request" 'magit-branch-pull-request)
+
+    (magit-define-popup-switch 'magit-patch-popup ?w
+      "Ignore all whitespace" "--ignore-all-space")
 
     (set-face-foreground 'magit-hash
                          (face-foreground 'font-lock-type-face))
@@ -633,6 +666,7 @@ branch."
 (put 'whitespace-line-column 'safe-local-variable #'integerp)
 (put 'emacs-lisp-docstring-fill-column 'safe-local-variable #'integerp)
 (put 'lexical-binding 'safe-local-variable #'booleanp)
+(put 'bug-reference-bug-regexp 'safe-local-variable #'stringp)
 (setq enable-local-eval nil)
 
 ;;; unsafe/annoying locals
