@@ -17,14 +17,16 @@
                  (pkg-sym          (el-get-package-symbol package))
                  (current-rev
                   (cond
+                   ((not (string= (el-get-package-status package) "installed"))
+                    "nil")
                    (compute-checksum
                     (or (ignore-errors (funcall compute-checksum package))
                         "???"))
                    ((and (eq type 'elpa) package-alist)
                     (package-version-join
-                     (package-desc-version (car
-                                            (el-get-elpa-descs
-                                             (assq (intern package) package-alist))))))
+                     (package-desc-version
+                      (car (el-get-elpa-descs
+                            (assq (intern package) package-alist))))))
                    ((eq type 'builtin) "-")
                    (t "???")))
                  (face (if (or (eq type 'builtin)
