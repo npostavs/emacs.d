@@ -145,46 +145,48 @@ fixed, and then closed.
 If given a prefix, and given a tag to set, the tag will be
 removed instead."
   (interactive
-   (list (completing-read
-	  "Control message: " debbugs-control-message-keywords nil t)
-         (let ((implicit-ids
-                (delq nil (list (debbugs-gnu-current-id t)
-                                debbugs-gnu-bug-number ; Set on group entry.
-                                (debbugs-gnu-guess-current-id)
-                                (let ((bugnum-re "\\([0-9]+\\)\\(?:-done\\)@debbugs.gnu.org")
-                                      (addr nil))
-                                  (and (eq major-mode 'message-mode)
-                                       (save-restriction
-                                         (message-narrow-to-headers)
-                                         (or (let ((addr (message-fetch-field "to")))
-                                               (and addr (string-match bugnum-re addr)
-                                                    (match-string 1 addr)))
-                                             (let ((addr (message-fetch-field "cc")))
-                                               (and addr (string-match bugnum-re addr)
-                                                    (match-string 1 addr)))))))))))
-           (string-to-number
-            (completing-read "Bug #ID: " (mapcar #'prin1-to-string implicit-ids)
-                             (lambda (s) (string-match-p "\\`[0-9]+\\'" s))
-                             nil nil nil (car implicit-ids))))
-	 current-prefix-arg))
+   (save-excursion ; Point can change while prompting!
+     (list (completing-read
+            "Control message: " debbugs-control-message-keywords nil t)
+           (let ((implicit-ids
+                  (delq nil (list (debbugs-gnu-current-id t)
+                                  debbugs-gnu-bug-number ; Set on group entry.
+                                  (debbugs-gnu-guess-current-id)
+                                  (let ((bugnum-re "\\([0-9]+\\)\\(?:-done\\)@debbugs.gnu.org")
+                                        (addr nil))
+                                    (and (eq major-mode 'message-mode)
+                                         (save-restriction
+                                           (message-narrow-to-headers)
+                                           (or (let ((addr (message-fetch-field "to")))
+                                                 (and addr (string-match bugnum-re addr)
+                                                      (match-string 1 addr)))
+                                               (let ((addr (message-fetch-field "cc")))
+                                                 (and addr (string-match bugnum-re addr)
+                                                      (match-string 1 addr)))))))))))
+             (string-to-number
+              (completing-read "Bug #ID: " (mapcar #'prin1-to-string implicit-ids)
+                               (lambda (s) (string-match-p "\\`[0-9]+\\'" s))
+                               nil nil nil (car implicit-ids))))
+           current-prefix-arg)))
   (let* ((version
-	  (when (member message '("close" "done" "fixed" "found"))
-	    (read-string
-	     "Version: "
-	     (cond
-	      ;; Emacs development versions.
-	      ((string-match
-		"^\\([0-9]+\\)\\.\\([0-9]+\\)\\.\\([0-9]+\\)\\." emacs-version)
-	       (format "%s.%d"
-		       (match-string 1 emacs-version)
-		       (1+ (string-to-number (match-string 2 emacs-version)))))
-	      ;; Emacs release versions.
-	      ((string-match
-		"^\\([0-9]+\\)\\.\\([0-9]+\\)\\.\\([0-9]+\\)$" emacs-version)
-	       (format "%s.%s"
-		       (match-string 1 emacs-version)
-		       (match-string 2 emacs-version)))
-	      (t emacs-version)))))
+          (when (member message '("close" "done" "fixed" "found"))
+            (save-excursion
+              (read-string
+               "Version: "
+               (cond
+                ;; Emacs development versions.
+                ((string-match
+                  "^\\([0-9]+\\)\\.\\([0-9]+\\)\\.\\([0-9]+\\)\\." emacs-version)
+                 (format "%s.%d"
+                         (match-string 1 emacs-version)
+                         (1+ (string-to-number (match-string 2 emacs-version)))))
+                ;; Emacs release versions.
+                ((string-match
+                  "^\\([0-9]+\\)\\.\\([0-9]+\\)\\.\\([0-9]+\\)$" emacs-version)
+                 (format "%s.%s"
+                         (match-string 1 emacs-version)
+                         (match-string 2 emacs-version)))
+                (t emacs-version))))))
 	 (status (debbugs-gnu-current-status))
          (subject (format "Subject: control message for bug #%d" bugid)))
     (unless (eq major-mode 'message-mode)
@@ -212,8 +214,10 @@ removed instead."
         (forward-line))
       (insert
        (cond
-        ((member message '("unarchive" "unmerge" "reopen" "noowner"))
+        ((member message '("unarchive" "unmerge" "noowner"))
          (format "%s %d\n" message id))
+        ((equal message "reopen")
+         (format "reopen %d\ntag %d - fixed patch\n" id id))
         ((member message '("merge" "forcemerge"))
          (format "%s %d %s\n" message id
                  (read-string "Merge with bug #: ")))
