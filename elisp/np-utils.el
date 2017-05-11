@@ -121,7 +121,8 @@ sequence, just like C-x e e e..."
     "invalid"
     "reassign"
     "retitle"
-    "fixed" "found" "notfound"
+    ;; `notfixed' works, but is undocumnted at debbugs.gnu.org.
+    "fixed" "found" "notfound" "notfixed"
     "patch" "wontfix" "moreinfo" "unreproducible" "notabug"
     "pending" "help" "security" "confirmed"
     "usertag"))
@@ -243,7 +244,7 @@ removed instead."
          (format "close %d %s\n" id version))
         ((equal message "done")
          (format "tags %d fixed\nclose %d %s\n" id id version))
-        ((member message '("found" "notfound" "fixed"))
+        ((member message '("found" "notfound" "fixed" "notfixed"))
          (format "%s %d %s\n" message id version))
         ((member message '("donenotabug" "donewontfix"
                            "doneunreproducible"))
