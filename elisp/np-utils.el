@@ -114,17 +114,17 @@ sequence, just like C-x e e e..."
 (defconst debbugs-control-message-keywords
   '("serious" "important" "normal" "minor" "wishlist"
     "done" "donenotabug" "donewontfix" "doneunreproducible"
+    "invalid" ; done+notabug+wontfix
     "unarchive" "unmerge" "reopen" "close"
     "merge" "forcemerge"
     "block" "unblock"
     "owner" "noowner"
-    "invalid"
     "reassign"
     "retitle"
-    ;; `notfixed' works, but is undocumnted at debbugs.gnu.org.
+    ;; `notfixed' works, but is undocumented at debbugs.gnu.org.
     "fixed" "found" "notfound" "notfixed"
     "patch" "wontfix" "moreinfo" "unreproducible" "notabug"
-    "pending" "help" "security" "confirmed"
+    "pending" "help" "security" "confirmed" "easy"
     "usertag"))
 (defconst debbugs-control-message-commands-regexp
   (concat "^" (regexp-opt (cl-list* "#" "tags" "severity"
@@ -253,8 +253,8 @@ removed instead."
                            "minor" "wishlist"))
          (format "severity %d %s\n" id message))
         ((equal message "invalid")
-         (format "tags %d notabug\ntags %d wontfix\nclose %d\n"
-                 id id id))
+         (format "tags %d notabug wontfix\nclose %d\n"
+                 id id))
         ((equal message "usertag")
          (format "user %s\nusertag %d %s\n"
                  (completing-read
@@ -264,8 +264,8 @@ removed instead."
                   nil nil (car debbugs-gnu-default-packages))
                  id (read-string "User tag: ")))
         (t
-         (format "tags %d%s %s\n"
-                 id (if reverse " -" "")
+         (format "tags %d %c %s\n"
+                 id (if reverse ?- ?+)
                  message))))
       (unless (looking-at-p debbugs-control-message-end-regexp)
         (insert "quit\n\n")))))
