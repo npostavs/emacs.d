@@ -111,6 +111,9 @@ sequence, just like C-x e e e..."
     (search-forward "Major Mode Bindings")
     (narrow-to-page)))
 
+
+;;; debbugs stuff
+
 (defconst debbugs-control-message-keywords
   '("serious" "important" "normal" "minor" "wishlist"
     "done" "donenotabug" "donewontfix" "doneunreproducible"
@@ -135,6 +138,22 @@ sequence, just like C-x e e e..."
                             "thank" "thanks" "thankyou" "thank you"))
           "$"))
 
+(defun debbugs-implicit-ids ()
+  (delq nil (list (debbugs-gnu-current-id t)
+                  debbugs-gnu-bug-number ; Set on group entry.
+                  (debbugs-gnu-guess-current-id)
+                  (let ((bugnum-re "\\([0-9]+\\)\\(?:-done\\)@debbugs.gnu.org")
+                        (addr nil))
+                    (and (eq major-mode 'message-mode)
+                         (save-restriction
+                           (message-narrow-to-headers)
+                           (or (let ((addr (message-fetch-field "to")))
+                                 (and addr (string-match bugnum-re addr)
+                                      (match-string 1 addr)))
+                               (let ((addr (message-fetch-field "cc")))
+                                 (and addr (string-match bugnum-re addr)
+                                      (match-string 1 addr))))))))))
+
 ;; Based on `debbugs-gnu-send-control-message', but don't send.
 (autoload 'debbugs-gnu-current-id "debbugs-gnu.el")
 (defun debbugs-gnu-make-control-message (message bugid &optional reverse)
@@ -149,21 +168,7 @@ removed instead."
    (save-excursion ; Point can change while prompting!
      (list (completing-read
             "Control message: " debbugs-control-message-keywords nil t)
-           (let ((implicit-ids
-                  (delq nil (list (debbugs-gnu-current-id t)
-                                  debbugs-gnu-bug-number ; Set on group entry.
-                                  (debbugs-gnu-guess-current-id)
-                                  (let ((bugnum-re "\\([0-9]+\\)\\(?:-done\\)@debbugs.gnu.org")
-                                        (addr nil))
-                                    (and (eq major-mode 'message-mode)
-                                         (save-restriction
-                                           (message-narrow-to-headers)
-                                           (or (let ((addr (message-fetch-field "to")))
-                                                 (and addr (string-match bugnum-re addr)
-                                                      (match-string 1 addr)))
-                                               (let ((addr (message-fetch-field "cc")))
-                                                 (and addr (string-match bugnum-re addr)
-                                                      (match-string 1 addr)))))))))))
+           (let ((implicit-ids (debbugs-implicit-ids)))
              (string-to-number
               (completing-read "Bug #ID: " (mapcar #'prin1-to-string implicit-ids)
                                (lambda (s) (string-match-p "\\`[0-9]+\\'" s))
@@ -174,20 +179,11 @@ removed instead."
             (save-excursion
               (read-string
                "Version: "
-               (cond
-                ;; Emacs development versions.
-                ((string-match
-                  "^\\([0-9]+\\)\\.\\([0-9]+\\)\\.\\([0-9]+\\)\\." emacs-version)
-                 (format "%s.%d"
-                         (match-string 1 emacs-version)
-                         (1+ (string-to-number (match-string 2 emacs-version)))))
-                ;; Emacs release versions.
-                ((string-match
-                  "^\\([0-9]+\\)\\.\\([0-9]+\\)\\.\\([0-9]+\\)$" emacs-version)
-                 (format "%s.%s"
-                         (match-string 1 emacs-version)
-                         (match-string 2 emacs-version)))
-                (t emacs-version))))))
+               (pcase (version-to-list emacs-version)
+                 ;; Emacs development versions.
+                 ((and `(,major ,minor ,micro . ,_))
+                  (format "%d.%d" major (+ (if (> micro 1) 1 0) minor)))
+                 (_ emacs-version))))))
 	 (status (debbugs-gnu-current-status))
          (subject (format "Subject: control message for bug #%d" bugid)))
     (unless (eq major-mode 'message-mode)
@@ -269,6 +265,128 @@ removed instead."
                  message))))
       (unless (looking-at-p debbugs-control-message-end-regexp)
         (insert "quit\n\n")))))
+
+(defvar magit-emacs-patch-range nil)
+
+(defun magit-prepare-emacs-patches (range args)
+  (interactive
+   (list (-if-let (revs (magit-region-values 'commit))
+             (concat (car (last revs)) "^.." (car revs))
+           (let ((range (magit-read-range-or-commit "Format range or commit")))
+             (if (string-match-p "\\.\\." range)
+                 range
+               (format "%s~..%s" range range))))
+         (magit-patch-arguments)))
+  (let ((bugnum nil))
+    (with-temp-buffer
+      (magit-git-insert "log" "--format=%B" range)
+      (goto-char (point-min))
+      (while (re-search-forward "[bB]ug ?#\\([0-9]+\\)" nil t)
+        (push (match-string 1) bugnum)))
+    (setq bugnum (completing-read "Enter bug number: " bugnum))
+    (setq magit-emacs-patch-rev-list `(,(magit-toplevel) ,range ,args))
+    (let ((grp-window (get-buffer-window "*Group*" t)))
+      (when (window-live-p grp-window)
+        (select-frame-set-input-focus (window-frame grp-window))
+        (select-window grp-window)
+        (gnus-read-ephemeral-bug-group
+         bugnum
+         (cdr (assoc 'emacs gnus-bug-group-download-format-alist)))))))
+
+(defun magit-attach-emacs-patches (range type disposition tag)
+  (interactive
+   (let ((disposition (completing-read "disposition: " '("inline" "attachment"))))
+     (list magit-emacs-patch-rev-list
+           (if (equal disposition "inline") "text/x-diff" "text/plain")
+           disposition
+           (y-or-n-p "tag + patch? "))))
+  (pcase range
+    (`(,repo-dir ,range ,args)
+     (letrec ((dir (make-temp-file "patches-to-send" t))
+              (deldir (lambda ()
+                        (delete-directory dir t)
+                        (remove-hook 'message-exit-actions deldir t)
+                        (remove-hook 'kill-buffer-hook deldir t))))
+       (add-hook 'message-exit-actions deldir nil t)
+       (add-hook 'kill-buffer-hook deldir nil t)
+       (let ((default-directory repo-dir))
+         (magit-call-git "format-patch" range
+                         (cons (concat "--output-directory=" dir) args)))
+       (dolist (patch (directory-files dir t "\\`[^.]"))
+         (mml-attach-file patch type "patch" disposition))
+       (when tag
+         (debbugs-gnu-make-control-message
+          "patch" (car (debbugs-implicit-ids))))))
+    (_ (user-error "Patches not prepared"))))
+
+(defun magit-announce-pushed-emacs-patches (range)
+  (interactive (list magit-emacs-patch-rev-list))
+  (pcase range
+    (`(,repo-dir ,range ,_args)
+     (let ((default-directory repo-dir))
+       (insert "Pushed: ")
+       (dolist (rev (nreverse (magit-git-lines "rev-list" range)))
+         (magit-pop-revision-stack rev repo-dir))
+       (let ((emacs-version
+              (with-temp-buffer
+                (insert-file-contents "configure.ac")
+                (re-search-forward "^ *AC_INIT(GNU Emacs, *\\([0-9.]+\\), *bug-gnu-emacs@gnu.org)")
+                (match-string 1))))
+         (debbugs-gnu-make-control-message
+          "done" (car (debbugs-implicit-ids))))))
+    (_ (user-error "Patches not prepared"))))
+
+(setq debbugs-gnu-trunk-directory "~/src/emacs/emacs-master/")
+(defun debbugs-gnu-grab-patch (&optional branch)
+  "Apply the patch from the current message.
+If given a prefix, patch in the branch directory instead."
+  (interactive "P")
+  (add-hook 'emacs-lisp-mode-hook 'debbugs-gnu-lisp-mode)
+  (add-hook 'diff-mode-hook 'debbugs-gnu-diff-mode)
+  (add-hook 'change-log-mode-hook 'debbugs-gnu-change-mode)
+  (debbugs-gnu-init-current-directory branch)
+  (let ((rej (expand-file-name "debbugs-gnu.rej" temporary-file-directory))
+	(output-buffer (get-buffer-create "*debbugs patch*"))
+	(patch-buffers nil))
+    (when (file-exists-p rej)
+      (delete-file rej))
+    (with-current-buffer output-buffer
+      (erase-buffer))
+    (gnus-summary-select-article nil t)
+    ;; The patches are either in MIME attachements or the main article
+    ;; buffer.  Determine which.
+    (with-current-buffer gnus-article-buffer
+      (dolist (handle (mapcar 'cdr (gnus-article-mime-handles)))
+	(when
+	    (string-match "diff\\|patch\\|plain" (mm-handle-media-type handle))
+	  (push (cons (mm-handle-encoding handle)
+		      (mm-handle-buffer handle))
+		patch-buffers))))
+    (unless patch-buffers
+      (gnus-summary-show-article 'raw)
+      (article-decode-charset)
+      (push (cons nil gnus-article-buffer) patch-buffers))
+    (dolist (elem patch-buffers)
+      (with-temp-buffer
+	(setq default-directory debbugs-gnu-current-directory)
+        (insert-buffer-substring (cdr elem))
+	(cond ((eq (car elem) 'base64)
+	       (base64-decode-region (point-min) (point-max)))
+	      ((eq (car elem) 'quoted-printable)
+	       (quoted-printable-decode-region (point-min) (point-max))))
+        (goto-char (point-min))
+        (unless
+            (eq 0 (cond
+                   ((re-search-forward "^\\(>?\\)From:?" nil t)
+                    (call-process-region (match-end 1) (point-max)
+                                         "git" nil output-buffer nil
+                                         "am" "-"))
+                   ((search-forward "diff --git" nil t)
+                    (call-process-region (match-end 1) (point-max)
+                                         "git" nil output-buffer nil
+                                         "am" "-"))
+                   (t 0)))
+          (message (with-current-buffer output-buffer (buffer-string))))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

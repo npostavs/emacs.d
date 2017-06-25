@@ -563,6 +563,9 @@ branch."
     (magit-define-popup-switch 'magit-patch-popup ?w
       "Ignore all whitespace" "--ignore-all-space")
 
+    (magit-define-popup-action 'magit-patch-popup ?E
+      "Prepare patches for Emacs bug" 'magit-prepare-emacs-patches)
+
     (magit-define-popup-option 'magit-commit-popup ?D
       "Override author date" "--date=" )
 
