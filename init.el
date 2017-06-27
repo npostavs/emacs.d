@@ -516,7 +516,8 @@
     (setq magit-pop-revision-stack-format
           (pcase-let ((`(,pt ,_eob ,index-regexp)
                        (default-value 'magit-pop-revision-stack-format)))
-            `(,pt "%N: %ci %H\n  %s\n" ,index-regexp)))
+            `(,pt "[%N: %h]: %ci\n  %s\n  http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=%H"
+                  ,index-regexp)))
 
     ;; Modify margin format: abbreviate time, shorten author name.
     (pcase-let ((`(,init ,_style ,width ,author ,_author-width)
@@ -561,6 +562,12 @@ branch."
 
     (magit-define-popup-switch 'magit-patch-popup ?w
       "Ignore all whitespace" "--ignore-all-space")
+
+    (magit-define-popup-action 'magit-patch-popup ?E
+      "Prepare patches for Emacs bug" 'magit-prepare-emacs-patches)
+
+    (magit-define-popup-option 'magit-commit-popup ?D
+      "Override author date" "--date=" )
 
     (set-face-foreground 'magit-hash
                          (face-foreground 'font-lock-type-face))

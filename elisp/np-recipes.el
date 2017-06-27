@@ -6,11 +6,11 @@
            :pkgname "rolandwalker/anaphora")
     (:name dash                            :checkout "fec6f5480d0ce03ead0e6117ac77dc7e757e76f8"
            :branch "2.12.1")
-    (:name debbugs                         :checkout "0.9.5"
+    (:name debbugs                         :checkout "0.14"
            :type elpa :description "SOAP library to access debbugs servers")
     (:name diminish                        :checkout "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
     (:name dired-details                   :checkout "3de7e19ae874dac03edf9951648a1f11f52dead6")
-    (:name el-get                          :checkout "da45e215ace4571fe559904c9453b49cbc41cfb4"
+    (:name el-get                          :checkout "e03598a6ed150fa6f1a754eefa9593629c7c379c"
            :pkgname "npostavs/el-get" :branch "origin/current")
     (:name elisp-slime-nav                 :checkout "1a2cb6a832635bde694fd25cc6dce2962aad3807"
            :description "Slime-style navigation of Emacs Lisp source with M-. & M-,"
