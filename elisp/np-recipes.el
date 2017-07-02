@@ -10,7 +10,7 @@
            :type elpa :description "SOAP library to access debbugs servers")
     (:name diminish                        :checkout "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
     (:name dired-details                   :checkout "3de7e19ae874dac03edf9951648a1f11f52dead6")
-    (:name el-get                          :checkout "e03598a6ed150fa6f1a754eefa9593629c7c379c"
+    (:name el-get                          :checkout "cfb081e3563df0da60de554ecad4dbb20857f033"
            :pkgname "npostavs/el-get" :branch "origin/current")
     (:name elisp-slime-nav                 :checkout "1a2cb6a832635bde694fd25cc6dce2962aad3807"
            :description "Slime-style navigation of Emacs Lisp source with M-. & M-,"
@@ -52,7 +52,7 @@
     (:name undo-tree                       :checkout "bc9d09555f5aeac6ac4684d748be763f64a7d80a")
     (:name use-package                     :checkout "38034854ac21bd5ddc1a1129fd6c8ff86d939f8a")
     (:name with-editor                     :checkout "8ae3c7aed92842f5988671c1b3350c65c58857e0")
-    (:name yasnippet                       :checkout "f0535443197af5e917d29494e7c95c4ab6da71d7"
+    (:name yasnippet                       :checkout "688571f63ba6b074a99f0d7f93e54317774279e8"
            :branch "origin/current" :pkgname "npostavs/yasnippet"))
  )
 
