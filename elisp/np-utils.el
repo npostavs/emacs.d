@@ -124,7 +124,8 @@ sequence, just like C-x e e e..."
     "owner" "noowner"
     "reassign"
     "retitle"
-    ;; `notfixed' works, but is undocumented at debbugs.gnu.org.
+    ;; 'notfixed <bugnum> <version>' works, even though it's
+    ;; undocumented at debbugs.gnu.org.
     "fixed" "found" "notfound" "notfixed"
     "patch" "wontfix" "moreinfo" "unreproducible" "notabug"
     "pending" "help" "security" "confirmed" "easy"
@@ -165,7 +166,7 @@ fixed, and then closed.
 If given a prefix, and given a tag to set, the tag will be
 removed instead."
   (interactive
-   (save-excursion ; Point can change while prompting!
+   (save-excursion                 ; Point can change while prompting!
      (list (completing-read
             "Control message: " debbugs-control-message-keywords nil t)
            (let ((implicit-ids (debbugs-implicit-ids)))
@@ -210,59 +211,60 @@ removed instead."
       (while (looking-at-p debbugs-control-message-commands-regexp)
         (forward-line))
       (insert
-       (cond
-        ((member message '("unarchive" "unmerge" "noowner"))
-         (format "%s %d\n" message id))
-        ((equal message "reopen")
-         (format "reopen %d\ntag %d - fixed patch\n" id id))
-        ((member message '("merge" "forcemerge"))
-         (format "%s %d %s\n" message id
-                 (read-string "Merge with bug #: ")))
-        ((member message '("block" "unblock"))
-         (format
-          "%s %d by %s\n" message id
-          (mapconcat
-           'identity
-           (completing-read-multiple
-            (format "%s with bug(s) #: " (capitalize message))
-            (if (equal message "unblock")
-                (mapcar 'number-to-string
-                        (cdr (assq 'blockedby status))))
-            nil (and (equal message "unblock") status))
-           " ")))
-        ((equal message "owner")
-         (format "owner %d !\n" id))
-        ((equal message "retitle")
-         (format "retitle %d %s\n" id (read-string "New title: ")))
-        ((equal message "reassign")
-         (format "reassign %d %s\n" id (read-string "Package(s): ")))
-        ((equal message "close")
-         (format "close %d %s\n" id version))
-        ((equal message "done")
-         (format "tags %d fixed\nclose %d %s\n" id id version))
-        ((member message '("found" "notfound" "fixed" "notfixed"))
-         (format "%s %d %s\n" message id version))
-        ((member message '("donenotabug" "donewontfix"
-                           "doneunreproducible"))
-         (format "tags %d %s\nclose %d\n" id (substring message 4) id))
-        ((member message '("serious" "important" "normal"
-                           "minor" "wishlist"))
-         (format "severity %d %s\n" id message))
-        ((equal message "invalid")
-         (format "tags %d notabug wontfix\nclose %d\n"
-                 id id))
-        ((equal message "usertag")
-         (format "user %s\nusertag %d %s\n"
-                 (completing-read
-                  "Package name or email address: "
-                  (append
-                   debbugs-gnu-all-packages (list user-mail-address))
-                  nil nil (car debbugs-gnu-default-packages))
-                 id (read-string "User tag: ")))
-        (t
-         (format "tags %d %c %s\n"
-                 id (if reverse ?- ?+)
-                 message))))
+       (save-excursion             ; Point can change while prompting!
+         (cond
+          ((member message '("unarchive" "unmerge" "noowner"))
+           (format "%s %d\n" message id))
+          ((equal message "reopen")
+           (format "reopen %d\ntag %d - fixed patch\n" id id))
+          ((member message '("merge" "forcemerge"))
+           (format "%s %d %s\n" message id
+                   (read-string "Merge with bug #: ")))
+          ((member message '("block" "unblock"))
+           (format
+            "%s %d by %s\n" message id
+            (mapconcat
+             'identity
+             (completing-read-multiple
+              (format "%s with bug(s) #: " (capitalize message))
+              (if (equal message "unblock")
+                  (mapcar 'number-to-string
+                          (cdr (assq 'blockedby status))))
+              nil (and (equal message "unblock") status))
+             " ")))
+          ((equal message "owner")
+           (format "owner %d !\n" id))
+          ((equal message "retitle")
+           (format "retitle %d %s\n" id (read-string "New title: ")))
+          ((equal message "reassign")
+           (format "reassign %d %s\n" id (read-string "Package(s): ")))
+          ((equal message "close")
+           (format "close %d %s\n" id version))
+          ((equal message "done")
+           (format "tags %d fixed\nclose %d %s\n" id id version))
+          ((member message '("found" "notfound" "fixed" "notfixed"))
+           (format "%s %d %s\n" message id version))
+          ((member message '("donenotabug" "donewontfix"
+                             "doneunreproducible"))
+           (format "tags %d %s\nclose %d\n" id (substring message 4) id))
+          ((member message '("serious" "important" "normal"
+                             "minor" "wishlist"))
+           (format "severity %d %s\n" id message))
+          ((equal message "invalid")
+           (format "tags %d notabug wontfix\nclose %d\n"
+                   id id))
+          ((equal message "usertag")
+           (format "user %s\nusertag %d %s\n"
+                   (completing-read
+                    "Package name or email address: "
+                    (append
+                     debbugs-gnu-all-packages (list user-mail-address))
+                    nil nil (car debbugs-gnu-default-packages))
+                   id (read-string "User tag: ")))
+          (t
+           (format "tags %d %c %s\n"
+                   id (if reverse ?- ?+)
+                   message)))))
       (unless (looking-at-p debbugs-control-message-end-regexp)
         (insert "quit\n\n")))))
 
