@@ -129,7 +129,9 @@ sequence, just like C-x e e e..."
     "fixed" "found" "notfound" "notfixed"
     "patch" "wontfix" "moreinfo" "unreproducible" "notabug"
     "pending" "help" "security" "confirmed" "easy"
-    "usertag"))
+    "usertag"
+    "documentation" ;; usertag:emacs.documentation
+    ))
 (defconst debbugs-control-message-commands-regexp
   (concat "^" (regexp-opt (cl-list* "#" "tags" "severity"
                                     debbugs-control-message-keywords))
@@ -253,6 +255,8 @@ removed instead."
           ((equal message "invalid")
            (format "tags %d notabug wontfix\nclose %d\n"
                    id id))
+          ((equal message "documentation")
+           (format "user %s\nusertag %d %s\n" "emacs" id "documentation"))
           ((equal message "usertag")
            (format "user %s\nusertag %d %s\n"
                    (completing-read
