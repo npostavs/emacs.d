@@ -289,14 +289,13 @@ removed instead."
       (goto-char (point-min))
       (while (re-search-forward "[bB]ug ?#\\([0-9]+\\)" nil t)
         (push (match-string 1) bugnum)))
-    (setq bugnum (completing-read "Enter bug number: " bugnum))
     (setq magit-emacs-patch-rev-list `(,(magit-toplevel) ,range ,args))
     (let ((grp-window (get-buffer-window "*Group*" t)))
       (when (window-live-p grp-window)
         (select-frame-set-input-focus (window-frame grp-window))
         (select-window grp-window)
         (gnus-read-ephemeral-bug-group
-         bugnum
+         (completing-read "Enter bug number: " bugnum)
          (cdr (assoc 'emacs gnus-bug-group-download-format-alist)))))))
 
 (defun magit-attach-emacs-patches (range type disposition tag)
