@@ -342,56 +342,88 @@ removed instead."
     (_ (user-error "Patches not prepared"))))
 
 (setq debbugs-gnu-trunk-directory "~/src/emacs/emacs-master/")
+;; Adaped from `debbugs-gnu-apply-patch'.
 (defun debbugs-gnu-grab-patch (&optional branch)
   "Apply the patch from the current message.
 If given a prefix, patch in the branch directory instead."
   (interactive "P")
+  (require 'debbugs-gnu)
   (add-hook 'emacs-lisp-mode-hook 'debbugs-gnu-lisp-mode)
   (add-hook 'diff-mode-hook 'debbugs-gnu-diff-mode)
   (add-hook 'change-log-mode-hook 'debbugs-gnu-change-mode)
   (debbugs-gnu-init-current-directory branch)
-  (let ((rej (expand-file-name "debbugs-gnu.rej" temporary-file-directory))
-	(output-buffer (get-buffer-create "*debbugs patch*"))
-	(patch-buffers nil))
-    (when (file-exists-p rej)
-      (delete-file rej))
-    (with-current-buffer output-buffer
-      (erase-buffer))
-    (gnus-summary-select-article nil t)
-    ;; The patches are either in MIME attachements or the main article
-    ;; buffer.  Determine which.
-    (with-current-buffer gnus-article-buffer
-      (dolist (handle (mapcar 'cdr (gnus-article-mime-handles)))
-	(when
-	    (string-match "diff\\|patch\\|plain" (mm-handle-media-type handle))
-	  (push (cons (mm-handle-encoding handle)
-		      (mm-handle-buffer handle))
-		patch-buffers))))
-    (unless patch-buffers
-      (gnus-summary-show-article 'raw)
-      (article-decode-charset)
-      (push (cons nil gnus-article-buffer) patch-buffers))
-    (dolist (elem patch-buffers)
-      (with-temp-buffer
-	(setq default-directory debbugs-gnu-current-directory)
-        (insert-buffer-substring (cdr elem))
-	(cond ((eq (car elem) 'base64)
-	       (base64-decode-region (point-min) (point-max)))
-	      ((eq (car elem) 'quoted-printable)
-	       (quoted-printable-decode-region (point-min) (point-max))))
-        (goto-char (point-min))
-        (unless
-            (eq 0 (cond
-                   ((re-search-forward "^\\(>?\\)From:?" nil t)
-                    (call-process-region (match-end 1) (point-max)
-                                         "git" nil output-buffer nil
-                                         "am" "-"))
-                   ((search-forward "diff --git" nil t)
-                    (call-process-region (match-end 1) (point-max)
-                                         "git" nil output-buffer nil
-                                         "am" "-"))
-                   (t 0)))
-          (message (with-current-buffer output-buffer (buffer-string))))))))
+  (gnus-summary-select-article nil t)
+  (with-current-buffer gnus-article-buffer
+    (let* ((from (gnus-fetch-field "from"))
+           (subject (gnus-fetch-field "subject"))
+           (date (gnus-fetch-field "date"))
+           (message (with-current-buffer gnus-article-buffer
+                      (save-restriction
+                        (gnus-narrow-to-body)
+                        (buffer-string))))
+           (chosen-patches
+            (let ((wconf (current-window-configuration))
+                  (patch-buffers nil))
+              (unwind-protect
+                  (progn
+                    (delete-other-windows)
+                    (dolist (handle (gnus-article-mime-handles))
+                      (let ((num (pop handle)))
+                        (when (string-match "diff\\|patch\\|plain"
+                                            (mm-handle-media-type handle))
+                          (let ((buf (mm-handle-buffer handle)))
+                            (when (with-current-buffer buf
+                                    (goto-char (point-min))
+                                    (re-search-forward
+                                     "\\(?:^>?From:?\\)\\|diff --git" nil t))
+                              (push buf patch-buffers)
+                              (set-window-dedicated-p
+                               (display-buffer
+                                buf
+                                '(display-buffer-pop-up-window . nil))
+                               t))))))
+                    (unless patch-buffers
+                      (gnus-summary-show-article 'raw)
+                      (article-decode-charset)
+                      (push gnus-article-buffer patch-buffers))
+                    (balance-windows)
+                    (completing-read-multiple
+                     "Apply patch(es)? "
+                     patch-buffers nil t))
+                (with-demoted-errors "Trying to restore pre-patch-grab window conf"
+                  (set-window-configuration wconf)
+                  ;; Restore the article buffer to non-`raw' form.
+                  (gnus-summary-show-article)))))
+           (patch-dir
+            (make-temp-file (replace-regexp-in-string
+                             "[^-[:alnum:]]" "_" subject)
+                            t))
+           (patch-num 0)
+           (tmp-patch-files nil))
+      (unwind-protect
+          (progn
+            (dolist (buf chosen-patches)
+              (push (make-temp-file
+                     (expand-file-name (format "%04d" (cl-incf patch-num))
+                                       patch-dir)
+                     nil ".patch")
+                    tmp-patch-files)
+              (with-temp-file (car tmp-patch-files)
+                (insert-buffer buf)
+                (goto-char (point-min))
+                (unless (re-search-forward "^\\(>?\\)From:?" nil t)
+                  ;; Looks like a bare patch, supplement with
+                  ;; email data.
+                  (insert "From: " from "\n")
+                  (insert "Subject: " subject "\n")
+                  (insert "Date: " date "\n\n")
+                  (insert message))))
+            (with-temp-buffer
+              (setq default-directory debbugs-gnu-current-directory)
+              (unless (eq 0 (apply #'call-process "git" nil '(t t) nil
+                                   "am" tmp-patch-files))
+                (message (buffer-string)))))
+        (delete-directory patch-dir t)))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
