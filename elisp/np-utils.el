@@ -178,7 +178,7 @@ removed instead."
                                nil nil nil (car implicit-ids))))
            current-prefix-arg)))
   (let* ((version
-          (when (member message '("close" "done" "fixed" "found"))
+          (when (member message '("done" "fixed" "found"))
             (save-excursion
               (read-string
                "Version: "
@@ -241,7 +241,7 @@ removed instead."
           ((equal message "reassign")
            (format "reassign %d %s\n" id (read-string "Package(s): ")))
           ((equal message "close")
-           (format "close %d %s\n" id version))
+           (format "close %d\n" id))
           ((equal message "done")
            (format "tags %d fixed\nclose %d %s\n" id id version))
           ((member message '("found" "notfound" "fixed" "notfixed"))
