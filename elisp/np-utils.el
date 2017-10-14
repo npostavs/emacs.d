@@ -332,16 +332,18 @@ removed instead."
        (insert "Pushed: ")
        (dolist (rev (nreverse (magit-git-lines "rev-list" range)))
          (magit-pop-revision-stack rev repo-dir))
-       (let ((emacs-version
-              (with-temp-buffer
-                (insert-file-contents "configure.ac")
-                (re-search-forward "^ *AC_INIT(GNU Emacs, *\\([0-9.]+\\), *bug-gnu-emacs@gnu.org)")
-                (match-string 1))))
-         (debbugs-gnu-make-control-message
-          "done" (car (debbugs-implicit-ids))))))
+       (when (y-or-n-p "Close bug? ")
+         (let ((emacs-version
+                (with-temp-buffer
+                  (insert-file-contents "configure.ac")
+                  (re-search-forward "^ *AC_INIT(GNU Emacs, *\\([0-9.]+\\), *bug-gnu-emacs@gnu.org)")
+                  (match-string 1))))
+           (debbugs-gnu-make-control-message
+            "done" (car (debbugs-implicit-ids)))))))
     (_ (user-error "Patches not prepared"))))
 
 (setq debbugs-gnu-trunk-directory "~/src/emacs/emacs-master/")
+(setq debbugs-gnu-branch-directory "~/src/emacs/emacs-26/")
 ;; Adaped from `debbugs-gnu-apply-patch'.
 (defun debbugs-gnu-grab-patch (&optional branch)
   "Apply the patch from the current message.
@@ -373,6 +375,11 @@ If given a prefix, patch in the branch directory instead."
                                             (mm-handle-media-type handle))
                           (let ((buf (mm-handle-buffer handle)))
                             (when (with-current-buffer buf
+                                    (pcase (mm-handle-encoding handle)
+                                      (`base64
+                                       (base64-decode-region (point-min) (point-max)))
+                                      (`quoted-printable
+                                       (quoted-printable-decode-region (point-min) (point-max))))
                                     (goto-char (point-min))
                                     (re-search-forward
                                      "\\(?:^>?From:?\\)\\|diff --git" nil t))
@@ -385,11 +392,15 @@ If given a prefix, patch in the branch directory instead."
                     (unless patch-buffers
                       (gnus-summary-show-article 'raw)
                       (article-decode-charset)
-                      (push gnus-article-buffer patch-buffers))
+                      (push (get-buffer gnus-article-buffer) patch-buffers))
                     (balance-windows)
-                    (completing-read-multiple
-                     "Apply patch(es)? "
-                     patch-buffers nil t))
+                    (mapcar (lambda (bufname)
+                              (with-current-buffer bufname
+                                (buffer-string)))
+                            (let ((crm-separator ","))
+                              (completing-read-multiple
+                               "Apply patch(es)? "
+                               (mapcar #'buffer-name patch-buffers) nil t))))
                 (with-demoted-errors "Trying to restore pre-patch-grab window conf"
                   (set-window-configuration wconf)
                   ;; Restore the article buffer to non-`raw' form.
@@ -402,28 +413,52 @@ If given a prefix, patch in the branch directory instead."
            (tmp-patch-files nil))
       (unwind-protect
           (progn
-            (dolist (buf chosen-patches)
+            (dolist (patch chosen-patches)
               (push (make-temp-file
                      (expand-file-name (format "%04d" (cl-incf patch-num))
                                        patch-dir)
                      nil ".patch")
                     tmp-patch-files)
               (with-temp-file (car tmp-patch-files)
-                (insert-buffer buf)
+                (insert patch)
                 (goto-char (point-min))
-                (unless (re-search-forward "^\\(>?\\)From:?" nil t)
+                (if (re-search-forward "^\\(>?\\)From:?" nil t)
+                    ;; 'git am' gets confused by '>From'.
+                    (delete-region (match-beginning 1) (match-end 1))
                   ;; Looks like a bare patch, supplement with
                   ;; email data.
                   (insert "From: " from "\n")
-                  (insert "Subject: " subject "\n")
                   (insert "Date: " date "\n\n")
+                  (insert "Subject: " subject "\n")
                   (insert message))))
             (with-temp-buffer
               (setq default-directory debbugs-gnu-current-directory)
-              (unless (eq 0 (apply #'call-process "git" nil '(t t) nil
-                                   "am" tmp-patch-files))
-                (message (buffer-string)))))
+              (apply #'call-process "git" nil '(t t) nil
+                             "am" "--3way" (nreverse tmp-patch-files))
+              (message (buffer-string))))
         (delete-directory patch-dir t)))))
+
+(defun debbugs-gnu-commit (&optional branch)
+  "`magit-commit', --author --date --message set from email."
+  (interactive "P")
+  (require 'debbugs-gnu)
+  (debbugs-gnu-init-current-directory branch)
+  (gnus-summary-select-article nil t)
+  (with-current-buffer gnus-article-buffer
+    (let* ((from (gnus-fetch-field "from"))
+           (subject (gnus-fetch-field "subject"))
+           (date (gnus-fetch-field "date"))
+           (body (save-restriction
+                   (gnus-narrow-to-body)
+                   (buffer-string))))
+      (with-temp-buffer
+        (setq default-directory debbugs-gnu-current-directory)
+        (magit-commit
+         (list (concat "--author=" from)
+               (concat "--date=" date)
+               (concat "--message=" subject)
+               (concat "--message=" body)
+               "--edit"))))))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
