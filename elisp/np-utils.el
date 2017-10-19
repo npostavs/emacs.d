@@ -353,6 +353,7 @@ If given a prefix, patch in the branch directory instead."
   (add-hook 'emacs-lisp-mode-hook 'debbugs-gnu-lisp-mode)
   (add-hook 'diff-mode-hook 'debbugs-gnu-diff-mode)
   (add-hook 'change-log-mode-hook 'debbugs-gnu-change-mode)
+  (setq debbugs-gnu-current-directory nil)
   (debbugs-gnu-init-current-directory branch)
   (gnus-summary-select-article nil t)
   (with-current-buffer gnus-article-buffer
@@ -442,6 +443,7 @@ If given a prefix, patch in the branch directory instead."
   "`magit-commit', --author --date --message set from email."
   (interactive "P")
   (require 'debbugs-gnu)
+  (setq debbugs-gnu-current-directory nil)
   (debbugs-gnu-init-current-directory branch)
   (gnus-summary-select-article nil t)
   (with-current-buffer gnus-article-buffer
