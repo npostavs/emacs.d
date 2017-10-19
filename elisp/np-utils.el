@@ -460,6 +460,27 @@ If given a prefix, patch in the branch directory instead."
                (concat "--message=" body)
                "--edit"))))))
 
+(defun forward-message-to-debbugs ()
+  (interactive)
+  (save-restriction
+    (message-narrow-to-head)
+    (message-remove-header
+     (regexp-opt '("From" "To" "Subject" "Thread-Topic" "Thread-Index" "Date"
+                   "Message-ID" "References" "In-Reply-To"
+                   "X-Headers-End"))
+     ;; Remove all non-matching headers
+     t nil t))
+  (let* ((buf (current-buffer))
+         (subject (message-fetch-field "Subject"))
+         (from (message-fetch-field "From"))
+         ;; "RE: bug#28888: 26.0.90; nt/INSTALL.W64"
+         (bugnum (if (string-match "[bB]ug#\\([0-9]+\\)" subject)
+                     (string-to-number (match-string 1 subject)))))
+    (message-mail (format "%d@debbugs.gnu.org" (or bugnum 0)) subject
+                  `(("Cc" . ,from)))
+    (message-forward-make-body buf)
+    (insert "[forwarding to list]")))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; functions grabbed from elsewhere
