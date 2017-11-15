@@ -1,5 +1,6 @@
 ;;; -*- lexical-binding: t -*-
 (require 'cl-lib)
+(eval-when-compile (require 'rx))
 
 (defconst +quote-switching-char-table+
   (let* ((last (max ?' ?\"))
@@ -129,7 +130,7 @@ sequence, just like C-x e e e..."
     "fixed" "found" "notfound" "notfixed"
     "patch" "wontfix" "moreinfo" "unreproducible" "notabug"
     "pending" "help" "security" "confirmed" "easy"
-    "usertag"
+    "usertag" "user"
     "documentation" ;; usertag:emacs.documentation
     ))
 (defconst debbugs-control-message-commands-regexp
@@ -256,7 +257,11 @@ removed instead."
            (format "tags %d notabug wontfix\nclose %d\n"
                    id id))
           ((equal message "documentation")
-           (format "user %s\nusertag %d %s\n" "emacs" id "documentation"))
+           (concat (unless (save-excursion
+                             (message-goto-body)
+                             (re-search-forward "^user emacs$"))
+                     "user emacs\n")
+                   (format "usertag %d %s\n" id "documentation")))
           ((equal message "usertag")
            (format "user %s\nusertag %d %s\n"
                    (completing-read
@@ -332,30 +337,74 @@ removed instead."
        (insert "Pushed: ")
        (dolist (rev (nreverse (magit-git-lines "rev-list" range)))
          (magit-pop-revision-stack rev repo-dir))
-       (let ((emacs-version
-              (with-temp-buffer
-                (insert-file-contents "configure.ac")
-                (re-search-forward "^ *AC_INIT(GNU Emacs, *\\([0-9.]+\\), *bug-gnu-emacs@gnu.org)")
-                (match-string 1))))
-         (debbugs-gnu-make-control-message
-          "done" (car (debbugs-implicit-ids))))))
+       (when (y-or-n-p "Close bug? ")
+         (let ((emacs-version
+                (with-temp-buffer
+                  (insert-file-contents "configure.ac")
+                  (re-search-forward "^ *AC_INIT(GNU Emacs, *\\([0-9.]+\\), *bug-gnu-emacs@gnu.org")
+                  (match-string 1))))
+           (debbugs-gnu-make-control-message
+            "done" (car (debbugs-implicit-ids)))))))
     (_ (user-error "Patches not prepared"))))
 
-(setq debbugs-gnu-trunk-directory "~/src/emacs/emacs-master/")
+(defvar debbugs-gnu-repos '("~/src/emacs/emacs-master/"
+                            "~/src/emacs/emacs-bootstrapping/"
+                            "~/src/emacs/emacs-26/"))
+(defvar debbugs-gnu-repo-history nil)
+
+(defun debbugs-read-repo (prompt)
+  (completing-read prompt debbugs-gnu-repos
+                   #'file-directory-p nil nil
+                   'debbugs-gnu-repo-history (car debbugs-gnu-repo-history)))
+
+(defconst debbugs-subject-noise-regexp
+  (rx (opt (: (any "B" "b") "ug" (opt " ") "#" (+ digit) ": "))
+      (opt "[PATCH") (opt " " (+ digit) "/" (+ digit)) "]"
+      (opt " ")))
+
+(defun debbugs-strip-noise-from-subject (subject)
+  (cond ((stringp subject)
+         (replace-regexp-in-string
+          (concat "\\`" debbugs-subject-noise-regexp) "" subject))
+        ((bufferp subject)
+         (with-current-buffer subject
+           (goto-char (point-min))
+           (when (re-search-forward
+                  (concat "^Subject: *\\("
+                          debbugs-subject-noise-regexp
+                          "\\)")
+                  nil t)
+             (replace-match "" t t nil 1))))
+        (t (signal 'wrong-type-argument
+                   (list '(or stringp bufferp) subject)))))
+
+(defun debbugs-add-bugnum-if-needed (bugnum)
+  (cl-check-type bugnum integer)
+  (goto-char (point-min))
+  (let ((diff-start (re-search-forward "^\\(?:---\\|[+][+][+]\\) ")))
+    (goto-char (point-min))
+    (unless (re-search-forward (format "[Bb]ug ?#%d" bugnum) diff-start t)
+      (goto-char (point-min))
+      (re-search-forward "^[Ss]ubject:")
+      (end-of-line)
+      (insert (format " (Bug#%d)" bugnum)))))
+
 ;; Adaped from `debbugs-gnu-apply-patch'.
-(defun debbugs-gnu-grab-patch (&optional branch)
-  "Apply the patch from the current message.
-If given a prefix, patch in the branch directory instead."
-  (interactive "P")
+(defun debbugs-gnu-grab-patch ()
+  "Apply the patch from the current message."
+  (interactive)
   (require 'debbugs-gnu)
   (add-hook 'emacs-lisp-mode-hook 'debbugs-gnu-lisp-mode)
   (add-hook 'diff-mode-hook 'debbugs-gnu-diff-mode)
   (add-hook 'change-log-mode-hook 'debbugs-gnu-change-mode)
-  (debbugs-gnu-init-current-directory branch)
   (gnus-summary-select-article nil t)
   (with-current-buffer gnus-article-buffer
-    (let* ((from (gnus-fetch-field "from"))
-           (subject (gnus-fetch-field "subject"))
+    (let* ((bugnum (or (debbugs-gnu-current-id t)
+		       debbugs-gnu-bug-number ; Set on group entry.
+		       (debbugs-gnu-guess-current-id)))
+           (from (gnus-fetch-field "from"))
+           (subject (debbugs-strip-noise-from-subject
+                     (gnus-fetch-field "subject")))
            (date (gnus-fetch-field "date"))
            (message (with-current-buffer gnus-article-buffer
                       (save-restriction
@@ -371,11 +420,18 @@ If given a prefix, patch in the branch directory instead."
                       (let ((num (pop handle)))
                         (when (string-match "diff\\|patch\\|plain"
                                             (mm-handle-media-type handle))
-                          (let ((buf (mm-handle-buffer handle)))
+                          (let ((inhibit-read-only t)
+                                (buf (mm-handle-buffer handle)))
                             (when (with-current-buffer buf
+                                    (pcase (mm-handle-encoding handle)
+                                      (`base64
+                                       (base64-decode-region (point-min) (point-max)))
+                                      (`quoted-printable
+                                       (quoted-printable-decode-region (point-min) (point-max))))
                                     (goto-char (point-min))
                                     (re-search-forward
                                      "\\(?:^>?From:?\\)\\|diff --git" nil t))
+                              (debbugs-clean-headers)
                               (push buf patch-buffers)
                               (set-window-dedicated-p
                                (display-buffer
@@ -385,11 +441,18 @@ If given a prefix, patch in the branch directory instead."
                     (unless patch-buffers
                       (gnus-summary-show-article 'raw)
                       (article-decode-charset)
-                      (push gnus-article-buffer patch-buffers))
+                      (with-current-buffer (get-buffer gnus-article-buffer)
+                        (let ((inhibit-read-only t))
+                          (debbugs-clean-headers))
+                        (push (current-buffer) patch-buffers)))
                     (balance-windows)
-                    (completing-read-multiple
-                     "Apply patch(es)? "
-                     patch-buffers nil t))
+                    (mapcar (lambda (bufname)
+                              (with-current-buffer bufname
+                                (buffer-string)))
+                            (let ((crm-separator ","))
+                              (completing-read-multiple
+                               "Apply patch(es)? "
+                               (mapcar #'buffer-name patch-buffers) nil t))))
                 (with-demoted-errors "Trying to restore pre-patch-grab window conf"
                   (set-window-configuration wconf)
                   ;; Restore the article buffer to non-`raw' form.
@@ -402,28 +465,80 @@ If given a prefix, patch in the branch directory instead."
            (tmp-patch-files nil))
       (unwind-protect
           (progn
-            (dolist (buf chosen-patches)
+            (dolist (patch chosen-patches)
               (push (make-temp-file
                      (expand-file-name (format "%04d" (cl-incf patch-num))
                                        patch-dir)
                      nil ".patch")
                     tmp-patch-files)
               (with-temp-file (car tmp-patch-files)
-                (insert-buffer buf)
+                (insert patch)
                 (goto-char (point-min))
-                (unless (re-search-forward "^\\(>?\\)From:?" nil t)
+                (if (re-search-forward "^\\(>?\\)From:?" nil t)
+                    (progn
+                      ;; 'git am' gets confused by '>From'.
+                      (delete-region (match-beginning 1) (match-end 1)))
                   ;; Looks like a bare patch, supplement with
                   ;; email data.
                   (insert "From: " from "\n")
-                  (insert "Subject: " subject "\n")
                   (insert "Date: " date "\n\n")
-                  (insert message))))
+                  (insert "Subject: " subject "\n")
+                  (insert message))
+                (debbugs-strip-noise-from-subject (current-buffer))
+                (debbugs-add-bugnum-if-needed bugnum)))
             (with-temp-buffer
-              (setq default-directory debbugs-gnu-current-directory)
-              (unless (eq 0 (apply #'call-process "git" nil '(t t) nil
-                                   "am" tmp-patch-files))
-                (message (buffer-string)))))
+              (setq default-directory (debbugs-read-repo "Apply to: "))
+              (apply #'call-process "git" nil '(t t) nil
+                             "am" "--3way" (nreverse tmp-patch-files))
+              (message (buffer-string))))
         (delete-directory patch-dir t)))))
+
+(defun debbugs-gnu-commit ()
+  "`magit-commit', --author --date --message set from email."
+  (interactive)
+  (require 'debbugs-gnu)
+  (gnus-summary-select-article nil t)
+  (with-current-buffer gnus-article-buffer
+    (let* ((from (gnus-fetch-field "from"))
+           (subject (debbugs-strip-noise-from-subject
+                     (gnus-fetch-field "subject")))
+           (date (gnus-fetch-field "date"))
+           (body (save-restriction
+                   (gnus-narrow-to-body)
+                   (buffer-string))))
+      (with-temp-buffer
+        (setq default-directory (debbugs-read-repo "Commit to: "))
+        (magit-commit
+         (list (concat "--author=" from)
+               (concat "--date=" date)
+               (concat "--message=" subject)
+               (concat "--message=" body)
+               "--edit"))))))
+
+(defun debbugs-clean-headers ()
+  "Remove irrelevant headers, so I can see the important stuff."
+  (save-restriction
+    (message-narrow-to-head)
+    (message-remove-header
+     (regexp-opt '("From" "To" "Subject" "Thread-Topic" "Thread-Index" "Date"
+                   "Message-ID" "References" "In-Reply-To"
+                   "X-Headers-End"))
+     ;; Remove all non-matching headers
+     t nil t)))
+
+(defun forward-message-to-debbugs ()
+  (interactive)
+  (debbugs-clean-headers)
+  (let* ((buf (current-buffer))
+         (subject (message-fetch-field "Subject"))
+         (from (message-fetch-field "From"))
+         ;; "RE: bug#28888: 26.0.90; nt/INSTALL.W64"
+         (bugnum (if (string-match "[bB]ug#\\([0-9]+\\)" subject)
+                     (string-to-number (match-string 1 subject)))))
+    (message-mail (format "%d@debbugs.gnu.org" (or bugnum 0)) subject
+                  `(("Cc" . ,from)))
+    (message-forward-make-body buf)
+    (insert "[forwarding to list]")))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

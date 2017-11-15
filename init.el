@@ -516,7 +516,7 @@
     (setq magit-pop-revision-stack-format
           (pcase-let ((`(,pt ,_eob ,index-regexp)
                        (default-value 'magit-pop-revision-stack-format)))
-            `(,pt "[%N: %h]: %ci\n  %s\n  http://git.savannah.gnu.org/cgit/emacs.git/commit/?id=%H"
+            `(,pt "[%N: %h]: %ci\n  %s\n  https://git.savannah.gnu.org/cgit/emacs.git/commit/?id=%H"
                   ,index-regexp)))
 
     ;; Modify margin format: abbreviate time, shorten author name.
