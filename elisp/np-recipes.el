@@ -10,7 +10,7 @@
            :type elpa :description "SOAP library to access debbugs servers")
     (:name diminish                        :checkout "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
     (:name dired-details                   :checkout "3de7e19ae874dac03edf9951648a1f11f52dead6")
-    (:name el-get                          :checkout "cfb081e3563df0da60de554ecad4dbb20857f033"
+    (:name el-get                          :checkout "7466f295b5010ce31620cea515ec593bfe9bacae"
            :pkgname "npostavs/el-get" :branch "origin/current")
     (:name elisp-slime-nav                 :checkout "1a2cb6a832635bde694fd25cc6dce2962aad3807"
            :description "Slime-style navigation of Emacs Lisp source with M-. & M-,"
@@ -25,9 +25,11 @@
            :description "Make ido completes like built-in M-x does"
            :type github :pkgname "doitian/ido-complete-space-or-hyphen")
     (:name lua-mode                        :checkout "2453e370ca39f38fced67a6d2db462aaea110f22")
-    (:name magit                           :checkout "4def4474e3e1f2b21f38bff41922e0bea31a3620"
+    (:name magit                           :checkout "3fae6d5ff01d02537c916e7917092c8498983b75"
            :branch "origin/current" :pkgname "npostavs/magit"
-           :build (with-temp-file "lisp/magit-autoloads.el" nil))
+           :build (with-temp-file "lisp/magit-autoloads.el" nil)
+           :depends (dash with-editor emacs-async magit-popup ghub))
+    (:name magit-popup                     :checkout "70e3cdd6140ebdf477f86b88ac2bd1a8de115e88")
     (:name multiple-cursors                :checkout "54e408fc682d968ad46846d8bff079cd704ff6fe")
     (:name package                         :checkout -
            ;; cut out el-get's post-init stuff
@@ -52,8 +54,11 @@
     (:name undo-tree                       :checkout "bc9d09555f5aeac6ac4684d748be763f64a7d80a")
     (:name use-package                     :checkout "38034854ac21bd5ddc1a1129fd6c8ff86d939f8a")
     (:name with-editor                     :checkout "8ae3c7aed92842f5988671c1b3350c65c58857e0")
-    (:name yasnippet                       :checkout "688571f63ba6b074a99f0d7f93e54317774279e8"
-           :branch "origin/current" :pkgname "npostavs/yasnippet"))
+    (:name yasnippet                       :checkout "ecd65d2ba5ea2623dfd0b474fbb5dae231503637"
+           :branch "origin/current" :pkgname "npostavs/yasnippet"
+           ;; Don't fetch snippets submodule
+           :build nil)
+    (:name yasnippet-snippets              :checkout "871c6f022d51f3cdffb83e649ddb29fa0cfddc79"))
  )
 
 
