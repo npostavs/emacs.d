@@ -2,6 +2,16 @@
 ;; (package-initialize)
 
 
+
+(require 'server)
+(when (server-running-p)
+  (if (y-or-n-p "Server already running, abort?")
+      (keyboard-quit)
+    (setq server-name
+          (read-string "Different server name? "
+                       (concat server-name
+                               (number-to-string (random 1000)))))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; basic utils used for init
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
