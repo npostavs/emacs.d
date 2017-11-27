@@ -351,7 +351,7 @@
 
 (use-package smex
   :init (setq smex-save-file (locate-user-emacs-file "smex-items"))
-  :bind (("M-x" . smex)
+  :bind (([remap execute-extended-command] . smex)
          ("M-X" . smex-major-mode-commands)))
 
 (use-package ibuffer
