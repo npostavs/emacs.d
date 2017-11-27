@@ -436,7 +436,7 @@
   :diminish "")
 
 (use-package yasnippet
-  :defer 5
+  :defer 30
   :config (progn
             (setq yas-prompt-functions ; default x-prompt is just annoying
                   '(yas-ido-prompt yas-completing-prompt yas-no-prompt))
