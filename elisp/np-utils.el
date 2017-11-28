@@ -146,7 +146,7 @@ sequence, just like C-x e e e..."
   (delq nil (list (debbugs-gnu-current-id t)
                   debbugs-gnu-bug-number ; Set on group entry.
                   (debbugs-gnu-guess-current-id)
-                  (let ((bugnum-re "\\([0-9]+\\)\\(?:-done\\)@debbugs.gnu.org")
+                  (let ((bugnum-re "\\([0-9]+\\)\\(?:-done\\)?@debbugs.gnu.org")
                         (addr nil))
                     (and (eq major-mode 'message-mode)
                          (save-restriction
