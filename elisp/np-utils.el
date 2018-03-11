@@ -81,6 +81,19 @@ Prefix arg means just go to logical ending unconditionally."
   (set alist-var (cons (cons key value)
                        (assq-delete-all key (symbol-value alist-var)))))
 
+(defconst Info-browse-format
+  "https://www.gnu.org/software/emacs/manual/html_node/%s/%s.html")
+(defun browse-info-node (node-url)
+  "Open current info node in a browesr."
+  (interactive
+   (progn
+     (unless (bound-and-true-p Info-current-node)
+       (user-error "Not in info node"))
+     (list (format Info-browse-format
+                   (file-name-base Info-current-file)
+                   (replace-regexp-in-string " " "-" Info-current-node t t)))))
+  (browse-url node-url))
+
 
 ;; Based on `kmacro-call-macro' code.  There is a library form for
 ;; this sort of thing, but it looks a lot more complicated possibly
