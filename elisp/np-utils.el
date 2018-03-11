@@ -138,6 +138,7 @@ sequence, just like C-x e e e..."
     "owner" "noowner"
     "reassign"
     "retitle"
+    "forwarded"
     ;; 'notfixed <bugnum> <version>' works, even though it's
     ;; undocumented at debbugs.gnu.org.
     "fixed" "found" "notfound" "notfixed"
@@ -252,6 +253,8 @@ removed instead."
            (format "owner %d !\n" id))
           ((equal message "retitle")
            (format "retitle %d %s\n" id (read-string "New title: ")))
+          ((equal message "forwarded")
+           (format "forwarded %d %s\n" id (read-string "Forward to: ")))
           ((equal message "reassign")
            (format "reassign %d %s\n" id (read-string "Package(s): ")))
           ((equal message "close")
