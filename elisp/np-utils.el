@@ -556,6 +556,67 @@ removed instead."
     (message-forward-make-body buf)
     (insert "[forwarding to list]")))
 
+(when (version< emacs-version "26.0.90")
+  ;; Hack in fix for Bug#28831
+  (eval-after-load "gnus-group"
+    (defun gnus-read-ephemeral-bug-group (ids mbox-url &optional window-conf)
+      "Browse bug NUMBER as ephemeral group."
+      (interactive (list (read-string "Enter bug number: "
+				      (thing-at-point 'word) nil)
+		         ;; FIXME: Add completing-read from
+		         ;; `gnus-emacs-bug-group-download-format' ...
+		         (cdr (assoc 'emacs gnus-bug-group-download-format-alist))))
+      (when (stringp ids)
+        (setq ids (string-to-number ids)))
+      (unless (listp ids)
+        (setq ids (list ids)))
+      (let ((tmpfile (make-temp-file "gnus-temp-group-")))
+        (let ((coding-system-for-write 'binary)
+	      (coding-system-for-read 'binary))
+          (with-temp-file tmpfile
+	    (mm-disable-multibyte)
+	    (dolist (id ids)
+	      (let ((file (format "~/.emacs.d/debbugs-cache/%s" id)))
+	        (if (and (not gnus-plugged)
+		         (file-exists-p file))
+		    (insert-file-contents file)
+	          (url-insert-file-contents (format mbox-url id)))))
+	    ;; Add the debbugs address so that we can respond to reports easily.
+	    (let ((address
+	           (format "%s@%s" (car ids)
+		           (replace-regexp-in-string
+			    "/.*$" ""
+			    ;; >----------- HACK HERE (https) ---------------<
+                            (replace-regexp-in-string "^https://" "" mbox-url)))))
+	      (goto-char (point-min))
+	      (while (re-search-forward (concat "^" message-unix-mail-delimiter)
+				        nil t)
+	        (narrow-to-region (point)
+			          (if (search-forward "\n\n" nil t)
+				      (1- (point))
+				    (point-max)))
+	        (unless (string-match (concat "\\(?:\\`\\|[ ,<]\\)"
+					      (regexp-quote address)
+					      "\\(?:\\'\\|[ ,>]\\)")
+				      (concat (message-fetch-field "to") " "
+					      (message-fetch-field "cc")))
+	          (goto-char (point-min))
+	          (if (re-search-forward "^To:" nil t)
+		      (progn
+		        (message-next-header)
+		        (skip-chars-backward "\t\n ")
+		        (insert ", " address))
+		    (insert "To: " address "\n")))
+	        (goto-char (point-max))
+	        (widen)))))
+        (gnus-group-read-ephemeral-group
+         (format "nndoc+ephemeral:bug#%s"
+	         (mapconcat 'number-to-string ids ","))
+         `(nndoc ,tmpfile
+	         (nndoc-article-type mbox))
+         nil window-conf)
+        (delete-file tmpfile)))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; functions grabbed from elsewhere
