@@ -78,6 +78,7 @@ Prefix arg means just go to logical ending unconditionally."
 
 (defun set-assq (alist-var key value)
   "Set the value of KEY in ALIST-VAR to VALUE."
+  (declare (obsolete "use (setf (alist-get ALIST-VAR KEY) VALUE)" "25.1"))
   (set alist-var (cons (cons key value)
                        (assq-delete-all key (symbol-value alist-var)))))
 

@@ -69,7 +69,7 @@
 
 ;; Mail settings.
 (setq send-mail-function #'smtpmail-send-it
-      mail-host-address "users.sourceforge.net" ;"gmail.com"
+      mail-host-address "gmail.com"
       smtpmail-smtp-server "smtp.googlemail.com"
       smtpmail-smtp-service 587 ;25
       smtpmail-smtp-service 25 ;587
@@ -150,6 +150,18 @@
 
 (bind-key "<f7>" 'compile)
 (bind-key "C-<f7>" 'recompile)
+(setq compilation-error-regexp-alist
+      ;; Prune compilation message regexps (see Bug#9065).
+      '(ant bash python-tracebacks-and-caml cmake cmake-info java
+            gcc-include gnu guile-file guile-line))
+;; (absoft ada aix ant bash borland python-tracebacks-and-caml cmake
+;;         cmake-info comma cucumber msft edg-1 edg-2 epc ftnchek
+;;         iar ibm irix java jikes-file maven jikes-line clang-include
+;;         gcc-include ruby-Test::Unit gnu lcc makepp mips-1 mips-2 msft
+;;         omake oracle perl php rxp sparc-pascal-file sparc-pascal-line sparc-pascal-example
+;;         sun sun-ada watcom 4bsd gcov-file gcov-header gcov-nomark gcov-called-line
+;;         gcov-never-called perl--Pod::Checker perl--Test perl--Test2 perl--Test::Harness weblint
+;;         guile-file guile-line)
 (bind-key "C-<f5>" 'gdb)
 (bind-key "<f5>" 'gud-cont)
 (bind-key "<f9>" 'gud-break)
@@ -660,6 +672,9 @@
 (put 'emacs-lisp-docstring-fill-column 'safe-local-variable #'integerp)
 (put 'lexical-binding 'safe-local-variable #'booleanp)
 (put 'bug-reference-bug-regexp 'safe-local-variable #'stringp)
+(put 'autoload-compute-prefixes 'safe-local-variable #'booleanp)
+(put 'c-noise-macro-names 'safe-local-variable
+     (lambda (v) (and (listp v) (cl-every #'stringp v))))
 (setq enable-local-eval nil)
 
 ;;; unsafe/annoying locals
