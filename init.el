@@ -62,6 +62,9 @@
 
       gdb-many-windows t
 
+      epa-pinentry-mode 'loopback
+      auth-sources '("~/.authinfo.gpg")
+
       ;; No more damn prompts!
       dired-recursive-deletes 'always
       dired-recursive-copies 'always
@@ -73,6 +76,15 @@
       smtpmail-smtp-server "smtp.googlemail.com"
       smtpmail-smtp-service 587 ;25
       smtpmail-smtp-service 25 ;587
+
+      ;; Allow toggling between text and HTML views of emails.
+      ;; Possibly setting `gnus-buttonized-mime-types' and/or
+      ;; `gnus-unbuttonized-mime-types' might be more sensible, but I
+      ;; can't be bothered to figure it out right now.
+      gnus-inhibit-mime-unbuttonizing t
+      ;; Some mail comes with text/html and text/plain alternatives.
+      ;; Don't take the text/html, if possible.
+      mm-discouraged-alternatives '("text/html" "text/richtext")
       )
 
 (setq enable-recursive-minibuffers t)
@@ -235,6 +247,7 @@
   (insert (or (x-get-selection-value) (x-get-selection 'PRIMARY))))
 
 (bind-key "<S-insert>" 'yank-primary)
+(bind-key "C-x r a" 'append-to-register)
 
 (when (eq system-type 'windows-nt)
   (declare-function w32-send-sys-command nil)
@@ -248,6 +261,13 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;;; faces
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
+;; The light orange citation faces are hardly readable.
+(eval-after-load 'message
+  '(set-face-foreground 'message-cited-text "dark red"))
+(eval-after-load 'gnus-cite
+  '(set-face-foreground 'gnus-cite-4 "dark red"))
+
 (set-face-foreground 'font-lock-doc-face "dark red")
 (set-face-foreground 'font-lock-string-face "dark red")
 (set-face-foreground 'font-lock-type-face "purple4")
