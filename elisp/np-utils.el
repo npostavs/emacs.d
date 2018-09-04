@@ -84,16 +84,30 @@ Prefix arg means just go to logical ending unconditionally."
 
 (defconst Info-browse-format
   "https://www.gnu.org/software/emacs/manual/html_node/%s/%s.html")
+(defun Info-node-url (file node)
+  (format Info-browse-format
+          (file-name-base file)
+          (replace-regexp-in-string
+           "%" "_00"
+           (url-hexify-string
+            (replace-regexp-in-string " " "-" node t t))
+           t t)))
+
 (defun browse-info-node (node-url)
   "Open current info node in a browesr."
   (interactive
    (progn
      (unless (bound-and-true-p Info-current-node)
        (user-error "Not in info node"))
-     (list (format Info-browse-format
-                   (file-name-base Info-current-file)
-                   (replace-regexp-in-string " " "-" Info-current-node t t)))))
+     (list (Info-node-url Info-current-file Info-current-node))))
   (browse-url node-url))
+
+(defun info-node-markdown-link ()
+  (interactive)
+  (kill-new (format "[(%s) %s](%s)"
+                    (file-name-base Info-current-file)
+                    Info-current-node
+                    (Info-node-url Info-current-file Info-current-node))))
 
 
 ;; Based on `kmacro-call-macro' code.  There is a library form for
@@ -555,7 +569,9 @@ removed instead."
     (message-mail (format "%d@debbugs.gnu.org" (or bugnum 0)) subject
                   `(("Cc" . ,from)))
     (message-forward-make-body buf)
-    (insert "[forwarding to list]")))
+    (insert (format "\
+\[forwarding to list, please use \"Reply All\" to keep %d@debbugs.gnu.org on Cc]"
+                    (or bugnum 0)))))
 
 (when (version< emacs-version "26.0.90")
   ;; Hack in fix for Bug#28831
