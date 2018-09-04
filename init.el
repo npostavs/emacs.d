@@ -552,17 +552,20 @@
     (setq magit-keep-region-overlay t)
 
     ;; I always keep my repos under ~/src
-    (setq magit-repository-directories '("~/src/"))
+    (setq magit-repository-directories '(("~/src/" . 2)))
 
     (setq magit-popup-use-prefix-argument 'default)
     (setq magit-push-always-verify nil) ; obsolete
 
     ;; TODO: bind `magit-pop-revision-stack'?
-    (setq magit-pop-revision-stack-format
-          (pcase-let ((`(,pt ,_eob ,index-regexp)
-                       (default-value 'magit-pop-revision-stack-format)))
-            `(,pt "[%N: %h]: %ci\n  %s\n  https://git.savannah.gnu.org/cgit/emacs.git/commit/?id=%H"
-                  ,index-regexp)))
+    (use-package magit-extras
+      :defer t
+      :config
+      (setq magit-pop-revision-stack-format
+            (pcase-let ((`(,pt ,_eob ,index-regexp)
+                         (default-value 'magit-pop-revision-stack-format)))
+              `(,pt "[%N: %h]: %ci\n  %s\n  https://git.savannah.gnu.org/cgit/emacs.git/commit/?id=%H"
+                    ,index-regexp))))
 
     ;; Modify margin format: abbreviate time, shorten author name.
     (pcase-let ((`(,init ,_style ,width ,author ,_author-width)
@@ -616,20 +619,6 @@
     ;; there aren't.
     (defvar-local np/magit-want-submodules t)
     (put 'np/magit-want-submodules 'permanent-local t)
-    (defun np/magit-maybe-add-submodules ()
-      (if (and np/magit-want-submodules
-               (not (memq #'magit-insert-submodules magit-status-sections-hook))
-               (magit-get-submodules))
-          (dolist (inserter '(magit-insert-modules-unpulled-from-upstream
-                              magit-insert-modules-unpulled-from-pushremote
-                              magit-insert-modules-unpushed-to-upstream
-                              magit-insert-modules-unpushed-to-pushremote
-                              magit-insert-submodules))
-            (magit-add-section-hook
-             'magit-status-sections-hook inserter
-             'magit-insert-unpulled-from-upstream nil 'local))
-        (setq-local np/magit-want-submodules nil)))
-    (add-hook 'magit-status-mode-hook #'np/magit-maybe-add-submodules)
     (bind-key "j m" #'magit-jump-to-submodules magit-status-mode-map)
 
     (font-lock-add-keywords 'emacs-lisp-mode
@@ -679,6 +668,7 @@
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (dolist (cmd '(scroll-left
                narrow-to-region
+               narrow-to-page
                upcase-region downcase-region
                dired-find-alternate-file
                erase-buffer
@@ -695,6 +685,9 @@
 (put 'autoload-compute-prefixes 'safe-local-variable #'booleanp)
 (put 'c-noise-macro-names 'safe-local-variable
      (lambda (v) (and (listp v) (cl-every #'stringp v))))
+(put 'git-commit-major-mode 'safe-local-variable
+     (lambda (v) (memq v '(git-commit-elisp-text-mode
+                      text-mode))))
 (setq enable-local-eval nil)
 
 ;;; unsafe/annoying locals

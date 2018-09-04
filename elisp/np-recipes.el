@@ -16,6 +16,7 @@
            :description "Slime-style navigation of Emacs Lisp source with M-. & M-,"
            :type github
            :pkgname "purcell/elisp-slime-nav")
+    (:name ghub                            :checkout "48e91c0e1b5dea431b5edad018d2a2bdfa49eca2")
     (:name i3-emacs                        :checkout "055510298fe2d5b52a346aebcec859af9b55ac3c"
            :description "i3 emacs integration"
            :type github
@@ -25,11 +26,15 @@
            :description "Make ido completes like built-in M-x does"
            :type github :pkgname "doitian/ido-complete-space-or-hyphen")
     (:name lua-mode                        :checkout "2453e370ca39f38fced67a6d2db462aaea110f22")
-    (:name magit                           :checkout "3fae6d5ff01d02537c916e7917092c8498983b75"
+    (:name magit                           :checkout "12f9b9d8ea494f66966015be12520e4c4d9312be"
            :branch "origin/current" :pkgname "npostavs/magit"
            :build (with-temp-file "lisp/magit-autoloads.el" nil)
            :depends (dash with-editor emacs-async magit-popup ghub))
     (:name magit-popup                     :checkout "70e3cdd6140ebdf477f86b88ac2bd1a8de115e88")
+    (:name magit-imerge                    :checkout "546f76d14f16b114837f38d21c29ea6f6adfeaa7"
+           :description "Magit extension for git-imerge"
+           :type github
+           :pkgname "magit/magit-imerge")
     (:name multiple-cursors                :checkout "54e408fc682d968ad46846d8bff079cd704ff6fe")
     (:name package                         :checkout -
            ;; cut out el-get's post-init stuff
