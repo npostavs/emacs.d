@@ -584,6 +584,9 @@
     (magit-define-popup-switch 'magit-patch-popup ?w
       "Ignore all whitespace" "--ignore-all-space")
 
+    (magit-define-popup-switch 'magit-patch-apply-popup ?r
+      "Allow partial rejection" "--reject")
+
     (magit-define-popup-action 'magit-patch-popup ?E
       "Prepare patches for Emacs bug" 'magit-prepare-emacs-patches)
 

@@ -449,7 +449,7 @@ removed instead."
                     (delete-other-windows)
                     (dolist (handle (gnus-article-mime-handles))
                       (let ((num (pop handle)))
-                        (when (string-match "diff\\|patch\\|plain"
+                        (when (string-match "diff\\|patch\\|plain\\|text/x-verbatim"
                                             (mm-handle-media-type handle))
                           (let ((inhibit-read-only t)
                                 (buf (mm-handle-buffer handle)))
@@ -505,16 +505,25 @@ removed instead."
               (with-temp-file (car tmp-patch-files)
                 (insert patch)
                 (goto-char (point-min))
-                (if (re-search-forward "^\\(>?\\)From:?" nil t)
-                    (progn
-                      ;; 'git am' gets confused by '>From'.
-                      (delete-region (match-beginning 1) (match-end 1)))
+                (cond
+                 ((re-search-forward "^\\(>?\\)From:?" nil t)
+                  ;; 'git am' gets confused by '>From'.
+                  (delete-region (match-beginning 1) (match-end 1)))
+                 ;; 'git show' output.
+                 ((looking-at "\\`commit [[:xdigit:]]+\nAuthor: \\(.+\\)\nDate: \\(.+\\)\n\\(\\(?:.\\|\n +\\)+\\)\ndiff --git")
+                  (let ((author (match-string-no-properties 1))
+                        (date (match-string-no-properties 2))
+                        (msg-bounds (cons (match-beginning 3) (match-end 3))))
+                    (goto-char (car msg-bounds))
+                    ())
+                  ) 
+                 (t
                   ;; Looks like a bare patch, supplement with
                   ;; email data.
                   (insert "From: " from "\n")
                   (insert "Date: " date "\n\n")
                   (insert "Subject: " subject "\n")
-                  (insert message))
+                  (insert message)))
                 (debbugs-strip-noise-from-subject (current-buffer))
                 (debbugs-add-bugnum-if-needed bugnum)))
             (with-temp-buffer
@@ -551,24 +560,31 @@ removed instead."
   (save-restriction
     (message-narrow-to-head)
     (message-remove-header
-     (regexp-opt '("From" "To" "Subject" "Thread-Topic" "Thread-Index" "Date"
-                   "Message-ID" "References" "In-Reply-To"
-                   "X-Headers-End"))
+     (regexp-opt )
      ;; Remove all non-matching headers
      t nil t)))
 
 (defun forward-message-to-debbugs ()
   (interactive)
-  (debbugs-clean-headers)
+  ;(debbugs-clean-headers)
   (let* ((buf (current-buffer))
          (subject (message-fetch-field "Subject"))
          (from (message-fetch-field "From"))
          ;; "RE: bug#28888: 26.0.90; nt/INSTALL.W64"
          (bugnum (if (string-match "[bB]ug#\\([0-9]+\\)" subject)
-                     (string-to-number (match-string 1 subject)))))
+                     (string-to-number (match-string 1 subject))))
+         (message-forward-included-headers
+          '("From" "To" "Subject" "Thread-Topic" "Thread-Index" "Date"
+            "Message-ID" "References" "In-Reply-To"
+            "X-Headers-End")))
     (message-mail (format "%d@debbugs.gnu.org" (or bugnum 0)) subject
                   `(("Cc" . ,from)))
-    (message-forward-make-body buf)
+    ;; Inserts MIME-encoded text from BUF, and cleans headers
+    ;; according to `message-forward-included-headers'.  FIXME: it
+    ;; didn't parse quite right, missing end tags for subparts?  Use
+    ;; `mime-to-mml' instead (seems to work better)?
+    (message-forward-make-body-mml buf)
+    (message-position-point)
     (insert (format "\
 \[forwarding to list, please use \"Reply All\" to keep %d@debbugs.gnu.org on Cc]"
                     (or bugnum 0)))))
