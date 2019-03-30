@@ -380,7 +380,8 @@ removed instead."
 
 (defvar debbugs-gnu-repos '("~/src/emacs/emacs-master/"
                             "~/src/emacs/emacs-bootstrapping/"
-                            "~/src/emacs/emacs-26/"))
+                            "~/src/emacs/emacs-26/"
+                            "~/src/emacs/elpa/"))
 (defvar debbugs-gnu-repo-history nil)
 
 (defun debbugs-read-repo (prompt)
@@ -555,28 +556,29 @@ removed instead."
                (concat "--message=" body)
                "--edit"))))))
 
+(defconst debbugs-header-whitelist
+  '("From" "To" "Subject" "Thread-Topic" "Thread-Index" "Date"
+    "Message-ID" "References" "In-Reply-To"
+    "X-Headers-End"))
+
 (defun debbugs-clean-headers ()
   "Remove irrelevant headers, so I can see the important stuff."
   (save-restriction
     (message-narrow-to-head)
     (message-remove-header
-     (regexp-opt )
+     (regexp-opt debbugs-header-whitelist)
      ;; Remove all non-matching headers
      t nil t)))
 
 (defun forward-message-to-debbugs ()
   (interactive)
-  ;(debbugs-clean-headers)
   (let* ((buf (current-buffer))
          (subject (message-fetch-field "Subject"))
          (from (message-fetch-field "From"))
          ;; "RE: bug#28888: 26.0.90; nt/INSTALL.W64"
          (bugnum (if (string-match "[bB]ug#\\([0-9]+\\)" subject)
                      (string-to-number (match-string 1 subject))))
-         (message-forward-included-headers
-          '("From" "To" "Subject" "Thread-Topic" "Thread-Index" "Date"
-            "Message-ID" "References" "In-Reply-To"
-            "X-Headers-End")))
+         (message-forward-included-headers debbugs-header-whitelist))
     (message-mail (format "%d@debbugs.gnu.org" (or bugnum 0)) subject
                   `(("Cc" . ,from)))
     ;; Inserts MIME-encoded text from BUF, and cleans headers
