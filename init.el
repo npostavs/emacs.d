@@ -581,22 +581,34 @@
     ;; defaults for popups
     (setq magit-branch-popup-show-variables nil)
 
-    (magit-define-popup-switch 'magit-patch-popup ?w
-      "Ignore all whitespace" "--ignore-all-space")
+    ;; Transient doesn't support adding groups yet (I think).  Hack
+    ;; around it.
+    (unless (cl-member-if               ; Make it idempotent.
+             (lambda (colm) (and (vectorp colm)
+                            (equal (elt colm 2) '(:description "Options"))))
+             (get 'magit-patch 'transient--layout))
+      (push (transient--parse-group
+             'magit-patch
+             ["Options"
+              ("-w" "Ignore all whitespace" ("-w" "--ignore-all-space"))
+              ("=v" "Ignore all whitespace" ("-v" "--reroll-count="))])
+            (get 'magit-patch 'transient--layout)))
+    ;; To undo the effect, evaluate:
+    ;;
+    ;;   (pop (get 'magit-patch 'transient--layout))
 
-    (magit-define-popup-switch 'magit-patch-apply-popup ?r
-      "Allow partial rejection" "--reject")
-
+    (transient-append-suffix 'magit-patch "r"
+      '("E" "Prepare patches for Emacs bug" magit-prepare-emacs-patches))
     (magit-define-popup-action 'magit-patch-popup ?E
       "Prepare patches for Emacs bug" 'magit-prepare-emacs-patches)
 
-    (magit-define-popup-option 'magit-commit-popup ?D
-      "Override author date" "--date=" )
+    ;;; I forget why I wanted this.
+    ;; (magit-define-popup-switch 'magit-patch-apply-popup ?r
+    ;;   "Allow partial rejection" "--reject")
+
 
     (set-face-foreground 'magit-hash
                          (face-foreground 'font-lock-type-face))
-    (bind-key "SPC <t>"     'magit-invoke-popup-switch magit-popup-mode-map)
-    (bind-key "SPC SPC <t>" 'magit-invoke-popup-option magit-popup-mode-map)
     (bind-key "C-c C-d" 'magit-describe-section magit-mode-map)
     (bind-key "`" (if (fboundp 'magit-toggle-margin)
                       'magit-toggle-margin 'magit-log-toggle-margin)
@@ -627,21 +639,34 @@
     (font-lock-add-keywords 'emacs-lisp-mode
                             magit-font-lock-keywords)))
 
+(use-package forge
+  :init (progn
+          (setq forge-topic-list-limit '(60 . 0))) ; (OPEN . CLOSED)
+  :defer t
+  :config (progn
+            ;; I haven't set up flyspell properly.
+            (cl-callf2 remq #'turn-on-flyspell forge-post-mode-hook)))
+
+(use-package markdown-mode
+  :defer t
+  :config (progn
+            ;; Default underlining from `font-lock-constant-face' is
+            ;; too distracting.  Not sure if `mode-line' is better.
+            ;; Just background by itself gets covered by magit section
+            ;; highlighting.
+            (custom-theme-set-faces
+             'user
+             '(markdown-pre-face
+               ((t (:inherit (mode-line markdown-code-face)  :background "gainsboro")))))
+            (set-face-)))
+
 ;; use GNU make
 (add-to-list 'auto-mode-alist '("Makefile" . makefile-gmake-mode))
 
 (use-package i3-integration
   :load-path (lambda () `(,(concat el-get-dir "i3-emacs")))
   :if (and (eq window-system 'x)
-           (executable-find "i3"))
-  :config
-  (defadvice magit-key-mode (after show-whole-popup activate)
-    ;; The popup should fit the text exactly, but the last line is
-    ;; clipped by about 1 pixel (because of fontifying?) so the whole
-    ;; buffer ends up scrolling down. We'll just add an extra line.
-    ;; See https://github.com/magit/magit/issues/800 for details.
-    (set-window-text-height (selected-window)
-                            (1+ (count-lines (point-min) (point-max))))))
+           (executable-find "i3")))
 
 ;; org-mode
 (use-package org-mode

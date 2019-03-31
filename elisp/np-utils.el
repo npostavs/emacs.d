@@ -318,7 +318,7 @@ removed instead."
              (if (string-match-p "\\.\\." range)
                  range
                (format "%s~..%s" range range))))
-         (magit-patch-arguments)))
+         (transient-args)))
   (let ((bugnum nil))
     (with-temp-buffer
       (magit-git-insert "log" "--format=%B" range)
