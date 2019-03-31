@@ -716,6 +716,7 @@
 (put 'git-commit-major-mode 'safe-local-variable
      (lambda (v) (memq v '(git-commit-elisp-text-mode
                       text-mode))))
+(put 'org-src-preserve-indentation 'safe-local-variable #'booleanp)
 (setq enable-local-eval nil)
 
 ;;; unsafe/annoying locals
