@@ -1,15 +1,19 @@
 # -*- mode: org -*-
+* Emacs dev notes
+** fencepost.gnu.org
+*** Copyright checking
+- Consult [[/ssh:fencepost.gnu.org:/gd/gnuorg/copyright.list][copyright.list]].
+(as explained in [[https://www.gnu.org/prep/maintain/html_node/Copyright-Papers.html][(maintain standards) Copyright-Papers]]).
+- =Copyright-paperwork-exempt: yes=
+
+*** email? https://www.fsf.org/about/systems/sending-mail-via-fencepost
 * Tasks
 ** TODO uniquify - apply to non file buffers?
-** DONE default args for dired
 ** TODO visual line end
    - when point is at visual line end it *looks* like the cursor is on
      the next line. How to resolve this? Sacrifice space at end of
      line?
      - See http://debbugs.gnu.org/cgi/bugreport.cgi?bug=4469
-** DONE beginning-of-line-dwim doesn't dwim
-   goes to beginning of line instead of indentation when before
-   indentation
 ** TODO completion
    - company-mode? http://company-mode.github.io/
    - auto-complete? http://cx4a.org/software/auto-complete/
@@ -18,8 +22,6 @@
      - TabKey2 seems overly complex, SmartTab probably best
 ** TODO sane binding for mc/* commands
    - region-bindings-mode https://github.com/fgallina/region-bindings-mode
-** TextMate "ScopeSelectors", are they good?
-   http://manual.macromates.com/en/scope_selectors
 ** TODO Windows pty/console stuff
    - problem: http://www.gnu.org/software/emacs/manual/html_mono/efaq-w32.html#Subprocess-hang
    - see http://article.gmane.org/gmane.comp.gnu.mingw.user/24377/match=console+pty
@@ -27,10 +29,6 @@
 ** completing-read-function = ido-completing-read fails!?
    - see http://debbugs.gnu.org/cgi/bugreport.cgi?bug=15430
    - see [[https://github.com/technomancy/ido-ubiquitous][ido-ubiquitious]]
-** TODO smartparens? https://github.com/Fuco1/smartparens
-** use-package
-*** TODO? :config block should be idempotent
-    see eval-after-load, and after-load-alist
 ** el-get
 *** can .info be built without make?
     - like .elc files
