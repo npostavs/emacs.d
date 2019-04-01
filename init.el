@@ -639,6 +639,30 @@
     (font-lock-add-keywords 'emacs-lisp-mode
                             magit-font-lock-keywords)))
 
+(use-package git-commit
+  :defer t
+  :config (progn
+            (defun git-commit-insert-copyright-exempt ()
+              (interactive)
+              (save-excursion
+                (goto-char (point-max))
+                (while (re-search-backward (concat "^" comment-start) nil t))
+                (unless (looking-back "\n\n" nil)
+                  (insert ?\n))
+                (insert "Copyright-paperwork-exempt: yes" ?\n)
+                (unless (or (eobp) (= (char-after) ?\n))
+                  (insert ?\n))))
+            (bind-key "C-c C-s" 'git-commit-insert-copyright-exempt
+                      git-commit-mode-map)
+            (defun git-commit-co-authored (name mail)
+              "Insert a header mentioning the person who suggested the change."
+              (interactive (if current-prefix-arg
+                               (git-commit-read-ident)
+                             (git-commit-self-ident)))
+              (git-commit-insert-header "Co-authored-by" name mail))
+            (bind-key "C-c C-x c" 'git-commit-co-authored
+                      git-commit-mode-map)))
+
 (use-package forge
   :init (progn
           (setq forge-topic-list-limit '(60 . 0))) ; (OPEN . CLOSED)
