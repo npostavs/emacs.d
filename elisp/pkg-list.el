@@ -115,13 +115,18 @@
           (message "Couldn't find entry for %s, added one to kill-ring" pkg))))
      (t (message "remote = '%s', oops..." remote-rev)))))
 
-(defun pkg-list-update-to-target ()
-  (interactive)
-  (let* ((pkg-entry (tabulated-list-get-entry))
-         (pkg (el-get-package-symbol (elt pkg-entry 0))))
-    (if (el-get-package-installed-p pkg)
-        (el-get-update pkg)
-      (el-get-install pkg))))
+(defun pkg-list-current-entry ()
+  (elt (tabulated-list-get-entry) 0))
+
+(defun pkg-list-update-to-target (pkg)
+  (interactive (list (pkg-list-current-entry)))
+  (if (el-get-package-installed-p pkg)
+      (el-get-update pkg)
+    (el-get-install pkg)))
+
+(defun pkg-list-remove (pkg)
+  (interactive (list (pkg-list-current-entry)))
+  (el-get-remove pkg))
 
 (define-derived-mode pkg-list-mode tabulated-list-mode "PkgList"
   "List and manage el-get installed packages..."
@@ -136,7 +141,7 @@
 
 (define-key pkg-list-mode-map "U" #'pkg-list-update-to-target)
 (define-key pkg-list-mode-map "C" #'pkg-list-check-remote)
-(define-key pkg-list-mode-map "A" #'pkg-list-recipe-checkout-align)
+(define-key pkg-list-mode-map "R" #'pkg-list-remove)
 
 (defun pkg-list ()
   (interactive)

@@ -23,7 +23,10 @@
            :submodule nil)
     (:name closql                          :checkout "012b94f8695e194455111fd54eff0b94dd0dd0db")
     (:name emacsql                         :checkout "5ebd12b6ffaa9fbadefe8518eab07a028bbaf7c1")
-    (:name forge                           :checkout "e856dd86e899034dadb15ea68f344d34020e26a4")
+    (:name esqlite                         :checkout "bc4047e09b8f6c34802db86095cd465935670dce")
+    (:name forge                           :checkout "e856dd86e899034dadb15ea68f344d34020e26a4"
+           :build (progn nil)
+           :info nil)
     (:name ghub                            :checkout "c7ca6780bcd4d00d22e668e74b25f865ba892a45")
     (:name graphql                         :checkout "e2b309689f4faf9225f290080f836e988c5a576d")
     (:name i3-emacs                        :checkout "aaacb1930889ded9a8d8ffbbc2a46502c5cbc2fe"
@@ -63,7 +66,9 @@
     (:name ssh-agency                      :checkout "f8042250174fb72dd935b3e65820580e3232a6fd"
            :description "Use ssh-agent on win32 from Emacs"
            :type github :pkgname "magit/ssh-agency")
-    (:name transient                       :checkout "9e30038d2d69e4ad0f3333777137af52e4771442")
+    (:name transient                       :checkout "9e30038d2d69e4ad0f3333777137af52e4771442"
+           :build (progn nil)
+           :info nil)
     (:name treepy                          :checkout "b40e6b09eb9be45da67b8c9e4990a5a0d7a2a09d")
     (:name undo-tree                       :checkout "bc9d09555f5aeac6ac4684d748be763f64a7d80a")
     (:name use-package                     :checkout "38034854ac21bd5ddc1a1129fd6c8ff86d939f8a")
