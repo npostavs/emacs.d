@@ -16,7 +16,11 @@
            :description "Slime-style navigation of Emacs Lisp source with M-. & M-,"
            :type github
            :pkgname "purcell/elisp-slime-nav")
+    (:name closql                          :checkout "012b94f8695e194455111fd54eff0b94dd0dd0db")
+    (:name emacsql                         :checkout "5ebd12b6ffaa9fbadefe8518eab07a028bbaf7c1")
+    (:name forge                           :checkout "e856dd86e899034dadb15ea68f344d34020e26a4")
     (:name ghub                            :checkout "c7ca6780bcd4d00d22e668e74b25f865ba892a45")
+    (:name graphql                         :checkout "e2b309689f4faf9225f290080f836e988c5a576d")
     (:name i3-emacs                        :checkout "055510298fe2d5b52a346aebcec859af9b55ac3c"
            :description "i3 emacs integration"
            :type github
@@ -34,6 +38,7 @@
            :description "Magit extension for git-imerge"
            :type github
            :pkgname "magit/magit-imerge")
+    (:name markdown-mode                   :checkout "115f77df9755c6a453f3e5d9623ff885d207ea82")
     (:name multiple-cursors                :checkout "54e408fc682d968ad46846d8bff079cd704ff6fe")
     (:name package                         :checkout -
            ;; cut out el-get's post-init stuff
@@ -52,6 +57,7 @@
            :description "Use ssh-agent on win32 from Emacs"
            :type github :pkgname "magit/ssh-agency")
     (:name transient                       :checkout "9e30038d2d69e4ad0f3333777137af52e4771442")
+    (:name treepy                          :checkout "b40e6b09eb9be45da67b8c9e4990a5a0d7a2a09d")
     (:name undo-tree                       :checkout "bc9d09555f5aeac6ac4684d748be763f64a7d80a")
     (:name use-package                     :checkout "38034854ac21bd5ddc1a1129fd6c8ff86d939f8a")
     (:name with-editor                     :checkout "38df9bfc2227bcb7ac4899c83a03756d5f171450")
