@@ -2,6 +2,22 @@
 
 (defconst pkg-recipes-file "~/.emacs.d/elisp/np-recipes.el")
 
+(defun pkg-list-recipe-checkout-alignment ()
+  (with-current-buffer (find-file-noselect pkg-recipes-file)
+    (save-excursion
+      (goto-char (point-min))
+      (search-forward ":checkout")
+      (- (match-beginning 0) (line-beginning-position)))))
+
+(defun pkg-list-recipe-checkout-align ()
+  (interactive)
+  (let ((col (pkg-list-recipe-checkout-alignment)))
+    (search-forward ":checkout")
+    (save-excursion
+      (goto-char (match-beginning 0))
+      (when (<= (current-column) col)
+        (indent-to col)))))
+
 (defun pkg-list-entries ()
   (load pkg-recipes-file nil 'nomessage 'nosuffix)
   (delq
@@ -89,7 +105,11 @@
               (save-buffer)
               (eval-buffer)
               (revert-buffer))
-          (kill-new (format "(:name %s :checkout \"%s\")" pkg remote-rev))
+          (kill-new (with-temp-buffer
+                      (insert (format "(:name %s :checkout \"%s\")" pkg remote-rev))
+                      (search-backward ":checkout")
+                      (indent-to (pkg-list-recipe-checkout-alignment))
+                      (buffer-string)))
           (pop-to-buffer (current-buffer))
           (message "Couldn't find entry for %s, added one to kill-ring" pkg))))
      (t (message "remote = '%s', oops..." remote-rev)))))
@@ -115,6 +135,7 @@
 
 (define-key pkg-list-mode-map "U" #'pkg-list-update-to-target)
 (define-key pkg-list-mode-map "C" #'pkg-list-check-remote)
+(define-key pkg-list-mode-map "A" #'pkg-list-recipe-checkout-align)
 
 (defun pkg-list ()
   (interactive)
