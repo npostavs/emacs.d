@@ -576,7 +576,7 @@
     ;; this is too expensive to have on by default
     (setq magit-backup-mode nil)
 
-    ;; defaults for popups
+    ;; defaults for popups, obsolete.
     (setq magit-branch-popup-show-variables nil)
 
     ;; Transient doesn't support adding groups yet (I think).  Hack
@@ -622,10 +622,7 @@
     ;; there aren't.
     (defvar-local np/magit-want-submodules t)
     (put 'np/magit-want-submodules 'permanent-local t)
-    (bind-key "j m" #'magit-jump-to-submodules magit-status-mode-map)
-
-    (font-lock-add-keywords 'emacs-lisp-mode
-                            magit-font-lock-keywords)))
+    (bind-key "j m" #'magit-jump-to-submodules magit-status-mode-map)))
 
 (use-package git-commit
   :defer t
