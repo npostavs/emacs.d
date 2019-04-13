@@ -106,7 +106,8 @@
               (eval-buffer)
               (revert-buffer))
           (kill-new (with-temp-buffer
-                      (insert (format "(:name %s :checkout \"%s\")" pkg remote-rev))
+                      ;; Initial spacing to match np-recipes.el indent.
+                      (insert (format "    (:name %s :checkout \"%s\")" pkg remote-rev))
                       (search-backward ":checkout")
                       (indent-to (pkg-list-recipe-checkout-alignment))
                       (buffer-string)))
