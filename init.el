@@ -406,7 +406,7 @@
                               (mode . gnus-summary-mode)))
              ("Procs" (predicate . (get-buffer-process (current-buffer))))
              ("Grep"  (mode . grep-mode))
-             ("Magit" (name . "\\`[*]magit.*:")))))
+             ("Magit" (derived-mode . magit-mode)))))
 
     (define-and-add-hook ibuffer-mode-hook
       (ibuffer-switch-to-saved-filter-groups "default"))))
@@ -596,16 +596,6 @@
     ;; To undo the effect, evaluate:
     ;;
     ;;   (pop (get 'magit-patch 'transient--layout))
-
-    (transient-append-suffix 'magit-patch "r"
-      '("E" "Prepare patches for Emacs bug" magit-prepare-emacs-patches))
-    (magit-define-popup-action 'magit-patch-popup ?E
-      "Prepare patches for Emacs bug" 'magit-prepare-emacs-patches)
-
-    ;;; I forget why I wanted this.
-    ;; (magit-define-popup-switch 'magit-patch-apply-popup ?r
-    ;;   "Allow partial rejection" "--reject")
-
 
     (set-face-foreground 'magit-hash
                          (face-foreground 'font-lock-type-face))

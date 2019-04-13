@@ -1,5 +1,6 @@
 (defconst el-get-sources
   '((:name ace-jump-mode                   :checkout "8351e2df4fbbeb2a4003f2fb39f46d33803f3dac")
+    (:name ample-regexps                   :checkout "cbe91e148cac1ee8e223874dc956ed4cf607f046")
     (:name anaphora                        :checkout "20bf7dcfa502538d23525f0905b4f845d97993d3"
            :description "Anaphoric expressions for Emacs Lisp, providing implicit temporary variables."
            :type github
@@ -16,6 +17,10 @@
            :description "Slime-style navigation of Emacs Lisp source with M-. & M-,"
            :type github
            :pkgname "purcell/elisp-slime-nav")
+    (:name emacs-async                     :checkout "81dc034572e963550c5403a2b3c28047e46b4029")
+    (:name esqlite                         :checkout "bc4047e09b8f6c34802db86095cd465935670dce"
+           ;; Has pcsc as submodule, we already have it as el-get dep.
+           :submodule nil)
     (:name closql                          :checkout "012b94f8695e194455111fd54eff0b94dd0dd0db")
     (:name emacsql                         :checkout "5ebd12b6ffaa9fbadefe8518eab07a028bbaf7c1")
     (:name forge                           :checkout "e856dd86e899034dadb15ea68f344d34020e26a4")
@@ -34,7 +39,7 @@
            :branch "origin/current" :pkgname "npostavs/magit"
            :build (with-temp-file "lisp/magit-autoloads.el" nil)
            :info nil)
-    (:name magit-imerge                    :checkout "546f76d14f16b114837f38d21c29ea6f6adfeaa7"
+    (:name magit-imerge                    :checkout "54f2e25eb5f9e9763a60808ecfc1edef7f276ce0"
            :description "Magit extension for git-imerge"
            :type github
            :pkgname "magit/magit-imerge")
@@ -48,6 +53,7 @@
            :description "Parse, convert, and font-lock PCRE, Emacs and rx regexps"
            :type github
            :pkgname "joddie/pcre2el")
+    (:name pcsv                            :checkout "798e0933f8d0818beb17aebf3b1056bbf74e03d0")
     (:name pretty-symbols                  :checkout "fc49af3da086431c498adf92a86a9b5f70c6aad3"
            :description "Minor mode for drawing multi-character tokens as Unicode glyphs"
            :type github :pkgname "drothlis/pretty-symbols")
