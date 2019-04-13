@@ -93,7 +93,6 @@
 (setq-default indicate-empty-lines t
               indent-tabs-mode nil
               tab-width 4
-              c-basic-offset 'set-from-style ; Just keep it as default
               truncate-lines t)
 
 (when (fboundp 'tool-bar-mode)
@@ -500,7 +499,6 @@
 
 ;; cc-mode
 (use-package cc-mode
-  :init (setq-default c-basic-offset 4)
   :config
   (define-and-add-hook c-mode-common-hook
     (unless (fboundp 'global-subword-mode)
