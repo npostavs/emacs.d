@@ -672,6 +672,56 @@
              '(markdown-pre-face
                ((t (:inherit (mode-line markdown-code-face)  :background "gainsboro")))))))
 
+;; irc
+(use-package rcirc
+  :init (progn (setq rcirc-server-alist '(("irc.freenode.net"
+                                           :channels ("#emacs")
+                                           :port 6697 ; rfc7194
+                                           :encryption tls
+                                           :user "npostavs"
+                                           :nick "npostavs")))
+               (define-and-add-hook rcirc-track-minor-mode-hook
+                 ;; Update list of in/visible buffers on frame
+                 ;; switching too.
+                 (if rcirc-track-minor-mode
+                     (add-hook 'focus-in-hook
+                               'rcirc-window-configuration-change)
+                   (remove-hook 'focus-in-hook
+                                'rcirc-window-configuration-change)))
+               (add-hook 'rcirc-mode-hook #'rcirc-track-minor-mode))
+  :defer t
+  :config (progn (defun np/jump-to-rcirc (check-lopri)
+                   (interactive "P")
+                   (pcase-let ((`(,lopri . ,hipri) (rcirc-split-activity rcirc-activity)))
+                     (if (or (and (not check-lopri) hipri)
+                             (and check-lopri lopri))
+                         (progn
+                           (pop-to-buffer-same-window (car (if check-lopri lopri hipri)))
+                           (rcirc-jump-to-first-unread-line)
+                           (recenter))
+                       (rcirc-bury-buffers)
+                       (message "No IRC activity.%s"
+                                (if lopri
+                                    (concat
+                                     "  Type C-u " (key-description (this-command-keys))
+                                     " for low priority activity.")
+                                  "")))))
+                 (bind-key "<f12>" 'np/jump-to-rcirc)
+                 (let* ((auth (car (auth-source-search
+                                    :host "irc.freenode.net")))
+                        (secret (plist-get auth :secret))
+                        (host (plist-get auth :host)))
+                   (setf ;; Technically, we should `regexp-quote' the
+                         ;; host here, but whatever.
+                         (alist-get host rcirc-authinfo nil nil #'equal)
+                         `(nickserv
+                           ,(plist-get (alist-get host rcirc-server-alist
+                                                  nil nil #'equal)
+                                       :nick)
+                           ,(if (functionp secret)
+                                (funcall secret)
+                              secret))))))
+
 ;; use GNU make
 (add-to-list 'auto-mode-alist '("Makefile" . makefile-gmake-mode))
 
