@@ -660,6 +660,7 @@
             (cl-callf2 remq #'turn-on-flyspell forge-post-mode-hook)))
 
 (use-package markdown-mode
+  :init (setq markdown-gfm-use-electric-backquote nil) ; It's annoying.
   :defer t
   :config (progn
             ;; Default underlining from `font-lock-constant-face' is
@@ -669,8 +670,7 @@
             (custom-theme-set-faces
              'user
              '(markdown-pre-face
-               ((t (:inherit (mode-line markdown-code-face)  :background "gainsboro")))))
-            (set-face-)))
+               ((t (:inherit (mode-line markdown-code-face)  :background "gainsboro")))))))
 
 ;; use GNU make
 (add-to-list 'auto-mode-alist '("Makefile" . makefile-gmake-mode))
