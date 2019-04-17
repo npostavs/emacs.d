@@ -549,7 +549,7 @@ removed instead."
                    (buffer-string))))
       (with-temp-buffer
         (setq default-directory (debbugs-read-repo "Commit to: "))
-        (magit-commit
+        (magit-commit-create
          (list (concat "--author=" from)
                (concat "--date=" date)
                (concat "--message=" subject)
