@@ -44,6 +44,7 @@
            :type github
            :pkgname "magit/magit-imerge")
     (:name markdown-mode                   :checkout "115f77df9755c6a453f3e5d9623ff885d207ea82")
+    (:name memoize                         :checkout "9a561268ffb550b257a08710489a95cd087998b6")
     (:name multiple-cursors                :checkout "54e408fc682d968ad46846d8bff079cd704ff6fe")
     (:name package                         :checkout -
            ;; cut out el-get's post-init stuff
