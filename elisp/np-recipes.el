@@ -26,7 +26,7 @@
     (:name forge                           :checkout "e856dd86e899034dadb15ea68f344d34020e26a4")
     (:name ghub                            :checkout "c7ca6780bcd4d00d22e668e74b25f865ba892a45")
     (:name graphql                         :checkout "e2b309689f4faf9225f290080f836e988c5a576d")
-    (:name i3-emacs                        :checkout "055510298fe2d5b52a346aebcec859af9b55ac3c"
+    (:name i3-emacs                        :checkout "aaacb1930889ded9a8d8ffbbc2a46502c5cbc2fe"
            :description "i3 emacs integration"
            :type github
            :pkgname "vava/i3-emacs")
