@@ -7,7 +7,7 @@
            :pkgname "rolandwalker/anaphora")
     (:name dash                            :checkout "63022432e1f7bcc5af9582f29d4ed0552a2e658b"
            :branch "2.15.0")
-    (:name debbugs                         :checkout "0.16"
+    (:name debbugs                         :checkout "0.18"
            :type elpa :description "SOAP library to access debbugs servers")
     (:name diminish                        :checkout "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
     (:name dired-details                   :checkout "3de7e19ae874dac03edf9951648a1f11f52dead6")

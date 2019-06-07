@@ -391,6 +391,17 @@ removed instead."
           "patch" (car (debbugs-implicit-ids))))))
     (_ (user-error "Patches not prepared"))))
 
+(defun debbugs-gnu-read-commit-range-from-magit ()
+  (when (derived-mode-p 'magit-mode)
+    (-if-let (revs (magit-region-values 'commit))
+        (concat (car (last revs)) "^.." (car revs))
+      (let ((range (magit-read-range-or-commit "Format range or commit")))
+        (if (string-match-p "\\.\\." range)
+            range
+          (format "%s~..%s" range range))))))
+(add-hook 'debbugs-gnu-read-commit-range-hook
+          #'debbugs-gnu-read-commit-range-from-magit)
+
 (defun magit-announce-pushed-emacs-patches (range)
   (interactive (list magit-emacs-patch-rev-list))
   (pcase range
@@ -401,12 +412,14 @@ removed instead."
          (magit-pop-revision-stack rev repo-dir))
        (when (y-or-n-p "Close bug? ")
          (let ((emacs-version
-                (with-temp-buffer
-                  (insert-file-contents "configure.ac")
-                  (re-search-forward "^ *AC_INIT(GNU Emacs, *\\([0-9.]+\\), *bug-gnu-emacs@gnu.org")
-                  (match-string 1))))
+                (or (and (file-exists-p "configure.ac")
+                         (with-temp-buffer
+                           (insert-file-contents "configure.ac")
+                           (and (re-search-forward "^ *AC_INIT(GNU Emacs, *\\([0-9.]+\\), *bug-gnu-emacs@gnu.org" nil t)
+                                (match-string 1))))
+                    "")))
            (debbugs-gnu-make-control-message
-            "done" (car (debbugs-implicit-ids)))))))
+            "done" (car (debbugs-implicit-ids)) nil (current-buffer))))))
     (_ (user-error "Patches not prepared"))))
 
 (defvar debbugs-gnu-repos '("~/src/emacs/emacs-master/"

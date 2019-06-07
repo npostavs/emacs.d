@@ -74,8 +74,9 @@
 (setq send-mail-function #'smtpmail-send-it
       mail-host-address "gmail.com"
       smtpmail-smtp-server "smtp.gmail.com"
-      smtpmail-smtp-service 465
       smtpmail-stream-type 'tls
+      ;; 587 is for `starttls', not as good.  25 is plaintext, bad.
+      smtpmail-smtp-service 465
 
       ;; Allow toggling between text and HTML views of emails.
       ;; Possibly setting `gnus-buttonized-mime-types' and/or
@@ -540,7 +541,9 @@
          magit-auto-revert-mode nil
          magit-revert-buffers nil       ; obsolete
          ;; and just delete for real.
-         magit-delete-by-moving-to-trash nil)
+         magit-delete-by-moving-to-trash nil
+         magit-diff-highlight-indentation '(("" . tabs))
+         magit-diff-paint-whitespace-lines 'all)
   :config
   (progn
     ;; NOTE: require ido-ubiquitous
@@ -693,18 +696,13 @@
   :config (progn (bind-key "<f12>" 'np/jump-to-rcirc)
                  (let* ((auth (car (auth-source-search
                                     :host "irc.freenode.net")))
-                        (secret (plist-get auth :secret))
-                        (host (plist-get auth :host)))
-                   (setf ;; Technically, we should `regexp-quote' the
-                         ;; host here, but whatever.
-                         (alist-get host rcirc-authinfo nil nil #'equal)
-                         `(nickserv
-                           ,(plist-get (alist-get host rcirc-server-alist
-                                                  nil nil #'equal)
-                                       :nick)
-                           ,(if (functionp secret)
-                                (funcall secret)
-                              secret))))
+                        (secret (plist-get auth :secret)))
+                   (setq rcirc-authinfo nil) ; Start from clean slate
+                   (setf (alist-get "[.]freenode[.]net\\'" rcirc-authinfo nil nil #'equal)
+                         `(nickserv "npostavs"
+                                    ,(if (functionp secret)
+                                         (funcall secret)
+                                       secret))))
                  ;; Work around bug, TODO: fix it properly in Emacs.
                  (defun my-listify-arg1 (args)
                    (when (bufferp (nth 0 args))
