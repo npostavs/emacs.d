@@ -709,18 +709,13 @@
                  (bind-key "<f12>" 'np/jump-to-rcirc)
                  (let* ((auth (car (auth-source-search
                                     :host "irc.freenode.net")))
-                        (secret (plist-get auth :secret))
-                        (host (plist-get auth :host)))
-                   (setf ;; Technically, we should `regexp-quote' the
-                         ;; host here, but whatever.
-                         (alist-get host rcirc-authinfo nil nil #'equal)
-                         `(nickserv
-                           ,(plist-get (alist-get host rcirc-server-alist
-                                                  nil nil #'equal)
-                                       :nick)
-                           ,(if (functionp secret)
-                                (funcall secret)
-                              secret))))))
+                        (secret (plist-get auth :secret)))
+                   (setq rcirc-authinfo nil) ; Start from clean slate
+                   (setf (alist-get "[.]freenode[.]net\\'" rcirc-authinfo nil nil #'equal)
+                         `(nickserv "npostavs"
+                                    ,(if (functionp secret)
+                                         (funcall secret)
+                                       secret))))))
 
 ;; use GNU make
 (add-to-list 'auto-mode-alist '("Makefile" . makefile-gmake-mode))
