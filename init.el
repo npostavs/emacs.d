@@ -538,7 +538,9 @@
          magit-auto-revert-mode nil
          magit-revert-buffers nil       ; obsolete
          ;; and just delete for real.
-         magit-delete-by-moving-to-trash nil)
+         magit-delete-by-moving-to-trash nil
+         magit-diff-highlight-indentation '(("" . tabs))
+         magit-diff-paint-whitespace-lines 'all)
   :config
   (progn
     ;; NOTE: require ido-ubiquitous
