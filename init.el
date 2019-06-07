@@ -73,9 +73,9 @@
 ;; Mail settings.
 (setq send-mail-function #'smtpmail-send-it
       mail-host-address "gmail.com"
-      smtpmail-smtp-server "smtp.googlemail.com"
-      smtpmail-smtp-service 587 ;25
-      smtpmail-smtp-service 25 ;587
+      smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-smtp-service 465
+      smtpmail-stream-type 'tls
 
       ;; Allow toggling between text and HTML views of emails.
       ;; Possibly setting `gnus-buttonized-mime-types' and/or
@@ -399,10 +399,13 @@
                          (mode . completion-list-mode)
                          (mode . Man-mode)))
              ("Mail/News" (or (filename . "newsrc-dribble")
+                              (name . "*Group*")
                               (mode . message-mode)
                               (mode . gnus-article-mode)
                               (mode . gnus-group-mode)
                               (mode . gnus-summary-mode)))
+             ("Irc" (or (derived-mode . rcirc-mode)
+                        (derived-mode . erc-mode)))
              ("Procs" (predicate . (get-buffer-process (current-buffer))))
              ("Grep"  (mode . grep-mode))
              ("Magit" (derived-mode . magit-mode)))))
@@ -687,23 +690,7 @@
                                 'rcirc-window-configuration-change)))
                (add-hook 'rcirc-mode-hook #'rcirc-track-minor-mode))
   :defer t
-  :config (progn (defun np/jump-to-rcirc (check-lopri)
-                   (interactive "P")
-                   (pcase-let ((`(,lopri . ,hipri) (rcirc-split-activity rcirc-activity)))
-                     (if (or (and (not check-lopri) hipri)
-                             (and check-lopri lopri))
-                         (progn
-                           (pop-to-buffer-same-window (car (if check-lopri lopri hipri)))
-                           (rcirc-jump-to-first-unread-line)
-                           (recenter))
-                       (rcirc-bury-buffers)
-                       (message "No IRC activity.%s"
-                                (if lopri
-                                    (concat
-                                     "  Type C-u " (key-description (this-command-keys))
-                                     " for low priority activity.")
-                                  "")))))
-                 (bind-key "<f12>" 'np/jump-to-rcirc)
+  :config (progn (bind-key "<f12>" 'np/jump-to-rcirc)
                  (let* ((auth (car (auth-source-search
                                     :host "irc.freenode.net")))
                         (secret (plist-get auth :secret))
@@ -717,7 +704,37 @@
                                        :nick)
                            ,(if (functionp secret)
                                 (funcall secret)
-                              secret))))))
+                              secret))))
+                 ;; Work around bug, TODO: fix it properly in Emacs.
+                 (defun my-listify-arg1 (args)
+                   (when (bufferp (nth 0 args))
+                     (cl-callf (lambda (arg1) (list (aref (buffer-name arg1) 0))) (nth 0 args)))
+                   args)
+                 (advice-add 'rcirc-rebuild-tree :filter-args #'my-listify-arg1)))
+
+(use-package 'erc
+  :defer t
+  :init (progn (setq erc-prompt-for-password nil)
+               (setq erc-port 6697)     ; rfc7194
+               (setq erc-track-enable-keybindings nil) ; I bind to f12 anyway.
+               (setq erc-autojoin-channels-alist
+                     `(("freenode[.]net\\'" "#emacs"))))
+  :config (progn (defun my-erc-track-switch-buffer (arg)
+                   (interactive "p")
+                   (when (derived-mode-p 'erc-mode)
+                     ;; Save point before switching away.
+                     (goto-char (point-max))
+                     (forward-line -1))
+                   (let ((switch-to-buffer-preserve-window-point nil))
+                     (erc-track-switch-buffer arg))
+                   (when (derived-mode-p 'erc-mode)
+                     ;; Show new messages when switching back.
+                     (forward-line 1)
+                     (recenter))) ; Some context.
+                 (bind-key "<f12>" 'my-erc-track-switch-buffer)
+                 (add-to-list 'erc-track-exclude-types "JOIN")
+                 (add-to-list 'erc-track-exclude-types "PART")
+                 (add-to-list 'erc-track-exclude-types "QUIT")))
 
 ;; use GNU make
 (add-to-list 'auto-mode-alist '("Makefile" . makefile-gmake-mode))

@@ -43,6 +43,9 @@ single integer"
   (unload-feature feature t)
   (require feature))
 
+
+;;; dwim (?) line movement
+
 (defun beginning-of-line-dwim (&optional logical)
   "Go back to line's beginning or indentation, whichever is first.
 
@@ -82,6 +85,9 @@ Prefix arg means just go to logical ending unconditionally."
   (set alist-var (cons (cons key value)
                        (assq-delete-all key (symbol-value alist-var)))))
 
+
+;;; Info node linking
+
 (defconst Info-browse-format
   "https://www.gnu.org/software/emacs/manual/html_node/%s/%s.html")
 (defun Info-node-url (file node)
@@ -109,7 +115,31 @@ Prefix arg means just go to logical ending unconditionally."
                     Info-current-node
                     (Info-node-url Info-current-file Info-current-node))))
 
+
+;;; RCIRC functions
 
+(defun np/jump-to-rcirc (check-lopri)
+  (interactive "P")
+  (pcase-let ((`(,lopri . ,hipri) (rcirc-split-activity rcirc-activity)))
+    (if (or (and (not check-lopri) hipri)
+            (and check-lopri lopri))
+        (progn
+          (pop-to-buffer-same-window (car (if check-lopri lopri hipri)))
+          (rcirc-jump-to-first-unread-line)
+          (recenter))
+      (rcirc-bury-buffers)
+      (message "No IRC activity.%s"
+               (if lopri
+                   (concat
+                    "  Type C-u " (key-description (this-command-keys))
+                    " for low priority activity.")
+                 "")))))
+
+
+
+
+
+;;; Repeatable commands.
 ;; Based on `kmacro-call-macro' code.  There is a library form for
 ;; this sort of thing, but it looks a lot more complicated possibly
 ;; because it's working with older emacsen.
@@ -130,6 +160,7 @@ sequence, just like C-x e e e..."
                               (apply cmd args))))
       map))))
 
+
 ;; `describe-bindings' orders the keymaps by precedence so the
 ;; major-mode goes next to last, which makes it a bit inconvenient
 ;; for quick lookup.
