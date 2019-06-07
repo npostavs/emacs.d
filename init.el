@@ -73,9 +73,10 @@
 ;; Mail settings.
 (setq send-mail-function #'smtpmail-send-it
       mail-host-address "gmail.com"
-      smtpmail-smtp-server "smtp.googlemail.com"
-      smtpmail-smtp-service 587 ;25
-      smtpmail-smtp-service 25 ;587
+      smtpmail-smtp-server "smtp.gmail.com"
+      smtpmail-stream-type 'tls
+      ;; 587 is for `starttls', not as good.  25 is plaintext, bad.
+      smtpmail-smtp-service 465
 
       ;; Allow toggling between text and HTML views of emails.
       ;; Possibly setting `gnus-buttonized-mime-types' and/or
