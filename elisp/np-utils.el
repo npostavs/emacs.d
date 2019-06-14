@@ -116,7 +116,21 @@ Prefix arg means just go to logical ending unconditionally."
                     (Info-node-url Info-current-file Info-current-node))))
 
 
-;;; RCIRC functions
+;;; RCIRC function/config
+
+(defun np/start-rcirc ()
+  (interactive)
+  ;; Set `rcirc-authinfo' from ~/.authinfo.gpg.
+  (let* ((auth (car (auth-source-search
+                     :host "irc.freenode.net")))
+         (secret (plist-get auth :secret)))
+    (setq rcirc-authinfo
+          `(("[.]freenode[.]net\\'"
+             . (nickserv "npostavs"
+                         ,(if (functionp secret)
+                              (funcall secret)
+                            secret))))))
+  (rcirc nil))
 
 (defun np/jump-to-rcirc (check-lopri)
   (interactive "P")

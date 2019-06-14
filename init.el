@@ -683,6 +683,8 @@
                                            :encryption tls
                                            :user "npostavs"
                                            :nick "npostavs")))
+               ;; Use <f12> to start rcirc...
+               (bind-key "<f12>" 'np/start-rcirc)
                (define-and-add-hook rcirc-track-minor-mode-hook
                  ;; Update list of in/visible buffers on frame
                  ;; switching too.
@@ -693,16 +695,8 @@
                                 'rcirc-window-configuration-change)))
                (add-hook 'rcirc-mode-hook #'rcirc-track-minor-mode))
   :defer t
-  :config (progn (bind-key "<f12>" 'np/jump-to-rcirc)
-                 (let* ((auth (car (auth-source-search
-                                    :host "irc.freenode.net")))
-                        (secret (plist-get auth :secret)))
-                   (setq rcirc-authinfo nil) ; Start from clean slate
-                   (setf (alist-get "[.]freenode[.]net\\'" rcirc-authinfo nil nil #'equal)
-                         `(nickserv "npostavs"
-                                    ,(if (functionp secret)
-                                         (funcall secret)
-                                       secret))))
+  :config (progn ;; ...then later use it jump to running rcirc.
+                 (bind-key "<f12>" 'np/jump-to-rcirc)
                  ;; Work around bug, TODO: fix it properly in Emacs.
                  (defun my-listify-arg1 (args)
                    (when (bufferp (nth 0 args))
@@ -710,7 +704,7 @@
                    args)
                  (advice-add 'rcirc-rebuild-tree :filter-args #'my-listify-arg1)))
 
-(use-package 'erc
+(use-package erc
   :defer t
   :init (progn (setq erc-prompt-for-password nil)
                (setq erc-port 6697)     ; rfc7194
