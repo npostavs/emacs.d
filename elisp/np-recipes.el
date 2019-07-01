@@ -21,7 +21,7 @@
     (:name esqlite                         :checkout "bc4047e09b8f6c34802db86095cd465935670dce"
            ;; Has pcsc as submodule, we already have it as el-get dep.
            :submodule nil)
-    (:name closql                          :checkout "012b94f8695e194455111fd54eff0b94dd0dd0db")
+    (:name closql                          :checkout "7db24ab416925214b364ffe6bb36e367c43d5d35")
     (:name emacsql                         :checkout "5ebd12b6ffaa9fbadefe8518eab07a028bbaf7c1")
     (:name esqlite                         :checkout "bc4047e09b8f6c34802db86095cd465935670dce")
     (:name forge                           :checkout "e856dd86e899034dadb15ea68f344d34020e26a4"
