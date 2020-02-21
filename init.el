@@ -68,6 +68,11 @@
       ;; No more damn prompts!
       dired-recursive-deletes 'always
       dired-recursive-copies 'always
+
+      ;; When nil, there can be intolerable delays when displaying
+      ;; files with many non-ascii characters.
+      inhibit-compacting-font-caches t
+
       )
 
 ;; Mail settings.
@@ -77,6 +82,10 @@
       smtpmail-stream-type 'tls
       ;; 587 is for `starttls', not as good.  25 is plaintext, bad.
       smtpmail-smtp-service 465
+
+      ;; The OS doesn't always have this configured properly.
+      user-full-name "Noam Postavsky"
+      user-mail-address (concat (user-login-name) "@" mail-host-address)
 
       ;; Allow toggling between text and HTML views of emails.
       ;; Possibly setting `gnus-buttonized-mime-types' and/or
@@ -608,6 +617,15 @@
                       'magit-toggle-margin 'magit-log-toggle-margin)
               magit-mode-map)
     (bind-key "C-c C-l" 'magit-toggle-buffer-lock magit-mode-map)
+    (defun np/magit-show-commit-in-kill-ring (rev)
+      (interactive
+       (let ((kill (current-kill 0)))
+         (list (if (string-match-p "\\`[[:xdigit:]]+\\'" kill)
+                   kill
+                 (magit-read-branch-or-commit "Show commit")))))
+      (magit-show-commit rev))
+    (bind-key "C-y" #'np/magit-show-commit-in-kill-ring
+              magit-mode-map)
 
     ;; Show worktree section if there are worktrees, avoid overhead if
     ;; there aren't.
@@ -742,7 +760,8 @@
   :init (setq orig-default-notes-file "~/.emacs.d/notes"
               org-startup-folded nil
               org-confirm-babel-evaluate nil
-              org-export-copy-to-kill-ring nil))
+              org-export-copy-to-kill-ring nil
+              org-catch-invisible-edits 'error))
 
 ;;; probably this should be replaced with projectile or something
 (when (eq system-type 'windows-nt)
