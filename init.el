@@ -711,7 +711,9 @@
                                'rcirc-window-configuration-change)
                    (remove-hook 'focus-in-hook
                                 'rcirc-window-configuration-change)))
-               (add-hook 'rcirc-mode-hook #'rcirc-track-minor-mode))
+               (add-hook 'rcirc-mode-hook #'rcirc-track-minor-mode)
+               ;; Line up text underneath timestamp.
+               (setq rcirc-fill-prefix (make-string (length "hh:mm ") ?\s)))
   :defer t
   :config (progn ;; ...then later use it jump to running rcirc.
                  (bind-key "<f12>" 'np/jump-to-rcirc)
@@ -720,7 +722,8 @@
                    (when (bufferp (nth 0 args))
                      (cl-callf (lambda (arg1) (list (aref (buffer-name arg1) 0))) (nth 0 args)))
                    args)
-                 (advice-add 'rcirc-rebuild-tree :filter-args #'my-listify-arg1)))
+                 (advice-add 'rcirc-rebuild-tree :filter-args #'my-listify-arg1)
+                 (add-hook 'rcirc-markup-text-functions 'np/rcirc-markup-hide-name-list)))
 
 (use-package erc
   :defer t

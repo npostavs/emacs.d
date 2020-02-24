@@ -149,8 +149,17 @@ Prefix arg means just go to logical ending unconditionally."
                     " for low priority activity.")
                  "")))))
 
-
-
+(defun np/rcirc-markup-hide-name-list (sender response)
+  "Hide irc nicks with a `display' property.
+Add to `rcirc-markup-text-functions'."
+  (when (member response '("QUIT" "PART" "NAMES"))
+    (setq rcirc-trap-errors-flag nil)
+    ;; Need to subtract 1 for the added "…", and 3 because
+    ;; `rcirc-markup-fill' subtracts 3 (also of "..."!?).
+    (move-to-column (- (or rcirc-fill-column fill-column) 1 3))
+    (unless (eolp)
+      (delete-region (point) (line-end-position))
+      (insert ?…))))
 
 
 ;;; Repeatable commands.
