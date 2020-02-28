@@ -134,20 +134,34 @@ Prefix arg means just go to logical ending unconditionally."
 
 (defun np/jump-to-rcirc (check-lopri)
   (interactive "P")
-  (pcase-let ((`(,lopri . ,hipri) (rcirc-split-activity rcirc-activity)))
-    (if (or (and (not check-lopri) hipri)
-            (and check-lopri lopri))
-        (progn
-          (pop-to-buffer-same-window (car (if check-lopri lopri hipri)))
-          (rcirc-jump-to-first-unread-line)
-          (recenter))
-      (rcirc-bury-buffers)
-      (message "No IRC activity.%s"
-               (if lopri
-                   (concat
-                    "  Type C-u " (key-description (this-command-keys))
-                    " for low priority activity.")
-                 "")))))
+  (pcase-let* ((`(,lopri . ,hipri) (rcirc-split-activity rcirc-activity))
+               (activity (or hipri (and check-lopri lopri))))
+    (cond (activity
+           (pop-to-buffer-same-window (car activity))
+           (rcirc-jump-to-first-unread-line)
+           (recenter))
+          ((null (rcirc-process-list))
+           ;; No rcirc processes, probably got disconnected.
+           (save-current-buffer
+             (let ((server-bufs nil))
+               (dolist (buf (buffer-list))2
+                       (set-buffer buf)
+                       (let ((sbuf (and (derived-mode-p 'rcirc-mode)
+                                        (bound-and-true-p rcirc-server-buffer))))
+                         (when (and sbuf (not (memq sbuf server-bufs)))
+                           (push sbuf server-bufs)
+                           (set-buffer sbuf)
+                           (unless (process-live-p rcirc-process)
+                             (when (y-or-n-p (format "%s disconnected.  Reconnect? " rcirc-process))
+                               (rcirc-cmd-reconnect nil))))))
+               server-bufs)))
+          (t (rcirc-bury-buffers)
+             (message "No IRC activity.%s"
+                      (if lopri
+                          (concat
+                           "  Type C-u " (key-description (this-command-keys))
+                           " for low priority activity.")
+                        ""))))))
 
 (defun np/rcirc-markup-hide-name-list (sender response)
   "Hide irc nicks with a `display' property.
