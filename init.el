@@ -92,6 +92,8 @@
       ;; `gnus-unbuttonized-mime-types' might be more sensible, but I
       ;; can't be bothered to figure it out right now.
       gnus-inhibit-mime-unbuttonizing t
+      ;; No annoying images in front of from address please.
+      gnus-treat-display-face nil
       ;; Some mail comes with text/html and text/plain alternatives.
       ;; Don't take the text/html, if possible.
       mm-discouraged-alternatives '("text/html" "text/richtext")
@@ -157,6 +159,8 @@
 (bind-key "p" 'occur-prev occur-mode-map)
 ;; Almost always want to see major mode keymap
 (bind-key "b" 'describe-major-mode-bindings help-map)
+;; `apropos' usually more useful than `apropos-command'.
+(bind-key "a" 'apropos help-map)
 ;; single key non-homerow bindings for some less common operations
 (bind-key* "<delete>" 'delete-region)
 ;; some compatibility with Windows/VisualC++ stuff
@@ -552,7 +556,9 @@
          ;; and just delete for real.
          magit-delete-by-moving-to-trash nil
          magit-diff-highlight-indentation '(("" . tabs))
-         magit-diff-paint-whitespace-lines 'all)
+         magit-diff-paint-whitespace-lines 'all
+         ;; Default was ("-n256" "--decorate").
+         magit-log-section-arguments '("--graph" "-n128" "--decorate"))
   :config
   (progn
     ;; NOTE: require ido-ubiquitous
@@ -626,6 +632,7 @@
       (magit-show-commit rev))
     (bind-key "C-y" #'np/magit-show-commit-in-kill-ring
               magit-mode-map)
+    (bind-key "C-c e" 'debbugs-gnu-pick-commits magit-mode-map)
 
     ;; Show worktree section if there are worktrees, avoid overhead if
     ;; there aren't.
@@ -779,6 +786,13 @@
     (format "start \"%s\" /D %s cmd.exe"
             name (shell-quote-argument dir)))
    (dired dir)))
+
+;; Lilypond.
+(when (file-exists-p "~/src/lilypond-mode/")
+  (add-to-list 'load-path "~/src/lilypond-mode/")
+  (autoload 'LilyPond-mode "lilypond-mode")
+  (add-to-list 'auto-mode-alist '("\\.i?ly$" . LilyPond-mode)))
+
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

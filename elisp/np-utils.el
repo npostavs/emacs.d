@@ -459,14 +459,11 @@ removed instead."
             "done" (car (debbugs-implicit-ids)) nil (current-buffer))))))
     (_ (user-error "Patches not prepared"))))
 
-(defvar debbugs-gnu-repos '("~/src/emacs/emacs-master/"
-                            "~/src/emacs/emacs-bootstrapping/"
-                            "~/src/emacs/emacs-26/"
-                            "~/src/emacs/elpa/"))
+
 (defvar debbugs-gnu-repo-history nil)
 
 (defun debbugs-read-repo (prompt)
-  (completing-read prompt debbugs-gnu-repos
+  (completing-read prompt (np-build-emacs-workdirs #'abbreviate-file-name)
                    #'file-directory-p nil nil
                    'debbugs-gnu-repo-history (car debbugs-gnu-repo-history)))
 
@@ -642,7 +639,7 @@ removed instead."
     "Message-ID" "References" "In-Reply-To"
     "X-Headers-End"))
 
-(defun debbugs-clean-headers ()
+(defun debbugs-clean-headers () ; Used in `debbugs-gnu-grab-patch'.
   "Remove irrelevant headers, so I can see the important stuff."
   (save-restriction
     (message-narrow-to-head)
@@ -761,8 +758,7 @@ removed instead."
            fill-column)))
     (call-interactively #'fill-paragraph)))
 
-;;; from https://github.com/re5et/.emacs.d/blob/master/my/my-functions.el
-
+;;; from https://www.emacswiki.org/emacs/TransposeWindows
 (defun rotate-frame-window-buffers ()
   (interactive)
   (let ((window-and-buffers
@@ -777,6 +773,7 @@ removed instead."
         (switch-to-buffer buffer))))
   (make-repeatable 'rotate-frame-window-buffers))
 
+;;; https://www.emacswiki.org/emacs/ToggleWindowSplit
 (defun toggle-window-split ()
   (interactive)
   (if (= (count-windows) 2)
