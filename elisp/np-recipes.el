@@ -7,11 +7,11 @@
            :pkgname "rolandwalker/anaphora")
     (:name dash                            :checkout "63022432e1f7bcc5af9582f29d4ed0552a2e658b"
            :branch "2.15.0")
-    (:name debbugs                         :checkout "0.18"
+    (:name debbugs                         :checkout "0.46"
            :type elpa :description "SOAP library to access debbugs servers")
     (:name diminish                        :checkout "73669b69e5f9a0c9261c5b53624329d0e24d1ed8")
     (:name dired-details                   :checkout "3de7e19ae874dac03edf9951648a1f11f52dead6")
-    (:name el-get                          :checkout "38cd5aa6b4627a6e14abea995e19fb8f648b27b1"
+    (:name el-get                          :checkout "f81d0f152136e9be1155b616b76db81ab4bc2fa2"
            :pkgname "npostavs/el-get" :branch "origin/current")
     (:name elisp-slime-nav                 :checkout "1a2cb6a832635bde694fd25cc6dce2962aad3807"
            :description "Slime-style navigation of Emacs Lisp source with M-. & M-,"
@@ -70,7 +70,8 @@
            :build (progn nil)
            :info nil)
     (:name treepy                          :checkout "b40e6b09eb9be45da67b8c9e4990a5a0d7a2a09d")
-    (:name undo-tree                       :checkout "bc9d09555f5aeac6ac4684d748be763f64a7d80a")
+    (:name undo-tree                       :checkout "bc9d09555f5aeac6ac4684d748be763f64a7d80a"
+           :url "https://gitlab.com/tsc25/undo-tree.git")
     (:name use-package                     :checkout "38034854ac21bd5ddc1a1129fd6c8ff86d939f8a")
     (:name with-editor                     :checkout "38df9bfc2227bcb7ac4899c83a03756d5f171450")
     (:name yasnippet                       :checkout "ecd65d2ba5ea2623dfd0b474fbb5dae231503637"
