@@ -85,7 +85,7 @@
 
       ;; The OS doesn't always have this configured properly.
       user-full-name "Noam Postavsky"
-      user-mail-address (concat (user-login-name) "@" mail-host-address)
+      user-mail-address (concat "npostavs" "@" mail-host-address)
 
       ;; Allow toggling between text and HTML views of emails.
       ;; Possibly setting `gnus-buttonized-mime-types' and/or
@@ -281,6 +281,8 @@
 (eval-after-load 'gnus-cite
   '(set-face-foreground 'gnus-cite-4 "dark red"))
 
+;;(set-face-background 'default "#eee8d5") ; Solarized, Base2.
+(set-face-background 'default "#fdf6e3") ; Solarized, Base3.
 (set-face-foreground 'font-lock-doc-face "dark red")
 (set-face-foreground 'font-lock-string-face "dark red")
 (set-face-foreground 'font-lock-type-face "purple4")
@@ -463,6 +465,7 @@
   :config
   (progn
     (add-hook 'lisp-mode-hook #'enable-paredit-mode)
+    (add-hook 'scheme-mode-hook #'enable-paredit-mode)
     (add-hook 'emacs-lisp-mode-hook #'enable-paredit-mode)
     ;; Don't shadow `M-s' prefix key
     (unbind-key "M-s" paredit-mode-map)
@@ -758,6 +761,11 @@
 
 ;; use GNU make
 (add-to-list 'auto-mode-alist '("Makefile" . makefile-gmake-mode))
+;; Don't use idlwave, .pro files are are mainly qmake files.
+(setq auto-mode-alist (rassq-delete-all 'idlwave-mode auto-mode-alist))
+(add-to-list 'auto-mode-alist '("\\.pro\\'" . makefile-mode))
+;; Don't use DCL mode, whatever that is.
+(setq auto-mode-alist (rassq-delete-all 'dcl-mode auto-mode-alist))
 
 (use-package i3-integration
   :load-path (lambda () `(,(concat el-get-dir "i3-emacs")))
