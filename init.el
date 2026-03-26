@@ -781,6 +781,11 @@
               org-export-copy-to-kill-ring nil
               org-catch-invisible-edits 'error))
 
+(use-package ledger-mode
+  :defer t
+  :init (setq ledger-mode-should-check-version nil
+              ledger-use-iso-dates t))
+
 ;;; probably this should be replaced with projectile or something
 (when (eq system-type 'windows-nt)
  (defvar project-list '()
