@@ -37,6 +37,7 @@
     (:name ido-complete-space-or-hyphen    :checkout "3fe1fe1e1a743f8deb8f4025977647afecd58f14"
            :description "Make ido completes like built-in M-x does"
            :type github :pkgname "doitian/ido-complete-space-or-hyphen")
+    (:name ledger-mode                     :checkout "720c03b139d251c53f9deef491f5953e2fdb97ca")
     (:name lua-mode                        :checkout "2453e370ca39f38fced67a6d2db462aaea110f22")
     (:name magit                           :checkout "8bb78f0b8651a05a96728484735d361c5e1bbd6a"
            :branch "origin/current" :pkgname "npostavs/magit"
