@@ -44,6 +44,74 @@ single integer"
   (require feature))
 
 
+;;; Lilypond utils
+
+(defun ly-increment-bar-numbers (inc begin end)
+  (interactive "NIncrement bar number checks by: \nr")
+  (save-excursion
+    (goto-char end)
+    (while (re-search-backward "\\(?:% \\|\\\\barNumberCheck #\\)\\([0-9]+\\)\\( \\|%.*\\)*$" begin t)
+      (replace-match (number-to-string (+ (string-to-number (match-string 1))
+                                          inc))
+                     t t nil 1)
+      (goto-char (match-beginning 0)))))
+
+(defun number-to-word (num-str)
+  "Convert a numeric string NUM-STR (from 0 to 99) to its English word equivalent."
+  (let* ((ones '("Zero" "One" "Two" "Three" "Four"
+                 "Five" "Six" "Seven" "Eight" "Nine"))
+         (teens '("Ten" "Eleven" "Twelve" "Thirteen" "Fourteen"
+                  "Fifteen" "Sixteen" "Seventeen" "Eighteen" "Nineteen"))
+         (tens '("" "" "Twenty" "Thirty" "Forty"
+                 "Fifty" "Sixty" "Seventy" "Eighty" "Ninety"))
+         (num (string-to-number num-str)))
+    (cond
+     ((< num 10)
+      (nth num ones))
+     ((< num 20)
+      (nth (- num 10) teens))
+     ((< num 100)
+      (let ((ten-part (/ num 10))
+            (one-part (% num 10)))
+        (if (= one-part 0)
+            (nth ten-part tens)
+          (concat (nth ten-part tens) (nth one-part ones)))))
+     (t
+      (error "Unsupported input: must be between 0 and 99")))))
+
+(defun word-to-number (word)
+  "Convert an English word representation WORD (from Zero to NinetyNine) to its numeric string equivalent."
+  (let* ((ones '(("Zero" . 0) ("One" . 1) ("Two" . 2) ("Three" . 3) ("Four" . 4)
+                 ("Five" . 5) ("Six" . 6) ("Seven" . 7) ("Eight" . 8) ("Nine" . 9)))
+         (teens '(("Ten" . 10) ("Eleven" . 11) ("Twelve" . 12) ("Thirteen" . 13) ("Fourteen" . 14)
+                  ("Fifteen" . 15) ("Sixteen" . 16) ("Seventeen" . 17) ("Eighteen" . 18) ("Nineteen" . 19)))
+         (tens '(("Twenty" . 20) ("Thirty" . 30) ("Forty" . 40) ("Fifty" . 50)
+                 ("Sixty" . 60) ("Seventy" . 70) ("Eighty" . 80) ("Ninety" . 90)))
+         (case-fold-search nil)
+         (lookup (lambda (lst key)
+                   (cdr (assoc key lst)))))
+    (cond
+     ;; Exact match in ones or teens
+     ((assoc word ones)
+      (number-to-string (funcall lookup ones word)))
+     ((assoc word teens)
+      (number-to-string (funcall lookup teens word)))
+     ;; Composite numbers like "TwentyOne"
+     ((string-match "\\`\\([A-Z][a-z]+\\)\\([A-Z][a-z]+\\)\\'" word)
+      (let* ((ten-word (match-string 1 word))
+             (one-word (match-string 2 word))
+             (ten-val (funcall lookup tens ten-word))
+             (one-val (funcall lookup ones one-word)))
+        (if (and ten-val one-val)
+            (number-to-string (+ ten-val one-val))
+          (error "Invalid composite number word: %s" word))))
+     ;; Exact match in tens like "Twenty"
+     ((assoc word tens)
+      (number-to-string (funcall lookup tens word)))
+     (t
+      (error "Unsupported word input: %s" word)))))
+
+
 ;;; dwim (?) line movement
 
 (defun beginning-of-line-dwim (&optional logical)
