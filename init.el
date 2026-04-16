@@ -119,7 +119,9 @@
   (setq show-trailing-whitespace t))
 
 ;; typing the whole word is tiresome
-(fset 'yes-or-no-p 'y-or-n-p)
+(if (boundp 'use-short-answers)
+    (setq use-short-answers t) ;; Emacs 28 finally fixes this cleanly.
+  (fset 'yes-or-no-p 'y-or-n-p))
 
 ;; improved rectangle selection without semi-shadowing C-{z,x,c}
 (setq cua-delete-selection nil) ; but don't enable `delete-selection-mode'!
@@ -283,6 +285,9 @@
 
 ;;(set-face-background 'default "#eee8d5") ; Solarized, Base2.
 (set-face-background 'default "#fdf6e3") ; Solarized, Base3.
+;; Solarized accent colours are too strong, gtk default too weak for region selection.
+(when (featurep 'gtk)
+  (set-face-background 'region "lightgoldenrod2"))
 (set-face-foreground 'font-lock-doc-face "dark red")
 (set-face-foreground 'font-lock-string-face "dark red")
 (set-face-foreground 'font-lock-type-face "purple4")
@@ -819,6 +824,9 @@
                erase-buffer
                set-goal-column))
   (put cmd 'disabled nil))
+
+;; It's confusing when unexpected, not sure if I want it.
+(put 'cua-toggle-global-mark 'disabled t)
 
 ;;; safe locals
 (put 'Package 'safe-local-variable #'symbolp)
